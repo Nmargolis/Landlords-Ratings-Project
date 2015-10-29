@@ -33,6 +33,14 @@ class Landlord(db.Model):
             self.landlord_id, self.fname, self.lname)
 
 
+class Building(db.Model):
+
+    __tablename__ = "Buildings"
+
+    building_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(30))
+
+
 class Address(db.Model):
 
     __tablename__ = "Addresses"
@@ -46,9 +54,9 @@ class Address(db.Model):
     unit = db.Column(db.String(30))
     lat = db.Column(db.Float)
     lng = db.Column(db.Float)
-    building_id = db.Column(db.Integer, db.ForeignKey(Buildings.building_id))
+    building_id = db.Column(db.Integer, db.ForeignKey('Buildings.building_id'))
 
-    building = db.Relationship('Building', backref='addresses')
+    building = db.relationship('Building', backref='addresses')
 
     def __repr__(self):
         return "<Address address_id = {} street = {} city = {} state= {} zipcode = {} country = {} unit = {}>".format(
@@ -86,6 +94,7 @@ class Convo(db.Model):
 
 
 class Userconvo(db.Model):
+    """Association table between user and convo"""
 
     __tablename__ = "Userconvos"
 
@@ -119,14 +128,6 @@ class Message(db.Model):
             self.message_id, self.userconvo, self.user_id, self.sent_at)
 
 
-class Building(db.Model):
-
-    __tablename__ = "Buildings"
-
-    building_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(30))
-
-
 class Resource(db.Model):
 
     __tablename__ = "Resources"
@@ -142,9 +143,10 @@ class Resource(db.Model):
     def __repr__(self):
         return "<Resource resource_id = {} url = {} title = {} description = {} city = {} state = {} country = {}>".format(
             self.resource_id, self.url, self.title, self.description, self.city, self.state, self.country)
-  
+
 ##############################################################################
 # Helper functions
+
 
 def connect_to_db(app):
     """Connect the database to our Flask app."""
@@ -155,7 +157,6 @@ def connect_to_db(app):
     db.init_app(app)
 
 
-
 if __name__ == "__main__":
 
     from server import app
@@ -163,7 +164,3 @@ if __name__ == "__main__":
     connect_to_db(app)
     print "Connected to DB."
     db.create_all()
-
-
-
-

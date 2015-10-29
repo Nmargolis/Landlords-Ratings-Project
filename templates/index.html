@@ -1,6 +1,17 @@
 {% extends 'base.html' %}
 {% block title %}Home{% endblock %}
-
+{% block styles %}
+    <style>
+        .map { position:relative; top:0; bottom:0; width:50%; height: 500px; }
+    </style>
+{% endblock %}
 {% block content %}
     <h1>Home</h1>
+    <div>
+        <div id='map-one' class='map'> </div>
+    </div>
+    <script>
+        L.mapbox.accessToken = 'pk.eyJ1Ijoibm1hcmdvbGlzODkiLCJhIjoibGxsVVJETSJ9.dQv5byiwSyj--mr7Bgwezw';
+        L.mapbox.map('map-one', 'mapbox.streets').setView([38.8929,-77.0252], 14);
+    </script>
 {% endblock %}

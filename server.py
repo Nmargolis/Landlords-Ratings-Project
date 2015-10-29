@@ -1,6 +1,6 @@
 """Server for creating Flask app and handling routes"""
 
-from flask import Flask, request, render_template, session
+from flask import Flask, request, render_template, session, redirect, flash
 from flask_debugtoolbar import DebugToolbarExtension
 import os
 from jinja2 import StrictUndefined
@@ -13,11 +13,65 @@ app = Flask(__name__)
 
 @app.route('/')
 def display_homepage():
+    """Show homepage"""
     return render_template('index.html')
 
-@app.route('/process-login')
+
+@app.route('/login')
+def display_login_form():
+    """Show login form"""
+
+    #Check if already logged in
+    #If logged in, alert user. Provide option to logout and login as a different user
+    #If not logged in, display form
+    #Also display option to sign up and redirect to /signup
+    #This may be in jinja, not in the route.
+
+    return render_template('login.html')
+
+
+@app.route('/process-login', methods=['POST'])
 def process_login():
-    pass
+    """Process login form"""
+
+    #Get form input
+    #Check if username/email and password match
+    #If they don't match, flash message or alert and redirect back to /login
+    #Add user to session
+
+    return render_template('account-home.html')
+
+
+@app.route('/logout')
+def process_logout():
+    #Remove user from session
+    #Flash message
+    return render_template('index.html')
+
+
+@app.route('/signup')
+def display_signup_form():
+    """Show sign-up form"""
+
+    #Check if user logged in. If logged in, give option to logout
+    #^Maybe do in jinja
+ 
+    return render_template('signup.html')
+
+
+@app.route('/process-signup', methods=['POST'])
+def process_signup():
+    """Process sign-up form"""
+
+    #Get inputs from signup form
+    #Check if email is already in the database.
+    #If email already associated with account,
+    #   flash/alert message with 2 options:
+    #      login and redirect to '/login'
+    #       Or signup with a different email and redirect back to '/signup'
+
+    return render_template('account-home.html')
+
 
 
 if __name__ == "__main__":
