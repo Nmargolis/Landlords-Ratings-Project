@@ -43,6 +43,11 @@ class Address(db.Model):
     zipcode = db.Column(db.String(30))
     country = db.Column(db.String(30))
     unit = db.Column(db.String(30))
+    lat = db.Column(db.Float)
+    lng = db.Column(db.Float)
+    building_id = db.Column(db.Integer, db.ForeignKey(Buildings.building_id))
+
+    building = db.Relationship('Building', backref='addresses')
 
     def __repr__(self):
         return "<Address address_id = {} street = {} city = {} state= {} zipcode = {} country = {} unit = {}>".format(
@@ -103,6 +108,7 @@ class Message(db.Model):
     userconvo_id = db.Column(db.Integer, db.ForeignKey('Convos.convo_id'))
     user_id = db.Column(db.Integer, db.ForeignKey('Users.user_id'))
     sent_at = db.Column(db.DateTime) # maybe add utc.now
+    read = db.Column(db.Boolean, default=False)
 
     userconvo = db.relationship('Userconvo', backref='messages')
     user = db.relationship('User', backref='messages')
@@ -111,6 +117,7 @@ class Message(db.Model):
         return "<Message message_id = {} userconvo_id = {} user_id = {} sent_at = {}>".format(
             self.message_id, self.userconvo, self.user_id, self.sent_at)
 
+class Building(db.Model):
 
 class Resource(db.Model):
 
@@ -150,5 +157,5 @@ if __name__ == "__main__":
     db.create_all()
 
 
-# Do I need to do this in two places??
+
 
