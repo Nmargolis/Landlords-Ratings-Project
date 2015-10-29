@@ -15,6 +15,9 @@ app = Flask(__name__)
 def display_homepage():
     return render_template('index.html')
 
+@app.route('/process-login')
+def process_login():
+    pass
 
 
 if __name__ == "__main__":

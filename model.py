@@ -16,7 +16,8 @@ class User(db.Model):
     password = db.Column(db.String(30), nullable=False)
 
     def __repr__(self):
-        return "<User user_id = {} fname = {} lname = {} email = {} password = {}>".format(self.user_id, self.fname, self.lname, self.email, self.password)
+        return "<User user_id = {} fname = {} lname = {} email = {} password = {}>".format(
+            self.user_id, self.fname, self.lname, self.email, self.password)
 
 
 class Landlord(db.Model):
@@ -107,7 +108,7 @@ class Message(db.Model):
     message_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     userconvo_id = db.Column(db.Integer, db.ForeignKey('Convos.convo_id'))
     user_id = db.Column(db.Integer, db.ForeignKey('Users.user_id'))
-    sent_at = db.Column(db.DateTime) # maybe add utc.now
+    sent_at = db.Column(db.DateTime)  # maybe add utc.now
     read = db.Column(db.Boolean, default=False)
 
     userconvo = db.relationship('Userconvo', backref='messages')
@@ -117,7 +118,14 @@ class Message(db.Model):
         return "<Message message_id = {} userconvo_id = {} user_id = {} sent_at = {}>".format(
             self.message_id, self.userconvo, self.user_id, self.sent_at)
 
+
 class Building(db.Model):
+
+    __tablename__ = "Buildings"
+
+    building_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(30))
+
 
 class Resource(db.Model):
 
