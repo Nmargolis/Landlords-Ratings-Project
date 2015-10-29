@@ -62,7 +62,7 @@ class Review(db.Model):
 
     user = db.relationship('User', backref='reviews')
     landlord = db.relationship('Landlord', backref='reviews')
-    address = db.relaitonship('Address', backref='reviews')
+    address = db.relationship('Address', backref='reviews')
 
     def __repr__(self):
         return "<Review review_id = {} user_id = {} landlord_id = {} address_id = {} created_at = {} unit = {}>".format(
@@ -102,7 +102,7 @@ class Message(db.Model):
     message_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     userconvo_id = db.Column(db.Integer, db.ForeignKey('Convos.convo_id'))
     user_id = db.Column(db.Integer, db.ForeignKey('Users.user_id'))
-    sent_at = db.Column(db.DateTime)
+    sent_at = db.Column(db.DateTime) # maybe add utc.now
 
     userconvo = db.relationship('Userconvo', backref='messages')
     user = db.relationship('User', backref='messages')
@@ -127,7 +127,7 @@ class Resource(db.Model):
     def __repr__(self):
         return "<Resource resource_id = {} url = {} title = {} description = {} city = {} state = {} country = {}>".format(
             self.resource_id, self.url, self.title, self.description, self.city, self.state, self.country)
-
+  
 ##############################################################################
 # Helper functions
 
@@ -140,11 +140,15 @@ def connect_to_db(app):
     db.init_app(app)
 
 
-# if __name__ == "__main__":
 
-#     from server import app
-#     connect_to_db(app)
-#     print "Connected to DB."
+if __name__ == "__main__":
 
-# Why do I need to do this in two places?
+    from server import app
+
+    connect_to_db(app)
+    print "Connected to DB."
+    db.create_all()
+
+
+# Do I need to do this in two places??
 

@@ -1,17 +1,19 @@
 """Server for creating Flask app and handling routes"""
 
-# from jinja2 import StrictUndefined
-
 from flask import Flask, request, render_template, session
-
 from flask_debugtoolbar import DebugToolbarExtension
-
-# from model import connect_to_db, db
+import os
+from jinja2 import StrictUndefined
+from model import connect_to_db, db
 
 
 app = Flask(__name__)
-app.secret_key=SESSIONKEY
+# app.secret_key=os.environ['SESSION_KEY']
 
+
+@app.route('/')
+def display_homepage():
+    return render_template('index.html')
 
 
 
