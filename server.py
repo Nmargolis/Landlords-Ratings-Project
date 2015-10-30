@@ -55,7 +55,7 @@ def display_signup_form():
 
     #Check if user logged in. If logged in, give option to logout
     #^Maybe do in jinja
- 
+
     return render_template('signup.html')
 
 
@@ -69,10 +69,30 @@ def process_signup():
     #   flash/alert message with 2 options:
     #      login and redirect to '/login'
     #       Or signup with a different email and redirect back to '/signup'
+    #Otherwise, add user to database
 
-    return render_template('account-home.html')
+    #return render_template('account-home.html')
+    pass
 
 
+@app.route('/lookup')
+def display_lookup_page():
+    """Show page with options to look up landlords"""
 
+    return render_template('lookup.html')
+
+
+@app.route('/landlord')
+def display_landlord_page():
+    """Show page with landlord info and ratings"""
+
+    return render_template('landlord.html')
+
+
+@app.route('/rate')
+def display_rating_form():
+    """Show form for rating landlord"""
+
+    return render_template('rate.html')
 if __name__ == "__main__":
     app.run(debug=True)

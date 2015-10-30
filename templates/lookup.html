@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}Lookup{% endblock %}
+{% block styles %}
+    <style>
+        .map { position:relative; top:0; bottom:0; width:50%; height: 500px; float:right; }
+    </style>
+{% endblock %}
+{% block content %}
+    <h1>Lookup</h1>
+    <div>
+        <div id='map-one' class='map'> </div>
+    </div>
+    <script>
+        L.mapbox.accessToken = 'pk.eyJ1Ijoibm1hcmdvbGlzODkiLCJhIjoibGxsVVJETSJ9.dQv5byiwSyj--mr7Bgwezw';
+        L.mapbox.map('map-one', 'mapbox.streets').setView([37.7871, -122.4216], 13);
+    </script>
+{% endblock %}
