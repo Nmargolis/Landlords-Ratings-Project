@@ -120,7 +120,7 @@ class Message(db.Model):
     __tablename__ = "Messages"
 
     message_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    userconvo_id = db.Column(db.Integer, db.ForeignKey('Convos.convo_id'))
+    userconvo_id = db.Column(db.Integer, db.ForeignKey('Userconvos.userconvo_id'))
     user_id = db.Column(db.Integer, db.ForeignKey('Users.user_id'))
     sent_at = db.Column(db.DateTime)  # maybe add utc.now
     read = db.Column(db.Boolean, default=False)
