@@ -94,5 +94,6 @@ def display_rating_form():
     """Show form for rating landlord"""
 
     return render_template('rate.html')
+    
 if __name__ == "__main__":
     app.run(debug=True)
