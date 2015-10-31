@@ -21,8 +21,11 @@ def display_homepage():
 def display_login_form():
     """Show login form"""
 
-    #Check if already logged in
     #If logged in, alert user. Provide option to logout and login as a different user
+    if 'user' in session:
+        flash('You are already logged in')
+    # Should I do this in jinja and use javascript alerts?
+
     #If not logged in, display form
     #Also display option to sign up and redirect to /signup
     #This may be in jinja, not in the route.
@@ -34,7 +37,18 @@ def display_login_form():
 def process_login():
     """Process login form"""
 
-    #Get form input
+    # Get form input
+    email = request.form.get('email')
+    password = request.form.get('password')
+
+    # Find the associated user from the databse
+    account = User.query.filter_by(email=email).first()
+
+    # Get the password associated with that email and check if it matches password input
+
+    # Get the user_id to add to the session
+    user_id = account.user_id
+   
     #Check if username/email and password match
     #If they don't match, flash message or alert and redirect back to /login
     #Add user to session
@@ -94,6 +108,15 @@ def display_rating_form():
     """Show form for rating landlord"""
 
     return render_template('rate.html')
-    
+
+
+@app.route('/send-message')
+def send_message_():
+    """Initiate conversation if new, send message"""
+
+    pass
+
 if __name__ == "__main__":
+
+    connect_to_db(app)
     app.run(debug=True)
