@@ -71,7 +71,9 @@ class Review(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('Users.user_id'))
     landlord_id = db.Column(db.Integer, db.ForeignKey('Landlords.landlord_id'))
     address_id = db.Column(db.Integer, db.ForeignKey('Addresses.address_id'))
-    created_at = db.Column(db.DateTime)  # Is this how to do datetime? Should I do .utcnow?
+    moved_in_at = db.Column(db.DateTime)
+    moved_out_at = db.Column(db.DateTime)
+    created_at = db.Column(db.DateTime)
     rating1 = db.Column(db.Integer)
     rating2 = db.Column(db.Integer)
     rating3 = db.Column(db.Integer)

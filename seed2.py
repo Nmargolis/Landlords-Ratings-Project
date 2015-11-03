@@ -25,7 +25,7 @@ def load_users():
     # Delete all rows in table to avoid adding duplicates
     User.query.delete()
 
-    for i in range(0, 10):
+    for i in range(0, 50):
 
         user = User(fname=fake.first_name(),
                     lname=fake.last_name(),
@@ -47,7 +47,7 @@ def load_landlords():
     # Delete all rows in table to avoid adding duplicates
     Landlord.query.delete()
 
-    for i in range(0, 10):
+    for i in range(0, 50):
         landlord = Landlord(fname=fake.first_name(),
                             lname=fake.last_name())
 
@@ -64,7 +64,7 @@ def load_buildings():
     # Delete all rows in table to avoid adding duplicates
     Building.query.delete()
 
-    for i in range(0, 10):
+    for i in range(0, 50):
     # Question, if I only want 5 buildings, how do I do that when I'm creating addresses? Random number between 1 and 5?
         building = Building(name=fake.company())
 
@@ -81,11 +81,6 @@ def load_addresses():
     # Delete all rows in table to avoid adding duplicates
     Address.query.delete()
 
-    # Use mapbox for reverse geocoding using requests
-
-    # # Create list to hold address json results from reverse geocoding requests
-    # addresses = []
-
     # Initialize counter to add unit numbers 1/4 of the time
     i = 0
 
@@ -100,10 +95,11 @@ def load_addresses():
         # r = requests.get(req)
         response = geocoder.reverse(lon=lng, lat=lat, types=['address'])
         json_response = response.json()
-        print 'response: ', json_response, '\n'
+        # print 'response: ', json_response, '\n'
 
         if json_response["features"] == []:
-            print 'empty'
+            # print 'empty'
+            continue
         else:
             num = json_response["features"][0]["address"]
             st = json_response["features"][0]["text"]
@@ -116,8 +112,8 @@ def load_addresses():
             else:
                 continue
 
-          # For some reason -122.42691912,37.81240737 doesn't have the city attribute in context.
-          # https://api.mapbox.com/geocoding/v5/mapbox.places/-122.42691912,37.81240737.json?types=address&access_token=pk.eyJ1Ijoibm1hcmdvbGlzODkiLCJhIjoibGxsVVJETSJ9.dQv5byiwSyj--mr7Bgwezw
+            # For some reason -122.42691912,37.81240737 doesn't have the city attribute in context.
+            # https://api.mapbox.com/geocoding/v5/mapbox.places/-122.42691912,37.81240737.json?types=address&access_token=pk.eyJ1Ijoibm1hcmdvbGlzODkiLCJhIjoibGxsVVJETSJ9.dQv5byiwSyj--mr7Bgwezw
 
             # 1/4 of the times, create an address with unit and building id
             if i % 4 == 0:
@@ -150,29 +146,36 @@ def load_addresses():
 
             i += 1
 
-        # # Add the first result in json_result to list of addresses
-        # addresses.append(json_result[0])
 
-    # for i in range(0, 50):
+def load_reviews():
+    """Create reviews and load into database."""
 
-    #     # Get the street address from the ith address in addresses
-    #     street = addresses[i]["features"]["properties"]["address"]
-    #     address = Address(street=street,
-    #                     city=city,
-    #                     state=state,
-    #                     zipcode=zipcode,
-    #                     country=country,
-    #                     unit=unit,
-    #                     lat=lat,
-    #                     lng=lng,
-    #                     building_id=building_id)
+    # Delete all rows in table to avoid adding duplicates
+    Review.query.delete()
 
-    # # Add the address to the database
-    # db.session.add(address)
+    for i in range(0, 50):
 
-    # # Commit all additions to database
-    # db.session.commit()
+        # Set moved_in_at because moved_out_at and created_at depend on moved_in_at
+        moved_in_at = fake.date_time_between(start_date="-5y", end_date="now")
 
+        review = Review(user_id=randint(0, 50),
+                        landlord_id=randint(0, 50),
+                        address_id=randint(0, 50),
+                        moved_in_at=moved_in_at,
+                        moved_out_at=fake.date_time_between_dates(datetime_start=moved_in_at, datetime_end=None),
+                        created_at=fake.date_time_between_dates(datetime_start=moved_in_at, datetime_end=None),
+                        rating1=randint(1, 5),
+                        rating2=randint(1, 5),
+                        rating3=randint(1, 5),
+                        rating4=randint(1, 5),
+                        rating5=randint(1, 5),
+                        comment=fake.text(max_nb_chars=500))
+
+        # Add the review to the database
+        db.session.add(review)
+
+        # Commit all additions to database
+        db.session.commit()
 
 
 if __name__ == "__main__":
@@ -186,3 +189,4 @@ if __name__ == "__main__":
     load_landlords()
     load_buildings()
     load_addresses()
+    load_reviews()
