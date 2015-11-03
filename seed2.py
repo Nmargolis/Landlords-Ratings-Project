@@ -10,10 +10,12 @@ import requests
 import json
 import mapbox
 import os
+from random import randint
 
 fake = Faker()
 
 geocoder = mapbox.Geocoder(access_token=os.environ['MAPBOX_TOKEN'])
+
 
 def load_users():
     """Create fake users and load into database."""
@@ -81,8 +83,11 @@ def load_addresses():
 
     # Use mapbox for reverse geocoding using requests
 
-    # Create list to hold address json results from reverse geocoding requests
-    addresses = []
+    # # Create list to hold address json results from reverse geocoding requests
+    # addresses = []
+
+    # Initialize counter to add unit numbers 1/4 of the time
+    i = 0
 
     # Iterate through text file with each line containing "lattitude|longigude"
     for pair in open('data/u.coordinates'):
@@ -93,11 +98,60 @@ def load_addresses():
         # Make request to mapbox geocoding api using lng and lat
         # req = 'https://api.mapbox.com/geocoding/v5/mapbox.places/{},{}.json?access_token=pk.eyJ1Ijoibm1hcmdvbGlzODkiLCJhIjoibGxsVVJETSJ9.dQv5byiwSyj--mr7Bgwezw'.format(lng, lat)
         # r = requests.get(req)
-        response = geocoder.reverse(lon=lng, lat=lat)
-        json_result = response.json()
+        response = geocoder.reverse(lon=lng, lat=lat, types=['address'])
+        json_response = response.json()
+        print 'response: ', json_response, '\n'
 
-        # Add the first result in json_result to list of addresses
-        addresses.append(json_result[0])
+        if json_response["features"] == []:
+            print 'empty'
+        else:
+            num = json_response["features"][0]["address"]
+            st = json_response["features"][0]["text"]
+            street = '{} {}'.format(num, st)
+            if len(json_response["features"][0]["context"]) == 5:
+                city = json_response["features"][0]["context"][1]["text"]
+                zipcode = json_response["features"][0]["context"][2]["text"]
+                state = json_response["features"][0]["context"][3]["text"]
+                country = json_response["features"][0]["context"][4]["text"]
+            else:
+                continue
+
+          # For some reason -122.42691912,37.81240737 doesn't have the city attribute in context.
+          # https://api.mapbox.com/geocoding/v5/mapbox.places/-122.42691912,37.81240737.json?types=address&access_token=pk.eyJ1Ijoibm1hcmdvbGlzODkiLCJhIjoibGxsVVJETSJ9.dQv5byiwSyj--mr7Bgwezw
+
+            # 1/4 of the times, create an address with unit and building id
+            if i % 4 == 0:
+                building_id = randint(0, 10)
+                address = Address(street=street,
+                                city=city,
+                                state=state,
+                                zipcode=zipcode,
+                                country=country,
+                                unit=fake.building_number(),
+                                lat=lat,
+                                lng=lng,
+                                building_id=building_id)
+
+            # The rest of the time, create an address without unit and building id
+            else:
+                address = Address(street=street,
+                                city=city,
+                                state=state,
+                                zipcode=zipcode,
+                                country=country,
+                                lat=lat,
+                                lng=lng,)
+
+            # Add the address to the database
+            db.session.add(address)
+
+            # Commit all additions to database
+            db.session.commit()
+
+            i += 1
+
+        # # Add the first result in json_result to list of addresses
+        # addresses.append(json_result[0])
 
     # for i in range(0, 50):
 
@@ -131,4 +185,4 @@ if __name__ == "__main__":
     load_users()
     load_landlords()
     load_buildings()
-    # load_addresses()
+    load_addresses()
