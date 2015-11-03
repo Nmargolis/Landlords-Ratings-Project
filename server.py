@@ -24,13 +24,15 @@ def display_login_form():
     #If logged in, alert user. Provide option to logout and login as a different user
     if 'user' in session:
         flash('You are already logged in')
-    # Should I do this in jinja and use javascript alerts?
+        return redirect('/account-home')
 
+        # TO DO: decide whether to redirect to account-home
+        # or figure out a way to give the option of logging out or going to account-home
+        # Also decide whether to do this in jinja or here.
+    else:
     #If not logged in, display form
-    #Also display option to sign up and redirect to /signup
     #This may be in jinja, not in the route.
-
-    return render_template('login.html')
+        return render_template('login.html')
 
 
 @app.route('/process-login', methods=['POST'])
@@ -45,23 +47,40 @@ def process_login():
     account = User.query.filter_by(email=email).first()
     # TO DO: Deal with error if user does not exist. Redirect to sign up.
 
-    # Get the password associated with that email and check if it matches password input
-    # If they don't match, flash message or alert and redirect back to /login
+    if account is not None:
 
-    # Get the user_id to add to the session
-    user_id = account.user_id
+        # If the password entered matches the password assciated with the email in the database
+        if account.password == password:
 
-    #Add user to session
-    session['user'] = user_id
+            # Get the user_id to add to the session
+            user_id = account.user_id
 
-    return render_template('account-home.html')
+            #Add user to session
+            session['user'] = user_id
+            return render_template('account-home.html')
+
+        # If they don't match, flash message and redirect back to /login
+        else:
+            flash('Email does not match password. Please try again.')
+            return redirect('/login')
+
+    else:
+        flash('There is no account associated with that email. Please try again or sign up.')
+        return redirect('/login')
+        # To Do: Figure out how to give the option to try logging in again or sign up.
 
 
 @app.route('/logout')
 def process_logout():
     #Remove user from session
-    session.pop('user')
+    if 'user' in session:
+        session.pop('user')
+        flash('successfully logged out')
 
+    else:
+        flash('You are not logged in.')
+
+    # TO DO: Deal with keyerror that happens when there is no user in session
     #Flash message
     return render_template('index.html')
 
@@ -70,10 +89,12 @@ def process_logout():
 def display_signup_form():
     """Show sign-up form"""
 
-    #Check if user logged in. If logged in, give option to logout
-    #^Maybe do in jinja
+    if 'user' in session:
 
-    return render_template('signup.html')
+        flash('You are already logged in. If you would like to sign up, please log out first.')
+        return redirect('/')
+    else:
+        return render_template('signup.html')
 
 
 @app.route('/process-signup', methods=['POST'])
@@ -81,15 +102,39 @@ def process_signup():
     """Process sign-up form"""
 
     #Get inputs from signup form
-    #Check if email is already in the database.
-    #If email already associated with account,
-    #   flash/alert message with 2 options:
-    #      login and redirect to '/login'
-    #       Or signup with a different email and redirect back to '/signup'
-    #Otherwise, add user to database
+    fname = request.form.get('fname')
+    lname = request.form.get('lname')
+    email = request.form.get('email')
+    password = request.form.get('password')
 
-    #return render_template('account-home.html')
-    pass
+    #Check if email is already in the database.
+    account = User.query.filter_by(email=email).first()
+
+    # If email is not in the database, add the new user to the database
+    if account is None:
+        new_user = User(fname=fname, lname=lname, email=email, password=password)
+        db.session.add(new_user)
+        db.session.commit()
+        flash("You created an account. Please login to see your account home.")
+
+    # Otherwise, flash message saying an account with that email already exists.
+    else:
+        flash("You already have an account. Please login to see your account home")
+        # To Do: Figure out how to show two options: logout or account home.
+
+    return redirect('/login')
+
+
+@app.route('/account-home')
+def display_account_home():
+    # If user is logged in, show account home.
+    if 'user' in session:
+        return render_template('account-home.html')
+
+    # Otherwise, flash message and redirect to login
+    else:
+        flash('You are not logged in. Please log in.')
+        return redirect('/login')
 
 
 @app.route('/lookup')
@@ -104,14 +149,6 @@ def display_landlord_page():
     """Show page with landlord info and ratings"""
 
     return render_template('landlord.html')
-
-
-# build routes first, then create more route structure, repeat.
-# lookup by landlord, address and geolocation will be json endpoints
-# one search form, with dropdown/radio of method
-# if search type = landlord etc
-# 
-
 
 
 @app.route('/rate')

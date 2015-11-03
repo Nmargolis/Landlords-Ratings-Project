@@ -2,12 +2,14 @@
 {% block title %}Sign up{% endblock %}
 
 {% block content %}
-    <h1>Sign up</h1>
+<h1>Sign up</h1>
 
-    <form action="/process-signin" method="POST">
-      <label>Email: <input type="text" name="email" placeholder="yourname@email.com"></label>
-      <label>Password: <input type="password" name="password" placeholder="yourpassword"></label>
-      <input type="submit" value="Sign up">
+    <form action="/process-signup" method="POST">
+        <label>First name<input type="text" name="fname" placeholder="firstname"></label><br>
+        <label>Last name<input type="text" name="lname" placeholder="lastname"></label><br>
+        <label>Email: <input type="text" name="email" placeholder="yourname@email.com"></label><br>
+        <label>Password: <input type="password" name="password" placeholder="yourpassword"></label><br>
+        <input type="submit" value="Sign up">
     </form>
-    
+
 {% endblock %}

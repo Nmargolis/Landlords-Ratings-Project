@@ -9,10 +9,21 @@
 </head>
 
 <body>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class=flashes>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
     <a href='/login'>Log in</a> 
     <a href='/signup'>Sign up</a> 
-    <a href='/lookup'>Look up a landlord</a> 
     <a href='logout'>Log out</a>
+    <a href='/lookup'>Look up a landlord</a> 
+    <a href = '/account-home'>Account home</a>
+
     {% block content %}BODY CONTENT
     
     {% endblock %}
