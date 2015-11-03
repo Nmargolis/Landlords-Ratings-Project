@@ -4,11 +4,11 @@ from flask import Flask, request, render_template, session, redirect, flash
 from flask_debugtoolbar import DebugToolbarExtension
 import os
 from jinja2 import StrictUndefined
-from model import connect_to_db, db
+from model import connect_to_db, db, User, Landlord, Building, Address
 
 
 app = Flask(__name__)
-# app.secret_key=os.environ['SESSION_KEY']
+app.secret_key=os.environ['SESSION_KEY']
 
 
 @app.route('/')
@@ -43,15 +43,16 @@ def process_login():
 
     # Find the associated user from the databse
     account = User.query.filter_by(email=email).first()
+    # TO DO: Deal with error if user does not exist. Redirect to sign up.
 
     # Get the password associated with that email and check if it matches password input
+    # If they don't match, flash message or alert and redirect back to /login
 
     # Get the user_id to add to the session
     user_id = account.user_id
-   
-    #Check if username/email and password match
-    #If they don't match, flash message or alert and redirect back to /login
+
     #Add user to session
+    session['user'] = user_id
 
     return render_template('account-home.html')
 
@@ -59,6 +60,8 @@ def process_login():
 @app.route('/logout')
 def process_logout():
     #Remove user from session
+    session.pop('user')
+
     #Flash message
     return render_template('index.html')
 
@@ -101,6 +104,14 @@ def display_landlord_page():
     """Show page with landlord info and ratings"""
 
     return render_template('landlord.html')
+
+
+# build routes first, then create more route structure, repeat.
+# lookup by landlord, address and geolocation will be json endpoints
+# one search form, with dropdown/radio of method
+# if search type = landlord etc
+# 
+
 
 
 @app.route('/rate')
