@@ -16,13 +16,19 @@
     </script>
 
     <form id="search-by-address">
-        <label>Enter street:</label><input type="text" id="street-field" name="street" placeholder="1234 Main St"></input><br>
-        <label>Enter city:</label><input type="text" id="city-field" name="city" placeholder="San Francisco"></input><br>
-        <label>Enter state:</label><input type="text" id="state-field" name="state" placeholder="California"></input><br>
+        <label>Enter street:</label>
+        <input type="text" id="street-field" name="street" placeholder="1234 Main St"></input><br>
+        <label>Enter city:</label>
+        <input type="text" id="city-field" name="city" placeholder="San Francisco"></input><br>
+        <label>Enter state:</label>
+        <input type="text" id="state-field" name="state" placeholder="California"></input><br>
         <input type="submit">Search</input>
-    </form>
+    </form><br>
     <form id="search-by-name">
-        <label>Enter landlord name:</label><input type="text" id="name-field" value="name"></input><br>
+        <label>Enter landlord's first name:</label>
+        <input type="text" id="fname-field" name="fname" placeholder="first name"></input><br>
+        <label>Enter landlord's last name:</label>
+        <input type="text" id="lname-field" name="lname" placeholder="last name"></input><br>
         <input type="submit">Search</input>
     </form>
 
@@ -35,13 +41,9 @@
             console.log(results);
           
 
-            for (var review in results) {
-                if (results.hasOwnProperty(review)) {
-                    var landlordID = results[review]['landlord_id']
-                    $('#results').append("<p>Landlord: <a href='/landlord/"+ landlordID + "'> " + landlordID + "</a> </p>");
-                    // console.log(results[review]['landlord_id']);
-
-
+            for (var landlordID in results) {
+                if (results.hasOwnProperty(landlordID)) {
+                    $('#results').append("<p>Landlord: <a href='/landlord/"+ landlordID + "'> " + results[landlordID]['fname'] + " " + results[landlordID]['lname'] + "</a> </p>");
                 }
             }
 
@@ -49,7 +51,6 @@
 
         function lookupByAddress(evt) {
             evt.preventDefault();
-            console.log($)
             var address = $('#search-by-address').serialize();
             console.log(address)
             
@@ -57,7 +58,19 @@
             console.log("Finished sending address");
         }
 
+
+        function lookupByName(evt) {
+            evt.preventDefault();
+            var name = $('#search-by-name').serialize();
+
+            $.get('lookup-by-name.json', name, showLandlords);
+            console.log("Finished sending name");
+
+        }
+
         $("#search-by-address").on("submit", lookupByAddress)
+
+        $("#search-by-name").on("submit", lookupByName)
 
     </script>
 

@@ -32,6 +32,15 @@ class Landlord(db.Model):
         return "<Landlord landlord_id = {} fname = {} lname = {}>".format(
             self.landlord_id, self.fname, self.lname)
 
+    def convert_to_dict(self):
+        """Returns landlord object in dictionary form"""
+
+        landlord_dict = {'landlord_id': self.landlord_id,
+                        'fname': self.fname,
+                        'lname': self.lname}
+
+        return landlord_dict
+
 
 class Building(db.Model):
 

@@ -159,14 +159,32 @@ def find_landlords_by_address():
     reviews = db.session.query(Review).join(Address).filter(Address.street == street,
                                                             Address.state == state,
                                                             Address.city == city).all()
-    # print 'reviews: ', reviews
 
-    reviews_dict = {}
+    landlord_dict = {}
 
     for review in reviews:
-        reviews_dict[review.review_id] = review.convert_to_dict()
+        landlord = review.landlord
+        landlord_dict[landlord.landlord_id] = landlord.convert_to_dict()
 
-    return jsonify(reviews_dict)
+    return jsonify(landlord_dict)
+
+
+@app.route('/lookup-by-name.json')
+def find_landlords_by_name():
+    """Query for landlords by name and return json object with landlords"""
+    fname = request.args.get('fname')
+    lname = request.args.get('lname')
+
+    landlords = db.session.query(Landlord).filter(Landlord.fname == fname,
+                                                  Landlord.lname == lname).all()
+    print landlords
+
+    landlord_dict = {}
+
+    for landlord in landlords:
+        landlord_dict[landlord.landlord_id] = landlord.convert_to_dict()
+
+    return jsonify(landlord_dict)
 
 
 @app.route('/landlord/<int:landlord_id>')
