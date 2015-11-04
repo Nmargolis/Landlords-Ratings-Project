@@ -60,7 +60,7 @@ class Address(db.Model):
 
     def __repr__(self):
         return "<Address address_id = {} street = {} city = {} state= {} zipcode = {} country = {} unit = {}>".format(
-            self.address_id, self.city, self.state, self.zipcode, self.country, self.unit)
+            self.address_id, self.street, self.city, self.state, self.zipcode, self.country, self.unit)
 
 
 class Review(db.Model):
@@ -86,8 +86,26 @@ class Review(db.Model):
     address = db.relationship('Address', backref='reviews')
 
     def __repr__(self):
-        return "<Review review_id = {} user_id = {} landlord_id = {} address_id = {} created_at = {} unit = {}>".format(
-            self.user_id, self.landlord_id, self.address_id, self.created_at, self.unit)
+        return "<Review review_id = {} user_id = {} landlord_id = {} address_id = {} created_at = {}>".format(
+            self.review_id, self.user_id, self.landlord_id, self.address_id, self.created_at)
+
+    def convert_to_dict(self):
+        """Returns review object in dictionary form"""
+
+        review_dict = {'review_id': self.review_id,
+                        'user_id': self.user_id,
+                        'landlord_id': self.landlord_id,
+                        'moved_in_at': self.moved_in_at,
+                        'moved_out_at': self.moved_out_at,
+                        'created_at': self.created_at,
+                        'rating1': self.rating1,
+                        'rating2': self.rating2,
+                        'rating3': self.rating3,
+                        'rating4': self.rating4,
+                        'rating5': self.rating5,
+                        'comment': self.comment}
+
+        return review_dict
 
 
 class Convo(db.Model):

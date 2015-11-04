@@ -7,6 +7,14 @@
 
     <h3>Your reviews</h3>
 
+    {% for review in user.reviews %}
+       <article><b>Landlord: {{ review.landlord.fname }} {{ review.landlord.lname }}</b><br>
+        Address: {{ review.address.street }}, {{ review.address.city }}, {{ review.address.state }}<br>
+       </article>
+
+
+    {% endfor %}
+
     <button>Rate a landlord</button>
     <!-- Goes to lookup.htm -->
     

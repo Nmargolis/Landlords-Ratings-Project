@@ -1,10 +1,10 @@
 """Server for creating Flask app and handling routes"""
 
-from flask import Flask, request, render_template, session, redirect, flash
+from flask import Flask, request, render_template, session, redirect, flash, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 import os
 from jinja2 import StrictUndefined
-from model import connect_to_db, db, User, Landlord, Building, Address
+from model import connect_to_db, db, User, Landlord, Building, Address, Review
 
 
 app = Flask(__name__)
@@ -57,7 +57,8 @@ def process_login():
 
             #Add user to session
             session['user'] = user_id
-            return render_template('account-home.html')
+            return redirect('/account-home')
+            # return redirect('/')
 
         # If they don't match, flash message and redirect back to /login
         else:
@@ -129,8 +130,10 @@ def process_signup():
 def display_account_home():
     # If user is logged in, show account home.
     if 'user' in session:
-        return render_template('account-home.html')
+        user = User.query.get(session['user'])
+        return render_template('account-home.html', user=user)
 
+        return redirect('/')
     # Otherwise, flash message and redirect to login
     else:
         flash('You are not logged in. Please log in.')
@@ -144,11 +147,34 @@ def display_lookup_page():
     return render_template('lookup.html')
 
 
-@app.route('/landlord')
-def display_landlord_page():
-    """Show page with landlord info and ratings"""
+@app.route('/lookup-by-address.json')
+def find_landlords_by_address():
+    """Query for landlords associated with address and return json object with landlords"""
 
-    return render_template('landlord.html')
+    print "I'm at lookup-by-address"
+    street = request.args.get('street')
+    city = request.args.get('city')
+    state = request.args.get('state')
+
+    reviews = db.session.query(Review).join(Address).filter(Address.street == street,
+                                                            Address.state == state,
+                                                            Address.city == city).all()
+    # print 'reviews: ', reviews
+
+    reviews_dict = {}
+
+    for review in reviews:
+        reviews_dict[review.review_id] = review.convert_to_dict()
+
+    return jsonify(reviews_dict)
+
+
+@app.route('/landlord/<int:landlord_id>')
+def display_landlord_page(landlord_id):
+    """Show page with landlord info and ratings"""
+    landlord = Landlord.query.get(landlord_id)
+
+    return render_template('landlord.html', landlord=landlord)
 
 
 @app.route('/rate')

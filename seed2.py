@@ -20,8 +20,6 @@ geocoder = mapbox.Geocoder(access_token=os.environ['MAPBOX_TOKEN'])
 def load_users():
     """Create fake users and load into database."""
 
-#     print "Users"
-
     # Delete all rows in table to avoid adding duplicates
     User.query.delete()
 
@@ -30,7 +28,7 @@ def load_users():
         user = User(fname=fake.first_name(),
                     lname=fake.last_name(),
                     email=fake.safe_email(),
-                    password=fake.password(length=10, special_chars=True, digits=True, upper_case=True, lower_case=True))
+                    password=fake.password(length=10, special_chars=False, digits=True, upper_case=True, lower_case=True))
 
         # print user
 
@@ -158,9 +156,9 @@ def load_reviews():
         # Set moved_in_at because moved_out_at and created_at depend on moved_in_at
         moved_in_at = fake.date_time_between(start_date="-5y", end_date="now")
 
-        review = Review(user_id=randint(0, 50),
-                        landlord_id=randint(0, 50),
-                        address_id=randint(0, 50),
+        review = Review(user_id=randint(1, 50),
+                        landlord_id=randint(1, 50),
+                        address_id=randint(1, 44),
                         moved_in_at=moved_in_at,
                         moved_out_at=fake.date_time_between_dates(datetime_start=moved_in_at, datetime_end=None),
                         created_at=fake.date_time_between_dates(datetime_start=moved_in_at, datetime_end=None),
