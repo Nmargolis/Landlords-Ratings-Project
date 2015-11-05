@@ -6,7 +6,7 @@
     </style>
 {% endblock %}
 {% block content %}
-    <h1>Lookup</h1>
+    <h1>Lookup a Landlord</h1>
     <div>
         <div id='map-one' class='map'> </div>
     </div>
@@ -22,14 +22,14 @@
         <input type="text" id="city-field" name="city" placeholder="San Francisco"></input><br>
         <label>Enter state:</label>
         <input type="text" id="state-field" name="state" placeholder="California"></input><br>
-        <input type="submit">Search</input>
+        <input type="submit" value="Search"></input><br>
     </form><br>
     <form id="search-by-name">
         <label>Enter landlord's first name:</label>
         <input type="text" id="fname-field" name="fname" placeholder="first name"></input><br>
         <label>Enter landlord's last name:</label>
         <input type="text" id="lname-field" name="lname" placeholder="last name"></input><br>
-        <input type="submit">Search</input>
+        <input type="submit" vaue="Search"></input>
     </form>
 
     <div id='results'></div>
@@ -39,7 +39,6 @@
         function showLandlords(results) {
 
             console.log(results);
-          
 
             for (var landlordID in results) {
                 if (results.hasOwnProperty(landlordID)) {
@@ -57,7 +56,6 @@
             $.get('/lookup-by-address.json', address, showLandlords);
             console.log("Finished sending address");
         }
-
 
         function lookupByName(evt) {
             evt.preventDefault();

@@ -14,8 +14,54 @@
         L.mapbox.map('map-one', 'mapbox.streets').setView([37.7871, -122.4216], 13);
     </script>
   <h1>{{ landlord.fname }} {{ landlord.lname }}</h1>
-  <h3>Landlord info</h3>
-  <h3>Landlord ratings</h3>
-  <a href="/rate">Rate this landlord
 
+  <h3>Average ratings</h3>
+ 
+  <h3>Landlord reviews</h3>
+  {% for review in landlord.reviews %}
+    <article>
+    User: {{ review.user_id }} <br><!-- To Do: Make this a link to the user's profile -->
+    Address: {{ review.address_id.street }}<br> <!-- To Do: add more address info -->
+    Created at: {{ review.created_at }}<br>
+    <span class = "rating">Average rating: {{ (review.rating1 + review.rating2 + review.rating3 + review.rating4 + review.rating5)/5 }}<br></span>
+    <span class = "rating">rating1: {{ review.rating1 }}<br></span>
+    <span class = "rating">rating2: {{ review.rating2 }}<br></span>
+    <span class = "rating">rating3: {{ review.rating3 }}<br></span>
+    <span class = "rating">rating4: {{ review.rating4 }}<br></span>
+    <span class = "rating">rating5: {{ review.rating5 }}<br></span>
+    <p class = "comment"> comment: {{ review.comment }}</p>
+    </article>
+
+  {% endfor %}
+
+  <h3>Rate {{ landlord.fname }} {{ landlord.lname }}</h3>
+
+  {% if 'user' in session %}
+
+    <form action="/process-rating" method="POST">
+          <input type="hidden" name="landlord-id" value={{ landlord.landlord_id }}>
+          <input type="hidden" name="user-id" value="">
+          <label>Maintenance and repairs<br>
+              <input type="radio" name="repairs" value="1"> 1 
+              <input type="radio" name="repairs" value="2"> 2 
+              <input type="radio" name="repairs" value="3"> 3 
+              <input type="radio" name="repairs" value="4"> 4 
+              <input type="radio" name="repairs" value="5"> 5 
+          </label>
+           <label>Responsiveness<br>
+              <input type="radio" name="responsiveness" value="1"> 1 
+              <input type="radio" name="responsiveness" value="2"> 2 
+              <input type="radio" name="responsiveness" value="3"> 3 
+              <input type="radio" name="responsiveness" value="4"> 4 
+              <input type="radio" name="responsiveness" value="5"> 5 
+          </label>
+          <label>Comment</br>
+              <input type="text" name="comment" placeholder="Your comment here">
+          </label>
+        <input type="submit" value="Submit">
+      </form>
+
+  {% else %}
+    <p>You must be logged in to rate a landlord. Please <a href="/login">log in.</a></p>
+  {% endif %}
 {% endblock %}

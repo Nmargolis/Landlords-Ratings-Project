@@ -195,11 +195,15 @@ def display_landlord_page(landlord_id):
     return render_template('landlord.html', landlord=landlord)
 
 
-@app.route('/rate')
-def display_rating_form():
-    """Show form for rating landlord"""
+# Maybe don't need route for this one
+# @app.route('/rate/<int: landlord_id>')
+# def display_rating_form(landlord_id):
+#     """Show form for rating landlord"""
+    
+#     landlord = Landlord.query.get(landlord_id)
 
-    return render_template('rate.html')
+
+#     return render_template('rate.html')
 
 
 @app.route('/send-message')
