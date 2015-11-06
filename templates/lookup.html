@@ -11,7 +11,7 @@
         <div id='map-one' class='map'> </div>
     </div>
     <script>
-        L.mapbox.accessToken = 'pk.eyJ1Ijoibm1hcmdvbGlzODkiLCJhIjoibGxsVVJETSJ9.dQv5byiwSyj--mr7Bgwezw';
+        L.mapbox.accessToken = 'pk.eyJ1Ijoibm1hcmdvbGlzODkiLCJhIjoiY2lnbXZkZ3pwMDA0NG5ra280cmI4MzlwaCJ9.HHElSYk4EV_D2Jeg4gLJfg';
         L.mapbox.map('map-one', 'mapbox.streets').setView([37.7871, -122.4216], 13);
     </script>
 
@@ -39,6 +39,10 @@
         function showLandlords(results) {
 
             console.log(results);
+
+            if ($.isEmptyObject(results)) {
+                alert('Could not find any ratings matching your search.')
+            }
 
             for (var landlordID in results) {
                 if (results.hasOwnProperty(landlordID)) {
