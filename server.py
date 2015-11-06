@@ -5,6 +5,14 @@ from flask_debugtoolbar import DebugToolbarExtension
 import os
 from jinja2 import StrictUndefined
 from model import connect_to_db, db, User, Landlord, Building, Address, Review
+import mapbox
+import pprint
+import requests
+
+
+mapbox_token = os.environ['MAPBOX_TOKEN']
+geocoder = mapbox.Geocoder(access_token=mapbox_token)
+pp = pprint.PrettyPrinter(indent=4)
 
 
 app = Flask(__name__)
@@ -195,15 +203,79 @@ def display_landlord_page(landlord_id):
     return render_template('landlord.html', landlord=landlord)
 
 
-# Maybe don't need route for this one
-# @app.route('/rate/<int: landlord_id>')
-# def display_rating_form(landlord_id):
-#     """Show form for rating landlord"""
-    
-#     landlord = Landlord.query.get(landlord_id)
+# @app.route('/process-address.json')
+# def process_address():
+#     """Get address input and return json with the matching places"""
 
 
-#     return render_template('rate.html')
+
+@app.route('/process-rating', methods=['POST'])
+def process_rating():
+    """Get ratings from form and store them in reviews table"""
+
+    user_id = session['user']
+    landlord_id = request.form.get('landlord-id')
+
+    street_number = request.form.get('street-number')
+    street_name = request.form.get('street-name')
+    city = request.form.get('city')
+    state = request.form.get('state')
+    country = request.form.get('country')
+    zipcode = request.form.get('zipcode')
+
+    rating1 = request.form.get('rating1')
+    rating2 = request.form.get('rating2')
+    rating3 = request.form.get('rating3')
+    rating4 = request.form.get('rating4')
+    rating5 = request.form.get('rating5')
+    comment = request.form.get('comment')
+
+    # Process address to check if it is already in the databse
+    street = street_number + ' ' + street_name
+
+    # Query for the address in the database that matches the street, city and state
+    address = db.session.query(Address).filter(Address.street == street,
+                                               Address.city == city,
+                                               Address.state == state).first()
+
+    # If the address is not in the database
+    if address is None:
+
+        # Geocode to find lat and lng
+        # Use center of San Francisco for proximity lat and lng
+        proxim_lng = -122.4194155
+        proxim_lat = 37.7749295
+        req = 'https://api.mapbox.com/geocoding/v5/mapbox.places/{}.json?proximity={},{}&access_token={}'.format(street, proxim_lng, proxim_lat, mapbox_token)
+        r = requests.get(req)
+        json_response = r.json()
+        # pp.pprint(json_response)
+
+        # Isolate the feature in the city the user searched for
+        for feature in json_response['features']:
+            if city == feature['context'][1]["text"]:
+                feature_to_add = feature
+
+        # If there are no features that match the city the user searched for
+        if feature_to_add is None:
+            flash("Can't find the street address you entered in the city you entered.")
+            return "failed to find address"
+
+        # Otherwise, continue the process to add the address to the database
+        else:
+            address = Address(street=street,
+                              city=city,
+                              state=state,
+                              zipcode=zipcode,
+                              country=country,
+                              lng=feature_to_add['center'][0],
+                              lat=feature_to_add['center'][1])
+            print address
+
+            db.session.add(address)
+            db.session.commit()
+            print 'added address'
+
+            return "success"
 
 
 @app.route('/send-message')

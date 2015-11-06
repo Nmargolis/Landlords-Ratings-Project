@@ -10,9 +10,10 @@
         <div id='map-one' class='map'> </div>
     </div>
     <script>
-        L.mapbox.accessToken = 'pk.eyJ1Ijoibm1hcmdvbGlzODkiLCJhIjoibGxsVVJETSJ9.dQv5byiwSyj--mr7Bgwezw';
+        L.mapbox.accessToken = 'pk.eyJ1Ijoibm1hcmdvbGlzODkiLCJhIjoiY2lnbXZkZ3pwMDA0NG5ra280cmI4MzlwaCJ9.HHElSYk4EV_D2Jeg4gLJfg';
         L.mapbox.map('map-one', 'mapbox.streets').setView([37.7871, -122.4216], 13);
     </script>
+
   <h1>{{ landlord.fname }} {{ landlord.lname }}</h1>
 
   <h3>Average ratings</h3>
@@ -40,26 +41,52 @@
 
     <form action="/process-rating" method="POST">
           <input type="hidden" name="landlord-id" value={{ landlord.landlord_id }}>
-          <input type="hidden" name="user-id" value="">
-          <label>Maintenance and repairs<br>
+          <label><b>Address</b></label>
+            <input type="text" name="street-number" placeholder="1234">
+            <input type="text" name="street-name" placeholder="Main St">
+            <input type="text" name="city" placeholder="San Francisco">
+            <input type="text" name="state" placeholder="California">
+            <input type="text" name="zipcode" placeholder="00000">
+            <input type="text" name="country" placeholder="United States"><br>
+
+          <label>When did you move in? (optional)
+            <input type="date" name="move-in" placeholder="mm/dd/yyyy">
+          </label><br>
+           <label>When did you move out (optional)?
+            <input type="date" name="move-out" placeholder="mm/dd/yyyy">
+          </label><br>
+
+          <b>Please rate on the following criteria:</b><br>
+          <label>Maintenance and repairs
               <input type="radio" name="repairs" value="1"> 1 
               <input type="radio" name="repairs" value="2"> 2 
               <input type="radio" name="repairs" value="3"> 3 
               <input type="radio" name="repairs" value="4"> 4 
               <input type="radio" name="repairs" value="5"> 5 
-          </label>
-           <label>Responsiveness<br>
+          </label><br>
+          <label>Responsiveness
               <input type="radio" name="responsiveness" value="1"> 1 
               <input type="radio" name="responsiveness" value="2"> 2 
               <input type="radio" name="responsiveness" value="3"> 3 
               <input type="radio" name="responsiveness" value="4"> 4 
               <input type="radio" name="responsiveness" value="5"> 5 
-          </label>
-          <label>Comment</br>
+          </label></br>
+          <label>Comment
               <input type="text" name="comment" placeholder="Your comment here">
           </label>
         <input type="submit" value="Submit">
       </form>
+
+      <script>
+      //   var MapboxClient = require('mapbox');
+      //   var mapboxClient = new MapboxClient(L.mapbox.accessToken);
+      //   mapboxClient.geocodeForward('683 Sutter St', {
+      //     proximity: { latitude: 37.775, longitude: -122.4194}
+      //     }, function(err, res) {
+      //     // res is a GeoJSON document with geocoding matches
+      //     console.log(res)
+      //     });
+     </script>
 
   {% else %}
     <p>You must be logged in to rate a landlord. Please <a href="/login">log in.</a></p>
