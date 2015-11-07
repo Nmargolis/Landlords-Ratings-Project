@@ -142,7 +142,6 @@ def display_account_home():
         user = User.query.get(session['user'])
         return render_template('account-home.html', user=user)
 
-        return redirect('/')
     # Otherwise, flash message and redirect to login
     else:
         flash('You are not logged in. Please log in.')
@@ -224,8 +223,8 @@ def process_rating():
     country = request.form.get('country')
     zipcode = request.form.get('zipcode')
 
-    moved_in_at = request.form.get('move-in')
-    moved_out_at = request.form.get('move-out')
+    moved_in_at = datetime.strptime(request.form.get('move-in'), "%Y-%m-%d")
+    moved_out_at = datetime.strptime(request.form.get('move-out'), "%Y-%m-%d")
 
     rating1 = request.form.get('rating1')
     rating2 = request.form.get('rating2')
@@ -292,7 +291,7 @@ def process_rating():
                     address_id=address_id,
                     moved_in_at=moved_in_at,
                     moved_out_at=moved_out_at,
-                    created_at=datetime.utcnow,
+                    created_at=datetime.utcnow(),
                     rating1=rating1,
                     rating2=rating2,
                     rating3=rating3,
@@ -300,7 +299,8 @@ def process_rating():
                     rating5=rating5,
                     comment=comment)
 
-    print review
+    db.session.add(review)
+    db.session.commit()
 
     return "success"
 

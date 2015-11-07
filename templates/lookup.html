@@ -32,6 +32,8 @@
         <input type="submit" vaue="Search"></input>
     </form>
 
+
+
     <div id='results'></div>
 
     <script>
@@ -41,7 +43,8 @@
             console.log(results);
 
             if ($.isEmptyObject(results)) {
-                alert('Could not find any ratings matching your search.')
+                $('#results').html('Could not find any ratings matching your search.')
+                // TO DO: add option to add address or landlord
             }
 
             // Otherwise display each landlord as a link to the page for that landlord

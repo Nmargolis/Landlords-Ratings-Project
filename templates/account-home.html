@@ -2,20 +2,22 @@
 {% block title %}Account Home{% endblock %}
 
 {% block content %}
-    <h1>Your account</h1>
-
+    <h1>{{ user.fname }} {{ user.lname }}</h1>
 
     <h3>Your reviews</h3>
 
     {% for review in user.reviews %}
        <article><b>Landlord: {{ review.landlord.fname }} {{ review.landlord.lname }}</b><br>
         Address: {{ review.address.street }}, {{ review.address.city }}, {{ review.address.state }}<br>
+        Rating1: {{ review.rating1 }}<br>
+        Rating2: {{ review.rating2 }}<br>
+        Rating3: {{ review.rating3 }}<br>
+        Rating4: {{ review.rating4 }}<br>
+        Rating5: {{ review.rating5 }}<br>
+        Comment: {{ review.comment }}<br>
        </article>
 
-
     {% endfor %}
-
-    <button>Rate a landlord</button>
-    <!-- Goes to lookup.htm -->
     
+
 {% endblock %}
