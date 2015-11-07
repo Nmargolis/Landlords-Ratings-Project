@@ -8,6 +8,7 @@ from model import connect_to_db, db, User, Landlord, Building, Address, Review
 import mapbox
 import pprint
 import requests
+from datetime import datetime
 
 
 mapbox_token = os.environ['MAPBOX_TOKEN']
@@ -223,6 +224,9 @@ def process_rating():
     country = request.form.get('country')
     zipcode = request.form.get('zipcode')
 
+    moved_in_at = request.form.get('move-in')
+    moved_out_at = request.form.get('move-out')
+
     rating1 = request.form.get('rating1')
     rating2 = request.form.get('rating2')
     rating3 = request.form.get('rating3')
@@ -237,9 +241,11 @@ def process_rating():
     address = db.session.query(Address).filter(Address.street == street,
                                                Address.city == city,
                                                Address.state == state).first()
+    if address:
+        address_id = address.address_id
 
     # If the address is not in the database
-    if address is None:
+    elif address is None:
 
         # Geocode to find lat and lng
         # Use center of San Francisco for proximity lat and lng
@@ -250,10 +256,14 @@ def process_rating():
         json_response = r.json()
         # pp.pprint(json_response)
 
+        feature_to_add = None
+
         # Isolate the feature in the city the user searched for
         for feature in json_response['features']:
+            print 'iterating over json response'
             if city == feature['context'][1]["text"]:
                 feature_to_add = feature
+                break
 
         # If there are no features that match the city the user searched for
         if feature_to_add is None:
@@ -269,13 +279,30 @@ def process_rating():
                               country=country,
                               lng=feature_to_add['center'][0],
                               lat=feature_to_add['center'][1])
-            print address
 
             db.session.add(address)
             db.session.commit()
-            print 'added address'
 
-            return "success"
+            address_id = address.address_id
+
+    # Add the review to the database
+
+    review = Review(user_id=user_id,
+                    landlord_id=landlord_id,
+                    address_id=address_id,
+                    moved_in_at=moved_in_at,
+                    moved_out_at=moved_out_at,
+                    created_at=datetime.utcnow,
+                    rating1=rating1,
+                    rating2=rating2,
+                    rating3=rating3,
+                    rating4=rating4,
+                    rating5=rating5,
+                    comment=comment)
+
+    print review
+
+    return "success"
 
 
 @app.route('/send-message')

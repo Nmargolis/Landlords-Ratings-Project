@@ -44,12 +44,14 @@
                 alert('Could not find any ratings matching your search.')
             }
 
-            for (var landlordID in results) {
-                if (results.hasOwnProperty(landlordID)) {
-                    $('#results').append("<p>Landlord: <a href='/landlord/"+ landlordID + "'> " + results[landlordID]['fname'] + " " + results[landlordID]['lname'] + "</a> </p>");
+            // Otherwise display each landlord as a link to the page for that landlord
+            else {
+                for (var landlordID in results) {
+                    if (results.hasOwnProperty(landlordID)) {
+                        $('#results').append("<p>Landlord: <a href='/landlord/"+ landlordID + "'> " + results[landlordID]['fname'] + " " + results[landlordID]['lname'] + "</a> </p>");
+                    }
                 }
             }
-
         }
 
         function lookupByAddress(evt) {
