@@ -14,7 +14,7 @@ from random import randint
 
 fake = Faker()
 
-geocoder = mapbox.Geocoder(access_token=os.environ['MAPBOX_TOKEN'])
+geocoder = mapbox.Geocoder(access_token='pk.eyJ1Ijoibm1hcmdvbGlzODkiLCJhIjoiY2lnbXZkZ3pwMDA0NG5ra280cmI4MzlwaCJ9.HHElSYk4EV_D2Jeg4gLJfg')
 
 
 def load_users():
