@@ -30,10 +30,19 @@
     <span class = "rating">rating3: {{ review.rating3 }}<br></span>
     <span class = "rating">rating4: {{ review.rating4 }}<br></span>
     <span class = "rating">rating5: {{ review.rating5 }}<br></span>
-    <p class = "comment"> comment: {{ review.comment }}</p>
+    <p class = "comment">comment: {{ review.comment }}</p>
+
+    {% if 'user' in session %}
+    <a href="/send-message/{{ review.user_id }}"><button id="send-message">Message this user
+    </button></a>
+    {% else %}
+    <button href="/login">Log in to message this user</button>
+    {% endif %}
     </article>
 
+
   {% endfor %}
+
 
   <h3>Rate {{ landlord.fname }} {{ landlord.lname }}</h3>
 

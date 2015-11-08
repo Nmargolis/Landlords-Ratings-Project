@@ -305,11 +305,11 @@ def process_rating():
     return "success"
 
 
-@app.route('/send-message')
-def send_message_():
+@app.route('/send-message/<int:user_to>')
+def send_message_(user_to):
     """Initiate conversation if new, send message"""
 
-    pass
+    return render_template('message.html', user_to=user_to)
 
 if __name__ == "__main__":
 
