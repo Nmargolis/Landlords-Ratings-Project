@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}Send a message{% endblock %}
+
+{% block content %}
+    <h1>Send a message to {{ user_to }}</h1>
+
+    <form action="/process-message" method="POST">
+      <label>Message <input type="text" name="message" placeholder="Your message here"></label>
+    </form>
+    
+{% endblock %}  
