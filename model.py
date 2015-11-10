@@ -132,6 +132,10 @@ class Convo(db.Model):
 
     convo_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 
+    messages = db.relationship('Message',
+                               secondary='Userconvos',
+                               backref="conversation")
+
     def __repr__(self):
         return "<Convo convo_id = {}>".format(self.convo_id)
 
