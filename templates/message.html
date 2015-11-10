@@ -3,22 +3,21 @@
 
 {% block content %}
 
-{{existing_convo}}
-
     {% if not existing_convo %}
     <h1>Start a new conversation with user {{ user_to }}</h1>
 
         <form action="/process-message-new" method="POST">
           <label>Message </label><input type="text" name="message" placeholder="Your message here">
           <input type="hidden" name="user-to" value={{ user_to }}>
+          <input type="submit" value="send">
         </form>
 
     {% else %}
     <h1>Send a new message to user {{ user_to }}</h1>
         <form action="/process-message-existing" method="POST">
           <label>Message </label><input type="text" name="message" placeholder="Your message here">
-          <input type="hidden" name="user-to" value={{ user_to }}>
           <input type="hidden" name="convo" value={{ existing_convo.convo_id }}>
+          <input type="submit" value="send">
         </form>
 
         <h3>Previous messages in this conversation</h3>

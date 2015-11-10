@@ -33,7 +33,12 @@
     <p class = "comment">comment: {{ review.comment }}</p>
 
     {% if 'user' in session %}
-    <a href="/send-message/{{ review.user_id }}"><button id="send-message">Message this user</button></a>
+      {% if session['user'] == review.user_id %}
+        <b>*** This is your review ***</b>
+      {% else %}
+         <a href="/send-message/{{ review.user_id }}"><button id="send-message">Message this user</button></a>
+      {% endif %}
+   
     {% else %}
     <a href="/login"><button>Log in to message this user</button>
     {% endif %}
