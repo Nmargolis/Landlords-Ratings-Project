@@ -20,6 +20,10 @@ class User(db.Model):
                                     secondary='Userconvos',
                                     backref='users')
 
+    messages = db.relationship('Message',
+                               secondary='Userconvos',
+                               backref='user')
+
     def __repr__(self):
         return "<User user_id = {} fname = {} lname = {} email = {} password = {}>".format(
             self.user_id, self.fname, self.lname, self.email, self.password)
