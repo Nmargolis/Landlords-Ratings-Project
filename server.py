@@ -329,11 +329,13 @@ def send_message(user_to):
             existing_convo = convo
             break
 
+    print existing_convo
+
     return render_template('message.html', user_to=user_to.user_id, existing_convo=existing_convo)
 
 
-@app.route('/process-new-message', methods=['POST'])
-def process_message():
+@app.route('/process-message-new', methods=['POST'])
+def process_message_new():
     """Create new convo, userconvos and message and store in database"""
 
     user_to_id = request.form.get('user-to')
@@ -363,57 +365,43 @@ def process_message():
     db.session.add(new_message)
     db.session.commit()
 
-    return "success"
+    flash('Successfully started conversation and sent message.')
+    return redirect('/account-home')
 
 
+@app.route('/process-message-existing', methods=['POST'])
+def process_message_existing():
+    """Store message in database, associated with an existing userconvo"""
 
-    # user_from = User.query.get('user_from_id')
+    convo_id = request.form.get('convo')
+    sender_id = session['user']
+    content = request.form.get('message')
 
-    # user_to = User.query.get('user_to_id')
+    convo = Convo.query.get(convo_id)
 
-    # user_from_convos = db.session.query(Userconvo.convo_id).filter(Userconvo.user_id == user_from_id).all()
-    # user_to_convos = db.session.query(Userconvo.convo_id).filter(Userconvo.user_id == user_to_id).all()
+    userconvos = convo.userconvos
 
-    # # user_from_convos = user_from.conversations
-    # # user_to_convos = user_to.conversations
+    userconvo_id = None
 
-    # # # Convert to set for faster runtime
-    # # user_to_convos = set(user_to_convos)
+    for userconvo in userconvos:
+        if userconvo.user_id == sender_id:
+            userconvo_id = userconvo.userconvo_id
 
-    # convo_exists = False
+    if userconvo_id is None:
+        print "something weird happened."
 
+    new_message = Message(userconvo_id=userconvo_id,
+                          sent_at=datetime.utcnow(),
+                          content=content)
 
+    print new_message
 
-    # If not, create a convo and 2 userconvos add them to the database
-    # if convo_exists is False:
-    #     # Create new convo and add to database
-    #     convo = Convo()
-    #     db.session.add(convo)
-    #     db.session.commit(convo)
+    db.session.add(new_message)
+    db.session.commit()
 
-    #     # Get the convo_id to use in creating new userconvos
-    #     convo_id = convo.convo_id
+    flash('Successfully sent message.')
 
-    #     new_userconvo_1 = Userconvo(user_id=user_from_id, convo_id=convo_id)
-    #     db.session.add(new_userconvo_1)
-    #     db.session.commit()
-
-    #     new_userconvo_2 = Userconvo(user_id=user_to_id, convo_id=convo_id)
-    #     db.session.add(new_userconvo_2)
-    #     db.session.commit()
-
-    #     userconvo_id = new_userconvo_1.userconvo_id
-
-
-        # Create 2 userconvos, each with the new convo id
-
-        # Create message referencing convo_id
-
-    # Add message to the database
-
-    # convo_id = convo_id
-    # user_id = user_from
-    # sent_at = utc.now
+    return redirect('/account-home')
 
 
 if __name__ == "__main__":
