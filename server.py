@@ -4,7 +4,7 @@ from flask import Flask, request, render_template, session, redirect, flash, jso
 from flask_debugtoolbar import DebugToolbarExtension
 import os
 from jinja2 import StrictUndefined
-from model import connect_to_db, db, User, Landlord, Building, Address, Review
+from model import connect_to_db, db, User, Landlord, Building, Address, Review, Convo, Userconvo, Message
 import mapbox
 import pprint
 import requests
@@ -180,6 +180,8 @@ def find_landlords_by_address():
 @app.route('/lookup-by-name.json')
 def find_landlords_by_name():
     """Query for landlords by name and return json object with landlords"""
+
+    print "Im at lookup-by-name"
     fname = request.args.get('fname')
     lname = request.args.get('lname')
 
@@ -206,7 +208,6 @@ def display_landlord_page(landlord_id):
 # @app.route('/process-address.json')
 # def process_address():
 #     """Get address input and return json with the matching places"""
-
 
 
 @app.route('/process-rating', methods=['POST'])
@@ -306,10 +307,114 @@ def process_rating():
 
 
 @app.route('/send-message/<int:user_to>')
-def send_message_(user_to):
+def send_message(user_to):
     """Initiate conversation if new, send message"""
 
-    return render_template('message.html', user_to=user_to)
+    user_from = User.query.get(session['user'])
+    user_to = User.query.get(user_to)
+
+    user_from_convos = user_from.conversations
+    user_to_convos = user_to.conversations
+
+    # Convert to set for faster runtime
+    user_to_convos = set(user_to_convos)
+
+    # convo_exists = False
+
+    existing_convo = None
+
+    for convo in user_from_convos:
+        if convo in user_to_convos:
+            # convo_exists = True
+            existing_convo = convo
+            break
+
+    return render_template('message.html', user_to=user_to.user_id, existing_convo=existing_convo)
+
+
+@app.route('/process-new-message', methods=['POST'])
+def process_message():
+    """Create new convo, userconvos and message and store in database"""
+
+    user_to_id = request.form.get('user-to')
+    user_from_id = session['user']
+
+    convo = Convo()
+    db.session.add(convo)
+    db.session.commit()
+
+    # Get the convo_id to use in creating new userconvos
+    convo_id = convo.convo_id
+
+    new_userconvo_1 = Userconvo(user_id=user_from_id, convo_id=convo_id)
+    db.session.add(new_userconvo_1)
+    db.session.commit()
+
+    new_userconvo_2 = Userconvo(user_id=user_to_id, convo_id=convo_id)
+    db.session.add(new_userconvo_2)
+    db.session.commit()
+
+    userconvo_id = new_userconvo_1.userconvo_id
+
+    # Create new message
+    content = request.form.get('message')
+
+    new_message = Message(userconvo_id=userconvo_id, sent_at=datetime.utcnow(), content=content)
+    db.session.add(new_message)
+    db.session.commit()
+
+    return "success"
+
+
+
+    # user_from = User.query.get('user_from_id')
+
+    # user_to = User.query.get('user_to_id')
+
+    # user_from_convos = db.session.query(Userconvo.convo_id).filter(Userconvo.user_id == user_from_id).all()
+    # user_to_convos = db.session.query(Userconvo.convo_id).filter(Userconvo.user_id == user_to_id).all()
+
+    # # user_from_convos = user_from.conversations
+    # # user_to_convos = user_to.conversations
+
+    # # # Convert to set for faster runtime
+    # # user_to_convos = set(user_to_convos)
+
+    # convo_exists = False
+
+
+
+    # If not, create a convo and 2 userconvos add them to the database
+    # if convo_exists is False:
+    #     # Create new convo and add to database
+    #     convo = Convo()
+    #     db.session.add(convo)
+    #     db.session.commit(convo)
+
+    #     # Get the convo_id to use in creating new userconvos
+    #     convo_id = convo.convo_id
+
+    #     new_userconvo_1 = Userconvo(user_id=user_from_id, convo_id=convo_id)
+    #     db.session.add(new_userconvo_1)
+    #     db.session.commit()
+
+    #     new_userconvo_2 = Userconvo(user_id=user_to_id, convo_id=convo_id)
+    #     db.session.add(new_userconvo_2)
+    #     db.session.commit()
+
+    #     userconvo_id = new_userconvo_1.userconvo_id
+
+
+        # Create 2 userconvos, each with the new convo id
+
+        # Create message referencing convo_id
+
+    # Add message to the database
+
+    # convo_id = convo_id
+    # user_id = user_from
+    # sent_at = utc.now
+
 
 if __name__ == "__main__":
 

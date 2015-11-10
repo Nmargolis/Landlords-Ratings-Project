@@ -1,6 +1,7 @@
 """Model and functions for Landlord Ratings project."""
 
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 
 db = SQLAlchemy()
 
@@ -14,6 +15,10 @@ class User(db.Model):
     lname = db.Column(db.String(30))
     email = db.Column(db.String(50), nullable=False, unique=True)
     password = db.Column(db.String(30), nullable=False)
+
+    conversations = db.relationship('Convo',
+                                    secondary='Userconvos',
+                                    backref='users')
 
     def __repr__(self):
         return "<User user_id = {} fname = {} lname = {} email = {} password = {}>".format(
@@ -137,7 +142,7 @@ class Userconvo(db.Model):
     convo_id = db.Column(db.Integer, db.ForeignKey('Convos.convo_id'))
 
     user = db.relationship('User', backref='userconvos')
-    convo = db.relationship('Convo', backref='convos')
+    convo = db.relationship('Convo', backref='userconvos')
 
     def __repr__(self):
         return "<Userconvo userconvo_id = {} user_id = {} convo_id = {}>".format(
@@ -150,16 +155,15 @@ class Message(db.Model):
 
     message_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     userconvo_id = db.Column(db.Integer, db.ForeignKey('Userconvos.userconvo_id'))
-    user_id = db.Column(db.Integer, db.ForeignKey('Users.user_id'))
     sent_at = db.Column(db.DateTime)  # maybe add utc.now
+    content = db.Column(db.Text)
     read = db.Column(db.Boolean, default=False)
 
     userconvo = db.relationship('Userconvo', backref='messages')
-    user = db.relationship('User', backref='messages')
 
     def __repr__(self):
-        return "<Message message_id = {} userconvo_id = {} user_id = {} sent_at = {}>".format(
-            self.message_id, self.userconvo, self.user_id, self.sent_at)
+        return "<Message message_id = {} userconvo_id = {} sent_at = {} content = {} read = {}>".format(
+            self.message_id, self.userconvo_id, self.sent_at, self.content, self.read)
 
 
 class Resource(db.Model):
@@ -197,4 +201,4 @@ if __name__ == "__main__":
 
     connect_to_db(app)
     print "Connected to DB."
-    db.create_all()
+    # db.create_all()
