@@ -134,7 +134,8 @@ class Convo(db.Model):
 
     messages = db.relationship('Message',
                                secondary='Userconvos',
-                               backref="conversation")
+                               backref='conversation',
+                               order_by='desc(Message.sent_at)')
 
     def __repr__(self):
         return "<Convo convo_id = {}>".format(self.convo_id)
