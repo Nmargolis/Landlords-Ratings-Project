@@ -36,19 +36,35 @@
 
 
     <div id='results'>
+        <button class="hide" id="add-address-btn">Add address</button>
         <button class="hide" id="add-landlord-btn">Add landlord</button>
     </div>
     <div id='add-landlord-div' class='hide'>
         <form id="add-landlord-form">
-        <label>Enter landlord's first name:</label>
-        <input type="text" id="fname-field-add" name="fname-add" value=""></input>
-        <br>
-        <label>Enter landlord's last name:</label>
-        <input type="text" id="lname-field-add" name="lname-add" value=""></input><br>
-        <input type="submit" vaue="Add"></input>
+            <label>Enter landlord's first name:</label>
+            <input type="text" id="fname-field-add" name="fname-add" value=""></input>
+            <br>
+            <label>Enter landlord's last name:</label>
+            <input type="text" id="lname-field-add" name="lname-add" value=""></input><br>
+            <input type="submit" value="Add landlord"></input>
+        </form>
 
     </div>
-    <div id='add-address-div'></div>
+    <div id='add-address-div' class='hide'>
+        <form id="add-address-form">
+            <label>Enter street:</label>
+            <input type="text" id="street-field-add" name="street-add" value=""></input><br>
+            <label>Enter city:</label>
+            <input type="text" id="city-field-add" name="city-add" value=""></input><br>
+            <label>Enter state:</label>
+            <input type="text" id="state-field-add" name="state-add" value=""></input><br>
+             <label>Enter zipcode:</label>
+            <input type="text" id="zipcode-field-add" name="zipcode-add" placeholder="00000"></input><br>
+             <label>Enter country:</label>
+            <input type="text" id="country-field-add" name="country-add" value="United States"></input><br>
+            <input type="submit" value="Add address"></input>
+        </form>
+    </div>
 
     <script>
 
@@ -59,8 +75,9 @@
             console.log(results);
 
             if ($.isEmptyObject(results)) {
-                $('#results').prepend('Could not find any ratings matching your search.');
+                $('#results').prepend('Could not find any landlords matching your search.');
                 $('#add-landlord-btn').css('display', 'block');
+                $('#add-address-btn').css('display', 'block');
                 // TO DO: add option to add address or landlord
             }
 
@@ -89,7 +106,14 @@
 
             $.get('lookup-by-name.json', name, showLandlords);
             console.log("Finished sending name");
+        }
 
+        function showAddressForm(evt) {
+            console.log("clicked add address button");
+            $("#add-address-div").css("display", 'block');
+            $("#street-field-add").attr('value', $('#street-field').val());
+            $("#city-field-add").attr('value', $('#city-field').val());
+            $("#state-field-add").attr('value', $('#state-field').val());
         }
 
         function showLandlordForm(evt) {
@@ -97,6 +121,15 @@
             $("#add-landlord-div").css("display", 'block');
             $("#fname-field-add").attr('value', $('#fname-field').val());
             $("#lname-field-add").attr('value', $('#lname-field').val());
+        }
+
+        function addAddress(evt) {
+            evt.preventDefault();
+            var name = $('#add-address-form').serialize();
+
+            $.post('/add-new-address.json', name, function (results) {
+                alert(results);
+            });
         }
 
         function addLandlord(evt) {
@@ -113,10 +146,16 @@
         $("#search-by-name").on("submit", lookupByName);
 
          // When add landlord button is clicked, show the form to add landlord
-        // and populate the inputs with the values from the search form.
         $("#add-landlord-btn").on("click", showLandlordForm);
+
+        // When add address button is clicked, show the form to add addresses
+        $("#add-address-btn").on("click", showAddressForm);
         
-       $("#add-landlord-form").on("submit", addLandlord);
+        // Process landlord when add landlord form is submitted
+        $("#add-landlord-form").on("submit", addLandlord);
+
+        // Process address when add address button is submitted
+        $("#add-address-form").on("submit", addAddress);
 
     </script>
 

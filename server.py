@@ -210,6 +210,66 @@ def display_landlord_page(landlord_id):
 #     """Get address input and return json with the matching places"""
 
 
+@app.route('/add-new-address.json', methods=['POST'])
+def add_new_address():
+    """Add new address to database"""
+    print "I'm at add-new-address"
+    street = request.form.get('street-add')
+    city = request.form.get('city-add')
+    state = request.form.get('state-add')
+    zipcode = request.form.get('zipcode-add')
+    country = request.form.get('country-add')
+
+    address = db.session.query(Address).filter(Address.street == street,
+                                               Address.state == state,
+                                               Address.city == city).all()
+
+    if address:
+        return "{} {} already exists as an address.".format(street, city, state)
+
+    else:
+        # TO DO: Refactor to not repeat the following code both here and in process-review
+
+        # Geocode to find lat and lng
+        # Use center of San Francisco for proximity lat and lng
+        proxim_lng = -122.4194155
+        proxim_lat = 37.7749295
+
+        # Make request to mapbox geocoding api and turn response into json
+        req = 'https://api.mapbox.com/geocoding/v5/mapbox.places/{}.json?proximity={},{}&access_token={}'.format(street, proxim_lng, proxim_lat, mapbox_token)
+        r = requests.get(req)
+        json_response = r.json()
+        # pp.pprint(json_response)
+
+        feature_to_add = None
+
+        # Isolate the feature in the city the user searched for
+        for feature in json_response['features']:
+            print 'iterating over json response'
+            if city == feature['context'][1]["text"]:
+                feature_to_add = feature
+                break
+
+        # If there are no features that match the city the user searched for
+        if feature_to_add is None:
+            return "Can't find the street address you entered in the city you entered."
+
+        # Otherwise, continue the process to add the address to the database
+        else:
+            address = Address(street=street,
+                              city=city,
+                              state=state,
+                              zipcode=zipcode,
+                              country=country,
+                              lng=feature_to_add['center'][0],
+                              lat=feature_to_add['center'][1])
+            print address
+            db.session.add(address)
+            db.session.commit()
+
+        return "Successfully added {}, {}, {} as an address.".format(street, city, state)
+
+
 @app.route('/add-new-landlord.json', methods=['POST'])
 def add_new_landlord():
     """Add new landlord to database"""
