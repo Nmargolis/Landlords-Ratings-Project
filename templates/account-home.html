@@ -1,6 +1,22 @@
 {% extends 'base.html' %}
 {% block title %}Account Home{% endblock %}
+{% block styles %}
+    <style>
+        #reviews {
+            width: 45%;
+            position: relative;
+            float: left;
+            padding-right: 20px;
+        }
 
+        #convos {
+            width: 45%;
+            position: relative;
+            float: right;
+        }
+    </style>
+{% endblock %}
+    
 {% block content %}
     <h1>{{ user.fname }} {{ user.lname }}</h1>
 
@@ -16,8 +32,7 @@
             Rating4: {{ review.rating4 }}<br>
             Rating5: {{ review.rating5 }}<br>
             Comment: {{ review.comment }}<br>
-           </article>
-
+           </article><hr>
         {% endfor %}
     </div>
 
@@ -27,7 +42,8 @@
     {% for convo in user.conversations %}
         <article><b>{{ convo.subject }}</b><br>
             {% for message in convo.messages %}
-               Sent by user {{ message.user.user_id }} at {{ message.sent_at }}: <br>
+               Sent by user {{ message.user.user_id }} at {{ message.sent_at }}: 
+               <br>
             <p>{{ message.content }}</p> <br>
             {% endfor %}
         </article><hr>
