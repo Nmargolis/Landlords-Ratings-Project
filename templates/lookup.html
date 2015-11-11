@@ -3,6 +3,7 @@
 {% block styles %}
     <style>
         .map { position:relative; top:0; bottom:0; width:50%; height: 500px; float:right; }
+        .hide {display:none;}
     </style>
 {% endblock %}
 {% block content %}
@@ -34,16 +35,32 @@
 
 
 
-    <div id='results'></div>
+    <div id='results'>
+        <button class="hide" id="add-landlord-btn">Add landlord</button>
+    </div>
+    <div id='add-landlord-div' class='hide'>
+        <form id="add-landlord-form">
+        <label>Enter landlord's first name:</label>
+        <input type="text" id="fname-field-add" name="fname-add" value=""></input>
+        <br>
+        <label>Enter landlord's last name:</label>
+        <input type="text" id="lname-field-add" name="lname-add" value=""></input><br>
+        <input type="submit" vaue="Add"></input>
+
+    </div>
+    <div id='add-address-div'></div>
 
     <script>
+
+        // Functions to lookup by name or address and show list of landlords
 
         function showLandlords(results) {
 
             console.log(results);
 
             if ($.isEmptyObject(results)) {
-                $('#results').html('Could not find any ratings matching your search.')
+                $('#results').prepend('Could not find any ratings matching your search.');
+                $('#add-landlord-btn').css('display', 'block');
                 // TO DO: add option to add address or landlord
             }
 
@@ -75,9 +92,28 @@
 
         }
 
-        $("#search-by-address").on("submit", lookupByAddress)
+        $("#search-by-address").on("submit", lookupByAddress);
 
-        $("#search-by-name").on("submit", lookupByName)
+        $("#search-by-name").on("submit", lookupByName);
+
+        $("#add-landlord-btn").on("click", function() {
+            console.log("clicked add landlord button");
+            $("#add-landlord-div").css("display", 'block');
+            $("#fname-field-add").attr('value', $('#fname-field').val());
+            $("#lname-field-add").attr('value', $('#lname-field').val());
+            });
+    
+
+
+        // Functions to add landlord
+
+        // function addNewLandlord(evt) {
+        //     evt.preventDefault();
+        //     $('#add-landlord-div').html('');
+            
+        // }
+
+
 
     </script>
 
