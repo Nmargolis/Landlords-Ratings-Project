@@ -131,14 +131,22 @@ class Convo(db.Model):
     __tablename__ = "Convos"
 
     convo_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    subject = db.Column(db.String)
 
     messages = db.relationship('Message',
                                secondary='Userconvos',
                                backref='conversation',
                                order_by='desc(Message.sent_at)')
 
+    participants = db.relationship('User',
+                                   secondary='Userconvos')
+
     def __repr__(self):
         return "<Convo convo_id = {}>".format(self.convo_id)
+
+    def get_participant_ids(self):
+        """Return a list of participants in the conversation"""
+        pass
 
 
 class Userconvo(db.Model):
