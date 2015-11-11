@@ -25,10 +25,13 @@
     <h3>Your conversations</h3>
 
     {% for convo in user.conversations %}
-        <article>
-            {{ convo }}
-        </article>
-
+        <article><b>{{ convo.subject }}</b><br>
+            {% for message in convo.messages %}
+               Sent by user {{ message.user.user_id }} at {{ message.sent_at }}: <br>
+            <p>{{ message.content }}</p> <br>
+            {% endfor %}
+        </article><hr>
+    {% endfor %}
     </div>
     
 
