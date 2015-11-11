@@ -210,6 +210,29 @@ def display_landlord_page(landlord_id):
 #     """Get address input and return json with the matching places"""
 
 
+@app.route('/add-new-landlord.json', methods=['POST'])
+def add_new_landlord():
+    """Add new landlord to database"""
+    fname = request.form.get('fname-add')
+    lname = request.form.get('lname-add')
+
+    print fname
+    print lname
+
+    landlords = db.session.query(Landlord).filter(Landlord.fname == fname,
+                                                  Landlord.lname == lname).all()
+
+    if landlords:
+        return "{} {} already exists as a landlord.".format(fname, lname)
+
+    else:
+        landlord = Landlord(fname=fname, lname=lname)
+
+        db.session.add(landlord)
+        db.session.commit()
+        return "Successfully added {} {} as a landlord.".format(fname, lname)
+
+
 @app.route('/process-rating', methods=['POST'])
 def process_rating():
     """Get ratings from form and store them in reviews table"""

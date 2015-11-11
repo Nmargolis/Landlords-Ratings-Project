@@ -92,28 +92,31 @@
 
         }
 
-        $("#search-by-address").on("submit", lookupByAddress);
-
-        $("#search-by-name").on("submit", lookupByName);
-
-        $("#add-landlord-btn").on("click", function() {
+        function showLandlordForm(evt) {
             console.log("clicked add landlord button");
             $("#add-landlord-div").css("display", 'block');
             $("#fname-field-add").attr('value', $('#fname-field').val());
             $("#lname-field-add").attr('value', $('#lname-field').val());
+        }
+
+        function addLandlord(evt) {
+            evt.preventDefault();
+            var name = $('#add-landlord-form').serialize();
+
+            $.post('/add-new-landlord.json', name, function (results) {
+                alert(results);
             });
-    
+        }
 
+        $("#search-by-address").on("submit", lookupByAddress);
 
-        // Functions to add landlord
+        $("#search-by-name").on("submit", lookupByName);
 
-        // function addNewLandlord(evt) {
-        //     evt.preventDefault();
-        //     $('#add-landlord-div').html('');
-            
-        // }
-
-
+         // When add landlord button is clicked, show the form to add landlord
+        // and populate the inputs with the values from the search form.
+        $("#add-landlord-btn").on("click", showLandlordForm);
+        
+       $("#add-landlord-form").on("submit", addLandlord);
 
     </script>
 
