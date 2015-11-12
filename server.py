@@ -164,17 +164,26 @@ def find_landlords_by_address():
     city = request.args.get('city')
     state = request.args.get('state')
 
-    reviews = db.session.query(Review).join(Address).filter(Address.street == street,
-                                                            Address.state == state,
-                                                            Address.city == city).all()
+    address_result = db.session.query(Address).filter(Address.street == street,
+                                                 Address.state == state,
+                                                 Address.city == city).first()
 
-    landlord_dict = {}
+    if not address_result:
+        return "found-no-addresses"
 
-    for review in reviews:
-        landlord = review.landlord
-        landlord_dict[landlord.landlord_id] = landlord.convert_to_dict()
+    else:
+        reviews = address_result.reviews
 
-    return jsonify(landlord_dict)
+        if not reviews:
+            return"found-address-no-reviews"
+
+        landlord_dict = {}
+
+        for review in reviews:
+            landlord = review.landlord
+            landlord_dict[landlord.landlord_id] = landlord.convert_to_dict()
+
+        return jsonify(landlord_dict)
 
 
 @app.route('/lookup-by-name.json')
@@ -194,8 +203,11 @@ def find_landlords_by_name():
     for landlord in landlords:
         landlord_dict[landlord.landlord_id] = landlord.convert_to_dict()
 
-    return jsonify(landlord_dict)
-
+    print landlord_dict
+    if landlord_dict:
+        return jsonify(landlord_dict)
+    else:
+        return "found-no-landlords"
 
 @app.route('/landlord/<int:landlord_id>')
 def display_landlord_page(landlord_id):
@@ -307,8 +319,14 @@ def process_rating():
     country = request.form.get('country')
     zipcode = request.form.get('zipcode')
 
-    moved_in_at = datetime.strptime(request.form.get('move-in'), "%Y-%m-%d")
-    moved_out_at = datetime.strptime(request.form.get('move-out'), "%Y-%m-%d")
+    moved_in_at = request.form.get('move-in')
+    moved_out_at = request.form.get('move-out')
+
+    if moved_in_at:
+        moved_in_at = datetime.strptime(moved_in_at, "%Y-%m-%d")
+
+    if moved_out_at:
+        moved_out_at = datetime.strptime(moved_out_at, "%Y-%m-%d")
 
     rating1 = request.form.get('rating1')
     rating2 = request.form.get('rating2')

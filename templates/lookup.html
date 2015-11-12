@@ -74,15 +74,26 @@
 
             console.log(results);
 
-            if ($.isEmptyObject(results)) {
-                $('#results').prepend('Could not find any landlords matching your search.');
+            if (results == "found-no-landlords") {
+                $('#results').empty();
+                $('#results').prepend('<p>Could not find any landlords matching your search.</p>');
                 $('#add-landlord-btn').css('display', 'block');
+            }
+                
+            else if (results == "found-no-addresses") {
+                $('#results').empty();
+                $('#results').prepend('<p>Could not find any addresses matching your search.</p>');
                 $('#add-address-btn').css('display', 'block');
-                // TO DO: add option to add address or landlord
             }
 
+            else if(results == "found-address-no-reviews") {
+                $('#results').empty();
+                $('#results').prepend('<p>No reviews exist for this address yet.</p>');
+            }
+                
             // Otherwise display each landlord as a link to the page for that landlord
             else {
+                $('#results').empty();
                 for (var landlordID in results) {
                     if (results.hasOwnProperty(landlordID)) {
                         $('#results').append("<p>Landlord: <a href='/landlord/"+ landlordID + "'> " + results[landlordID]['fname'] + " " + results[landlordID]['lname'] + "</a> </p>");
@@ -129,6 +140,9 @@
 
             $.post('/add-new-address.json', name, function (results) {
                 alert(results);
+
+            $('#results').html('');
+
             });
         }
 
@@ -138,6 +152,8 @@
 
             $.post('/add-new-landlord.json', name, function (results) {
                 alert(results);
+
+            $('#results').html('');
             });
         }
 
