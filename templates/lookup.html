@@ -36,6 +36,7 @@
 
 
     <div id='results'>
+        <div id="results-message"></div>
         <button class="hide" id="add-address-btn">Add address</button>
         <button class="hide" id="add-landlord-btn">Add landlord</button>
     </div>
@@ -75,28 +76,28 @@
             console.log(results);
 
             if (results == "found-no-landlords") {
-                $('#results').empty();
-                $('#results').prepend('<p>Could not find any landlords matching your search.</p>');
+                $('#results-message').empty();
+                $('#results-message').prepend('<p>Could not find any landlords matching your search.</p>');
                 $('#add-landlord-btn').css('display', 'block');
             }
                 
             else if (results == "found-no-addresses") {
-                $('#results').empty();
-                $('#results').prepend('<p>Could not find any addresses matching your search.</p>');
+                $('#results-message').empty();
+                $('#results-message').prepend('<p>Could not find any addresses matching your search.</p>');
                 $('#add-address-btn').css('display', 'block');
             }
 
             else if(results == "found-address-no-reviews") {
-                $('#results').empty();
-                $('#results').prepend('<p>No reviews exist for this address yet.</p>');
+                $('#results-message').empty();
+                $('#results-message').prepend('<p>No reviews exist for this address yet.</p>');
             }
                 
             // Otherwise display each landlord as a link to the page for that landlord
             else {
-                $('#results').empty();
+                $('#results-message').empty();
                 for (var landlordID in results) {
                     if (results.hasOwnProperty(landlordID)) {
-                        $('#results').append("<p>Landlord: <a href='/landlord/"+ landlordID + "'> " + results[landlordID]['fname'] + " " + results[landlordID]['lname'] + "</a> </p>");
+                        $('#results-message').append("<p>Landlord: <a href='/landlord/"+ landlordID + "'> " + results[landlordID]['fname'] + " " + results[landlordID]['lname'] + "</a> </p>");
                     }
                 }
             }

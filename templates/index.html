@@ -6,5 +6,100 @@
 {% block content %}
     <h1>Home</h1>
    
+   <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modalRatingForm">
+     Rate a landlord
+   </button>
+
+    <!-- Modal form window -->
+    <div class="modal fade" id="modalRatingForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+          </div>
+          <div class="modal-body">
+            
+            {% if 'user' in session %}
+
+    <form action="/process-rating2.json" method="POST">
+          <label><b>Landlord:</b></label>
+            <label>Enter landlord's first name:</label>
+            <input type="text" id="fname-field" name="fname" placeholder="first name"></input><br>
+            <label>Enter landlord's last name:</label>
+            <input type="text" id="lname-field" name="lname" placeholder="last name"></input><br>
+          <label><b>Address:</b></label>
+            <input type="text" name="street-number" placeholder="1234">
+            <input type="text" name="street-name" placeholder="Main St">
+            <input type="text" name="city" placeholder="San Francisco">
+            <input type="text" name="state" placeholder="California">
+            <input type="text" name="zipcode" placeholder="00000">
+            <input type="text" name="country" placeholder="United States"><br>
+
+          <label>When did you move in? (optional)
+            <input type="date" name="move-in" placeholder="mm/dd/yyyy">
+          </label><br>
+           <label>When did you move out (optional)?
+            <input type="date" name="move-out" placeholder="mm/dd/yyyy">
+          </label><br>
+
+          <b>Please rate on the following criteria:</b><br>
+          <label>Maintenance and repairs
+              <input type="radio" name="rating1" value="1"> 1 
+              <input type="radio" name="rating1" value="2"> 2 
+              <input type="radio" name="rating1" value="3"> 3 
+              <input type="radio" name="rating1" value="4"> 4 
+              <input type="radio" name="rating1" value="5"> 5 
+          </label><br>
+          <label>Responsiveness
+              <input type="radio" name="rating2" value="1"> 1 
+              <input type="radio" name="rating2" value="2"> 2 
+              <input type="radio" name="rating2" value="3"> 3 
+              <input type="radio" name="rating2" value="4"> 4 
+              <input type="radio" name="rating2" value="5"> 5 
+          </label></br>
+          <label>Pest management
+              <input type="radio" name="rating3" value="1"> 1 
+              <input type="radio" name="rating3" value="2"> 2 
+              <input type="radio" name="rating3" value="3"> 3 
+              <input type="radio" name="rating3" value="4"> 4 
+              <input type="radio" name="rating3" value="5"> 5 
+          </label></br>
+           <label>Respect in communications
+              <input type="radio" name="rating4" value="1"> 1 
+              <input type="radio" name="rating4" value="2"> 2 
+              <input type="radio" name="rating4" value="3"> 3 
+              <input type="radio" name="rating4" value="4"> 4 
+              <input type="radio" name="rating4" value="5"> 5 
+          </label></br>
+           <label>Rent increases
+              <input type="radio" name="rating5" value="1"> 1 
+              <input type="radio" name="rating5" value="2"> 2 
+              <input type="radio" name="rating5" value="3"> 3 
+              <input type="radio" name="rating5" value="4"> 4 
+              <input type="radio" name="rating5" value="5"> 5 
+          </label></br>
+          <label>Comment
+              <input type="text" name="comment" placeholder="Your comment here">
+          </label>
+        <input type="submit" value="Submit">
+      </form>
+
+  {% else %}
+    <p>You must be logged in to rate a landlord. Please <a href="/login">log in.</a></p>
+  {% endif %}
+
+
+
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
 
 {% endblock %}
