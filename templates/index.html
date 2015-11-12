@@ -22,12 +22,17 @@
             
             {% if 'user' in session %}
 
-    <form action="/process-rating2.json" method="POST">
+    <form id="modal-review-form">
           <label><b>Landlord:</b></label>
             <label>Enter landlord's first name:</label>
             <input type="text" id="fname-field" name="fname" placeholder="first name"></input><br>
             <label>Enter landlord's last name:</label>
             <input type="text" id="lname-field" name="lname" placeholder="last name"></input><br>
+
+            # TO DO: add button to do ajax call to check if landlord in databse
+            # Allow user to choose to add landlord to databse if they don't exist
+            # OR: Just add the landlord if they don't exist.
+
           <label><b>Address:</b></label>
             <input type="text" name="street-number" placeholder="1234">
             <input type="text" name="street-name" placeholder="Main St">
@@ -90,8 +95,6 @@
   {% endif %}
 
 
-
-
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -101,5 +104,16 @@
       </div>
     </div>
 
+<script>
 
+    function displayResultsMessage(results) {
+        alert(results);
+    }
+    
+    $('#modal-review-form').on('submit', function (evt) {
+        evt.preventDefault();
+        var inputs = $('#modal-review-form').serialize();
+        $.post('/process-rating2.json', inputs, displayResultsMessage);
+    })
+</script>
 {% endblock %}
