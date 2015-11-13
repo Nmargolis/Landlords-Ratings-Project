@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% block title %}Map experiment{% endblock %}
+{% block styles %}
+  <style>
+    .map {
+    border-left:1px solid #fff;
+    position:absolute;
+    left:33.3333%;
+    width:66.6666%;
+    top:0;
+    bottom:0;
+    }
+  </style>
+ 
+{% endblock %}
+{% block content %}
+    <h1>Map</h1>
+    <div id="content">
+      <div id="landlords"></div>
+    </div>
+    <div id="map" class="map"></div>
+
+
+  <script>
+    // Initialize the map
+    L.mapbox.accessToken = 'pk.eyJ1Ijoibm1hcmdvbGlzODkiLCJhIjoiY2lnbXZlem9xMDAzdDZjbTM4a2tteXdzMSJ9.j6aj2wMzUUb8FZR1XMBiBg';
+
+    var map = L.mapbox.map('map', 'mapbox.streets')
+      .setView([37.7871, -122.4216], 13);
+
+    var myLayer = L.mapbox.featureLayer().addTo(map);
+
+    // Add geocoder search input
+    var geocoderControl = L.mapbox.geocoderControl('mapbox.places', {
+                                                    keepOpen: true,
+                                                    autocomplete: true
+                                                    });
+    geocoderControl.addTo(map);
+
+    // Request addresses as GeoJSON and add to map
+    $.get('/all_addresses.json', createLayer);
+
+    // var geojson = [
+    //               {
+    //                 "type": "FeatureCollection",
+    //                 "features": [
+    //                   {
+    //                     "type": "Feature",
+    //                     "geometry": {
+    //                       "type": "Point",
+    //                       "coordinates": [
+    //                         -122.411604,
+    //                         37.788844
+    //                       ]
+    //                     },
+    //                     "properties": {
+    //                       "address": "683 Sutter St",
+    //                       "city": "San Francisco",
+    //                       "country": "United States",
+    //                       "postalCode": "94102",
+    //                       "state": "California",
+    //                       "addressid": 43,
+    //                       "landlords": [
+    //                         {
+    //                           "landlord": "Anya Rome",
+    //                           "averagerating": 4.5
+    //                         },
+    //                         {
+    //                           "landlord": "Don Steinberg",
+    //                           "averagerating": 4.2
+    //                         }
+    //                       ]
+    //                     }
+    //                   },
+    //                   {
+    //                     "type": "Feature",
+    //                     "geometry": {
+    //                       "type": "Point",
+    //                       "coordinates": [
+    //                         -122.45010705,
+    //                         37.77411479
+    //                       ]
+    //                     },
+    //                     "properties": {
+    //                       "address": "2049 Grove St",
+    //                       "city": "San Francisco",
+    //                       "country": "United States",
+    //                       "postalCode": "94117",
+    //                       "state": "California",
+    //                       "addressid": 19,
+    //                       "landlords": [
+    //                         {
+    //                           "landlord": "Anya Rome",
+    //                           "averagerating": 4.5
+    //                         },
+    //                         {
+    //                           "landlord": "Don Steinberg",
+    //                           "averagerating": 4.2
+    //                         }
+    //                       ]
+    //                     }
+    //                   }]
+    //                 }
+    //                 ];
+
+    function createLayer(results) {
+      var geojson = results.features;
+      console.log(geojson);
+      myLayer.setGeoJSON(geojson);
+      myLayer.eachLayer(function(place) {
+        var properties = place.feature.properties;
+        var popup = '<h3>Address</h3><div>' + properties.address + '<br>'
+          var landlords = properties.landlords;
+          for (var i = 0; i < landlords.length; i++) {
+            // if (reviews.hasOwnProperty(reviews[i])) {
+              console.log(landlords[i]);
+              popup += '<br><b>Landlord: ' + landlords[i].landlord + '</b><br>Average rating: ' + landlords[i].averagerating;
+            // }
+            
+          }
+
+        place.on('click', function() {
+            // center the map on the selected marker.
+            map.setView(place.getLatLng(), 14);
+        });
+
+        popup += '</div>';
+        place.bindPopup(popup);
+      });
+    }
+
+  </script>
+
+{% endblock %}
