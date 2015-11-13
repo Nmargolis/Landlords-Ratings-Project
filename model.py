@@ -75,10 +75,53 @@ class Address(db.Model):
     building_id = db.Column(db.Integer, db.ForeignKey('Buildings.building_id'))
 
     building = db.relationship('Building', backref='addresses')
+    landlords = db.relationship('Landlord',
+                                secondary='Reviews',
+                                backref='addresses')
 
     def __repr__(self):
         return "<Address address_id = {} street = {} city = {} state= {} zipcode = {} country = {} unit = {}>".format(
             self.address_id, self.street, self.city, self.state, self.zipcode, self.country, self.unit)
+
+    def return_geojson(self):
+
+        landlords = self.landlords
+
+        # print landlords
+
+        landlord_list = []
+
+        for landlord in landlords:
+            landlord_list.append(
+                {
+                    "landlord": "{} {}".format(landlord.fname, landlord.lname),
+                    "averagerating": 4.5
+                }
+                )
+
+        # print landlord_list
+        return {
+            "type": "Feature",
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                self.lng,
+                self.lat
+              ]
+            },
+            "properties": {
+            "address": self.street,
+            "city": self.city,
+            "country": self.country,
+            "postalCode": self.zipcode,
+            "state": self.state,
+            "addressid": self.address_id,
+            "landlords": landlord_list
+            }
+          }
+
+
+
 
 
 class Review(db.Model):

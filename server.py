@@ -640,6 +640,35 @@ def process_message_existing():
     return redirect('/account-home')
 
 
+@app.route('/map')
+def display_map():
+    """Displays map.html"""
+
+    return render_template('map.html')
+
+@app.route('/all_addresses.json')
+def get_addresses():
+    """Returns geojson with all addresses in database"""
+
+    addresses = Address.query.all()
+
+    features = []
+
+    for address in addresses:
+        features.append(address.return_geojson())
+
+
+    geojson = {"features": [
+                {
+                    "type": "FeatureCollection",
+                    "features": features
+                }
+                ]}
+
+
+    return jsonify(geojson)
+
+
 if __name__ == "__main__":
 
     connect_to_db(app)
