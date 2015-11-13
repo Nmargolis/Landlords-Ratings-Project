@@ -183,6 +183,8 @@ def find_landlords_by_address():
             landlord = review.landlord
             landlord_dict[landlord.landlord_id] = landlord.convert_to_dict()
 
+        #TO DO: also return GeoJSON for that address
+
         return jsonify(landlord_dict)
 
 
@@ -209,13 +211,25 @@ def find_landlords_by_name():
     else:
         return "found-no-landlords"
 
+
 @app.route('/landlord/<int:landlord_id>')
 def display_landlord_page(landlord_id):
     """Show page with landlord info and ratings"""
     landlord = Landlord.query.get(landlord_id)
 
+    #TO DO: Also return GeoJSON of addresses and reviews for landlord
+
     return render_template('landlord.html', landlord=landlord)
 
+
+@app.route('/get_landlord_geojson.json')
+def get_landlord_geojson():
+    """Returns geojson with all addresses and reviews for a landlord"""
+    landlord_id = request.args.get('landlord-id')
+
+    landlord = Landlord.query.get(landlord_id)
+
+    return jsonify(landlord.get_geojson())
 
 # @app.route('/process-address.json')
 # def process_address():
@@ -648,7 +662,7 @@ def display_map():
 
 @app.route('/all_addresses.json')
 def get_addresses():
-    """Returns geojson with all addresses in database"""
+    """Returns geojson with all addresses and their reviews"""
 
     addresses = Address.query.all()
 
@@ -668,6 +682,11 @@ def get_addresses():
 
     return jsonify(geojson)
 
+# @app.route('addresses_given_landlord.json')
+# def get_addresses_given_landlord():
+#     """Returns geojson with all addresses and reviews for a landlord"""
+
+#     landlord = request.form.get('landlord-id')
 
 if __name__ == "__main__":
 

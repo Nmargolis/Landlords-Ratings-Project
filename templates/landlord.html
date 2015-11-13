@@ -7,11 +7,54 @@
 {% endblock %}
 {% block content %}
     <div>
-        <div id='map-one' class='map'> </div>
+        <div id='map' class='map'> </div>
     </div>
     <script>
-        L.mapbox.accessToken = 'pk.eyJ1Ijoibm1hcmdvbGlzODkiLCJhIjoiY2lnbXZkZ3pwMDA0NG5ra280cmI4MzlwaCJ9.HHElSYk4EV_D2Jeg4gLJfg';
-        L.mapbox.map('map-one', 'mapbox.streets').setView([37.7871, -122.4216], 13);
+           // Initialize the map
+    L.mapbox.accessToken = 'pk.eyJ1Ijoibm1hcmdvbGlzODkiLCJhIjoiY2lnbXZlem9xMDAzdDZjbTM4a2tteXdzMSJ9.j6aj2wMzUUb8FZR1XMBiBg';
+
+    var map = L.mapbox.map('map', 'mapbox.streets')
+      .setView([37.7871, -122.4216], 12);
+
+    var myLayer = L.mapbox.featureLayer().addTo(map);
+
+    // Add geocoder search input
+    var geocoderControl = L.mapbox.geocoderControl('mapbox.places', {
+                                                    keepOpen: true,
+                                                    autocomplete: true
+                                                    });
+    geocoderControl.addTo(map);
+
+    // Request addresses as GeoJSON and add to map
+    $.get('/get_landlord_geojson.json?landlord-id=' + {{landlord.landlord_id}}, createLayer);
+
+    function createLayer(results) {
+      var geojson = results.features;
+      console.log(geojson);
+      myLayer.setGeoJSON(geojson);
+      myLayer.eachLayer(function(place) {
+        var properties = place.feature.properties;
+        var popup = '<h3>Address</h3><div>' + properties.address + '<br>'
+          var landlords = properties.landlords;
+          for (var i = 0; i < landlords.length; i++) {
+            // if (reviews.hasOwnProperty(reviews[i])) {
+              console.log(landlords[i]);
+              popup += '<br><b>Landlord: ' + landlords[i].landlord + '</b><br>Average rating: ' + landlords[i].averagerating;
+            // }
+            
+          }
+
+        place.on('click', function() {
+            // center the map on the selected marker.
+            map.setView(place.getLatLng(), 14);
+        });
+
+        popup += '</div>';
+        place.bindPopup(popup);
+      });
+    }
+
+  </script>
     </script>
 
   <h1>{{ landlord.fname }} {{ landlord.lname }}</h1>

@@ -50,6 +50,25 @@ class Landlord(db.Model):
 
         return landlord_dict
 
+    def get_geojson(self):
+        """Returns GeoJSON of addresses and reviews associated with landlord"""
+
+        features = []
+
+        for address in self.addresses:
+            addr_feature = address.return_geojson()
+            features.append(addr_feature)
+
+        geojson = {"features": [
+                {
+                    "type": "FeatureCollection",
+                    "features": features
+                }
+                ]}
+
+        return geojson
+
+
 
 class Building(db.Model):
 
@@ -98,6 +117,7 @@ class Address(db.Model):
                     "averagerating": 4.5
                 }
                 )
+
 
         # print landlord_list
         return {
