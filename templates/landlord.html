@@ -30,7 +30,7 @@
 
     function createLayer(results) {
       var geojson = results.features;
-      console.log(geojson);
+      // console.log(geojson);
       myLayer.setGeoJSON(geojson);
       myLayer.eachLayer(function(place) {
         var properties = place.feature.properties;
@@ -38,7 +38,7 @@
           var landlords = properties.landlords;
           for (var i = 0; i < landlords.length; i++) {
             // if (reviews.hasOwnProperty(reviews[i])) {
-              console.log(landlords[i]);
+              // console.log(landlords[i]);
               popup += '<br><b>Landlord: ' + landlords[i].landlord + '</b><br>Average rating: ' + landlords[i].averagerating;
             // }
             
@@ -46,7 +46,7 @@
 
         place.on('click', function() {
             // center the map on the selected marker.
-            map.setView(place.getLatLng(), 14);
+            map.setView(place.getLatLng(), 12);
         });
 
         popup += '</div>';
