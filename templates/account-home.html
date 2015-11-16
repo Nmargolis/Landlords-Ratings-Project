@@ -42,10 +42,17 @@
     {% for convo in user.conversations %}
         <article><b>{{ convo.subject }}</b><br>
             {% for message in convo.messages %}
-               Sent by user {{ message.user.user_id }} at {{ message.sent_at }}: 
+               Sent by user {{ message.user[0].user_id }} at {{ message.sent_at }}: 
                <br>
             <p>{{ message.content }}</p> <br>
             {% endfor %}
+          <!--   Get other participant in convo -->
+            {% for participant in convo.participants %}
+                {% if session['user'] != participant.user_id %}
+                    <a href="/send-message/{{ participant.user_id }}"><button id="send-message">Message this user</button></a>
+                {% endif %}
+            {% endfor %}
+
         </article><hr>
     {% endfor %}
     </div>

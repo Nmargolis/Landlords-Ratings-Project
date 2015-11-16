@@ -23,7 +23,7 @@
         <h3>Previous messages in this conversation</h3>
 
         {% for message in existing_convo.messages %}
-            <b>Sent by user {{ message.user.user_id }} at {{ message.sent_at }}</b>: <br>
+            <b>Sent by user {{ message.user[0].user_id }} at {{ message.sent_at }}</b>: <br>
             <p>{{ message.content }}</p> <br>
         {% endfor %}
 

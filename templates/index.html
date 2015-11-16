@@ -37,26 +37,25 @@
                         <input type="text" id="fname-field" name="fname" placeholder="first name"></input><br>
                         <label>Enter landlord's last name:</label>
                         <input type="text" id="lname-field" name="lname" placeholder="last name"></input><br>
-                        <input type="submit" vaue="Search"></input>
-                    </form>
-
-                            <!-- div to display results -->
-                    <div id='results'>
-                        <div id="results-message"></div>
-                        <button class="hide" id="add-address-btn">Add address</button>
-                        <button class="hide" id="add-landlord-btn">Add landlord</button>
-                    </div>
+                      <!--   <input type="submit" value="Search"></input>
+                    </form> -->
 
                 </div> <!-- end modal-body -->
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <input type="submit" class="btn btn-primary" value="Search"></input>
+                </form>
                 </div>
             </div>
           </div>
         </div>
 
-
+        <!-- div to display results -->
+        <div id='results'>
+            <div id="results-message"></div>
+            <button class="hide" id="add-address-btn">Add address</button>
+            <button class="hide" id="add-landlord-btn">Add landlord</button>
+        </div>
 
 
         <div id='add-landlord-div' class='hide'>
@@ -221,6 +220,7 @@
 
             $.get('lookup-by-name.json', name, showLandlords);
             console.log("Finished sending name");
+            $('#modalSearchByNameForm').modal('hide');
         }
 
         function showAddressForm(evt) {
