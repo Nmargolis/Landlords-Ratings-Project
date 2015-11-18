@@ -32,6 +32,11 @@
       var geojson = results.features;
       // console.log(geojson);
       myLayer.setGeoJSON(geojson);
+      
+      // Fit the bounds of the map to show all reviews for the landlord
+      map.fitBounds(myLayer.getBounds(), {maxZoom: 12});
+
+      // Iterate through each marker to populate the popup
       myLayer.eachLayer(function(place) {
         var properties = place.feature.properties;
         var popup = '<h3>Address</h3><div>' + properties.address + '<br>'
@@ -40,6 +45,7 @@
             // if (reviews.hasOwnProperty(reviews[i])) {
               // console.log(landlords[i]);
               popup += '<br><b>Landlord: ' + landlords[i].landlord + '</b><br>Average rating: ' + landlords[i].averagerating;
+              popup += '<br>Don\'t see who you\'re looking for? <button class="show-review-form-btn">Add a review</button>'
             // }
             
           }

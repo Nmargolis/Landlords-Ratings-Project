@@ -19,36 +19,36 @@
     <div id="map" class="map"></div>
     <div id="content">
         <!-- Button to show lookup landlord by name -->
-        <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modalSearchByNameForm">
+        <!-- <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modalSearchByNameForm">
         Search for a landlord by name
-       </button><br>
+       </button><br> -->
 
         <!-- Form to search by name -->
-        <div class="modal fade" id="modalSearchByNameForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <!-- <div class="modal fade" id="modalSearchByNameForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
           <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="myModalLabel">Search for a landlord by name</h4>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body"> -->
                     <form id="search-by-name">
                         <label>Enter landlord's first name:</label>
                         <input type="text" id="fname-field" name="fname" placeholder="first name"></input><br>
                         <label>Enter landlord's last name:</label>
                         <input type="text" id="lname-field" name="lname" placeholder="last name"></input><br>
-                      <!--   <input type="submit" value="Search"></input>
-                    </form> -->
+                        <input type="submit" class="btn btn-primary" value="Search"></input>
+                    </form>
 
-                </div> <!-- end modal-body -->
-                <div class="modal-footer">
+                <!-- </div> 
+                  <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                     <input type="submit" class="btn btn-primary" value="Search"></input>
                 </form>
                 </div>
             </div>
           </div>
-        </div>
+        </div> -->
 
         <!-- div to display results -->
         <div id='results'>
@@ -91,9 +91,9 @@
             <form id="modal-review-form">
                   <label><b>Landlord:</b></label>
                     <label>Enter landlord's first name:</label>
-                    <input type="text" id="fname-field" name="fname" placeholder="first name"></input><br>
+                    <input type="text" id="fname-field-review" name="fname" placeholder="first name"></input><br>
                     <label>Enter landlord's last name:</label>
-                    <input type="text" id="lname-field" name="lname" placeholder="last name"></input><br>
+                    <input type="text" id="lname-field-review" name="lname" placeholder="last name"></input><br>
 
             <!--    # TO DO: add button to do ajax call to check if landlord in databse
                     # Allow user to choose to add landlord to databse if they don't exist
@@ -205,14 +205,14 @@
             }
         }
 
-        function lookupByAddress(evt) {
-            evt.preventDefault();
-            var address = $('#search-by-address').serialize();
-            console.log(address)
+        // function lookupByAddress(evt) {
+        //     evt.preventDefault();
+        //     var address = $('#search-by-address').serialize();
+        //     console.log(address)
             
-            $.get('/lookup-by-address.json', address, showLandlords);
-            console.log("Finished sending address");
-        }
+        //     $.get('/lookup-by-address.json', address, showLandlords);
+        //     console.log("Finished sending address");
+        // }
 
         function lookupByName(evt) {
             evt.preventDefault();
@@ -261,11 +261,20 @@
             });
         }
 
-        $("#search-by-address").on("submit", lookupByAddress);
+        // $("#search-by-address").on("submit", lookupByAddress);
 
         $("#search-by-name").on("submit", lookupByName);
 
          // When add landlord button is clicked, show the form to add landlord
+
+        // When user finishes entering landlord last name in modal review form, check if landlord in database
+        $('#lname-field-review').on('blur', function() {
+            var fname = $('#fname-field-review').val();
+            var lname = $('#lname-field-review').val();
+            var name = {fname: fname, lname: lname};
+
+          $.get('/lookup-by-name.json', name, displayResultsMessage);
+        });
 
         $("#add-landlord-btn").on("click", showLandlordForm);
 
@@ -337,5 +346,51 @@
       });
     }
 
+
+    function processGeocodeSelect(res) {
+      console.log(res);
+
+      //TO DO: Deal with error if nothing found
+      //TO DO: Handle if user presses enter instead of selecting from results
+      //TO DO: Close all tooltips that may be open
+
+      // Put selected place name in the input field
+      input = $('.leaflet-control-mapbox-geocoder .leaflet-control-mapbox-geocoder-form input ');
+
+      input.val(res.feature.place_name);
+
+      var resAddress = res.feature.address + ' ' + res.feature.text;
+      console.log(resAddress);
+      var city = res.feature.context[1].text;
+      console.log(city);
+      var state = res.feature.context[3].text;
+      console.log(state);
+
+      var address = { street: resAddress, city: city, state: state };
+
+      $.get('/lookup-by-address.json', address, showLandlords);
+
+      var found = false;
+      var msg = 'There are no reviews for that address.';
+
+      // If a marker that matches the feature exists, open the tooltip
+      myLayer.eachLayer(function(place) {
+          if (resAddress == place.feature.properties.address) {
+            map.setView(place.getLatLng(), 12);
+            place.openPopup();
+            found = true;
+            msg = '';
+          }
+      });
+      if (msg != '') {
+        alert(msg);
+      }
+    }
+
+
+    // When a user selects the location, show it as a point on the map
+    geocoderControl.on('select', processGeocodeSelect);
+    // geocoderControl.on('autoselect', processGeocodeSelect);
+    
   </script>
 {% endblock %}

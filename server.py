@@ -217,8 +217,6 @@ def display_landlord_page(landlord_id):
     """Show page with landlord info and ratings"""
     landlord = Landlord.query.get(landlord_id)
 
-    #TO DO: Also return GeoJSON of addresses and reviews for landlord
-
     return render_template('landlord.html', landlord=landlord)
 
 
@@ -230,10 +228,6 @@ def get_landlord_geojson():
     landlord = Landlord.query.get(landlord_id)
 
     return jsonify(landlord.get_geojson())
-
-# @app.route('/process-address.json')
-# def process_address():
-#     """Get address input and return json with the matching places"""
 
 
 @app.route('/add-new-address.json', methods=['POST'])
@@ -429,7 +423,7 @@ def process_rating():
 
 @app.route('/process-rating2.json', methods=['POST'])
 def process_rating2():
-    """Experimental route: Get ratings from form and store them in reviews table"""
+    """Get ratings from modal form and store them in reviews table"""
 
     user_id = session['user']
     landlord_id = request.form.get('landlord-id')
@@ -682,11 +676,7 @@ def get_addresses():
 
     return jsonify(geojson)
 
-# @app.route('addresses_given_landlord.json')
-# def get_addresses_given_landlord():
-#     """Returns geojson with all addresses and reviews for a landlord"""
 
-#     landlord = request.form.get('landlord-id')
 
 if __name__ == "__main__":
 

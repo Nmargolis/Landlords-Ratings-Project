@@ -42,7 +42,7 @@
 
     function createLayer(results) {
       var geojson = results.features;
-      console.log(geojson);
+      // console.log(geojson);
       myLayer.setGeoJSON(geojson);
       myLayer.eachLayer(function(place) {
         var properties = place.feature.properties;
@@ -50,21 +50,69 @@
           var landlords = properties.landlords;
           for (var i = 0; i < landlords.length; i++) {
             // if (reviews.hasOwnProperty(reviews[i])) {
-              console.log(landlords[i]);
+              // console.log(landlords[i]);
               popup += '<br><b>Landlord: ' + landlords[i].landlord + '</b><br>Average rating: ' + landlords[i].averagerating;
             // }
             
           }
 
-        place.on('click', function() {
-            // center the map on the selected marker.
-            map.setView(place.getLatLng(), 12);
-        });
+          place.on('click', function() {
+              // center the map on the selected marker.
+              map.setView(place.getLatLng(), 12);
+          });
 
-        popup += '</div>';
-        place.bindPopup(popup);
-      });
+          popup += '</div>';
+          place.bindPopup(popup);
+        });
     }
+
+
+
+
+    function processGeocodeSelect(res) {
+      console.log(res);
+
+      // Put selected place name in the input field
+      input = $('.leaflet-control-mapbox-geocoder .leaflet-control-mapbox-geocoder-form input ');
+
+      input.val(res.feature.place_name);
+
+      var resAddress = res.feature.address + ' ' + res.feature.text;
+      console.log(resAddress);
+
+      var found = false;
+      var msg = 'There are no reviews for that address.';
+
+      // If a marker that matches the feature exists, open the tooltip
+      myLayer.eachLayer(function(place) {
+          if (resAddress == place.feature.properties.address) {
+            map.setView(place.getLatLng(), 12);
+            place.openPopup();
+            found = true;
+            msg = '';
+          }
+      });
+      if (msg != '') {
+        alert(msg);
+      }
+    }
+
+
+    // When a user selects the location, show it as a point on the map
+    geocoderControl.on('select', processGeocodeSelect);
+
+    // input = $('.leaflet-control-mapbox-geocoder .leaflet-control-mapbox-geocoder-form input ');
+
+    // input.keyup(function (evt) {
+    //     if (evt.keyCode == 13) {
+    //       console.log('entered');
+    //       geocoderControl.on('found', function(res) {
+    //         console.log(res);
+    //       });
+
+    //     }
+    // });
+
 
   </script>
 
