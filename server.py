@@ -584,8 +584,9 @@ def process_message_new():
 
     user_to_id = request.form.get('user-to')
     user_from_id = session['user']
+    subject = request.form.get('subject')
 
-    convo = Convo()
+    convo = Convo(subject=subject)
     db.session.add(convo)
     db.session.commit()
 

@@ -375,6 +375,7 @@
 
       // If a marker that matches the feature exists, open the tooltip
       myLayer.eachLayer(function(place) {
+          place.closePopup();
           if (resAddress == place.feature.properties.address) {
             map.setView(place.getLatLng(), 12);
             place.openPopup();
