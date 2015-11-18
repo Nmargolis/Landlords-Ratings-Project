@@ -7,7 +7,7 @@
     <h1>Start a new conversation with user {{ user_to }}</h1>
 
         <form action="/process-message-new" method="POST">
-          <label>Subject: </label><input type="text" name="subject" placeholder="Subject for your conversation"
+          <label>Subject: </label><input type="text" name="subject" placeholder="Subject for your conversation">
           <label>Message: </label><input type="text" name="message" placeholder="Your message here">
           <input type="hidden" name="user-to" value={{ user_to }}>
           <input type="submit" value="send">
