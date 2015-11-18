@@ -113,7 +113,9 @@ class Address(db.Model):
         for landlord in landlords:
             landlord_list.append(
                 {
-                    "landlord": "{} {}".format(landlord.fname, landlord.lname),
+                    "firstName": landlord.fname,
+                    "lastName": landlord.lname,
+                    "landlordID": landlord.landlord_id,
                     "averagerating": 4.5
                 }
                 )

@@ -51,7 +51,7 @@
           for (var i = 0; i < landlords.length; i++) {
             // if (reviews.hasOwnProperty(reviews[i])) {
               // console.log(landlords[i]);
-              popup += '<br><b>Landlord: ' + landlords[i].landlord + '</b><br>Average rating: ' + landlords[i].averagerating;
+              popup += '<br><b>Landlord: <a href="/landlord/' + landlords[i].landlordID +'">' + landlords[i].firstName + ' ' + landlords[i].lastName +'</a></b><br>Average rating: ' + landlords[i].averagerating;
             // }
             
           }
