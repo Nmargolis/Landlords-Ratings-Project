@@ -90,8 +90,6 @@ def process_logout():
     else:
         flash('You are not logged in.')
 
-    # TO DO: Deal with keyerror that happens when there is no user in session
-    #Flash message
     return render_template('index.html')
 
 
@@ -148,11 +146,11 @@ def display_account_home():
         return redirect('/login')
 
 
-@app.route('/lookup')
-def display_lookup_page():
-    """Show page with options to look up landlords"""
+# @app.route('/lookup')
+# def display_lookup_page():
+#     """Show page with options to look up landlords"""
 
-    return render_template('lookup.html')
+#     return render_template('lookup.html')
 
 
 @app.route('/lookup-by-address.json')
@@ -196,8 +194,8 @@ def find_landlords_by_name():
     fname = request.args.get('fname')
     lname = request.args.get('lname')
 
-    landlords = db.session.query(Landlord).filter(Landlord.fname == fname,
-                                                  Landlord.lname == lname).all()
+    landlords = db.session.query(Landlord).filter(db.or_(Landlord.fname.ilike("%"+fname+"%"),
+                                                  Landlord.lname .ilike("%"+lname+"%"))).all()
     print landlords
 
     landlord_dict = {}
