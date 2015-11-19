@@ -20,15 +20,6 @@
       <div class="col-xs-12 col-md-4 col-lg-4">
         <h1>Home</h1>
      
-        <!-- Form to search by name -->
-<!--         <form id="search-by-name">
-            <label>Enter landlord's first name:</label>
-            <input type="text" id="fname-field" name="fname" placeholder="first name"></input><br>
-            <label>Enter landlord's last name:</label>
-            <input type="text" id="lname-field" name="lname" placeholder="last name"></input><br>
-            <input type="submit" class="btn btn-primary" value="Search"></input>
-        </form> -->
-
         <!-- div to display results -->
         <div id='results'>
             <!-- <div id="results-message"></div> -->
@@ -64,133 +55,133 @@
 
   </div> <!-- close container -->
 
-<script>
-      // Functions to lookup by name or address and show list of landlords
+// <script>
+//       // Functions to lookup by name or address and show list of landlords
 
-    function showLandlords(results) {
+//     function showLandlords(results) {
 
-        console.log(results);
+//         console.log(results);
 
-        if (results == "found-no-landlords") {
-            $('#results-message').empty();
-            $('#results-message').prepend('<p>Could not find any landlords matching your search.</p>');
-            $('#add-landlord-btn').removeClass('hide');
-        }
+//         if (results == "found-no-landlords") {
+//             $('#results-message').empty();
+//             $('#results-message').prepend('<p>Could not find any landlords matching your search.</p>');
+//             $('#add-landlord-btn').removeClass('hide');
+//         }
             
-        else if (results == "found-no-addresses") {
-            $('#results-message').empty();
-            $('#results-message').prepend('<p>Could not find any addresses matching your search.</p>');
-            $('#add-address-btn').removeClass('hide');
-        }
+//         else if (results == "found-no-addresses") {
+//             $('#results-message').empty();
+//             $('#results-message').prepend('<p>Could not find any addresses matching your search.</p>');
+//             $('#add-address-btn').removeClass('hide');
+//         }
 
-        else if(results == "found-address-no-reviews") {
-            $('#results-message').empty();
-            $('#results-message').prepend('<p>No reviews exist for this address yet.</p>');
-        }
+//         else if(results == "found-address-no-reviews") {
+//             $('#results-message').empty();
+//             $('#results-message').prepend('<p>No reviews exist for this address yet.</p>');
+//         }
             
-        // Otherwise display each landlord as a link to the page for that landlord
-        else {
-            $('#results-message').empty();
-            for (var landlordID in results) {
-                if (results.hasOwnProperty(landlordID)) {
-                    $('#results-message').append("<p>Landlord: <a href='/landlord/"+ landlordID + "'> " + results[landlordID]['fname'] + " " + results[landlordID]['lname'] + "</a> </p>");
-                }
-            }
-        }
-    }
+//         // Otherwise display each landlord as a link to the page for that landlord
+//         else {
+//             $('#results-message').empty();
+//             for (var landlordID in results) {
+//                 if (results.hasOwnProperty(landlordID)) {
+//                     $('#results-message').append("<p>Landlord: <a href='/landlord/"+ landlordID + "'> " + results[landlordID]['fname'] + " " + results[landlordID]['lname'] + "</a> </p>");
+//                 }
+//             }
+//         }
+//     }
 
-          // function lookupByAddress(evt) {
-          //     evt.preventDefault();
-          //     var address = $('#search-by-address').serialize();
-          //     console.log(address)
+//           // function lookupByAddress(evt) {
+//           //     evt.preventDefault();
+//           //     var address = $('#search-by-address').serialize();
+//           //     console.log(address)
               
-          //     $.get('/lookup-by-address.json', address, showLandlords);
-          //     console.log("Finished sending address");
-          // }
+//           //     $.get('/lookup-by-address.json', address, showLandlords);
+//           //     console.log("Finished sending address");
+//           // }
 
-    function lookupByName(evt) {
-        evt.preventDefault();
-        var name = $('#search-by-name').serialize();
+//     function lookupByName(evt) {
+//         evt.preventDefault();
+//         var name = $('#search-by-name').serialize();
 
-        $.get('lookup-by-name.json', name, showLandlords);
-        console.log("Finished sending name");
-        $('#modalResultsWindow').modal('show');
-    }
+//         $.get('lookup-by-name.json', name, showLandlords);
+//         console.log("Finished sending name");
+//         $('#modalResultsWindow').modal('show');
+//     }
 
-    function showAddressForm(evt) {
-        console.log("clicked add address button");
-        $("#add-address-div").removeClass('hide');
-        $("#street-field-add").attr('value', $('#street-field').val());
-        $("#city-field-add").attr('value', $('#city-field').val());
-        $("#state-field-add").attr('value', $('#state-field').val());
-    }
+//     function showAddressForm(evt) {
+//         console.log("clicked add address button");
+//         $("#add-address-div").removeClass('hide');
+//         $("#street-field-add").attr('value', $('#street-field').val());
+//         $("#city-field-add").attr('value', $('#city-field').val());
+//         $("#state-field-add").attr('value', $('#state-field').val());
+//     }
 
-    function showLandlordForm(evt) {
-        console.log("clicked add landlord button");
-        $("#add-landlord-div").removeClass('hide');
-        $("#fname-field-add").attr('value', $('#fname-field').val());
-        $("#lname-field-add").attr('value', $('#lname-field').val());
-    }
+//     function showLandlordForm(evt) {
+//         console.log("clicked add landlord button");
+//         $("#add-landlord-div").removeClass('hide');
+//         $("#fname-field-add").attr('value', $('#fname-field').val());
+//         $("#lname-field-add").attr('value', $('#lname-field').val());
+//     }
 
-    function addAddress(evt) {
-        evt.preventDefault();
-        var name = $('#add-address-form').serialize();
+//     function addAddress(evt) {
+//         evt.preventDefault();
+//         var name = $('#add-address-form').serialize();
 
-        $.post('/add-new-address.json', name, function (results) {
-            alert(results);
+//         $.post('/add-new-address.json', name, function (results) {
+//             alert(results);
 
-        $('#results').html('');
+//         $('#results').html('');
 
-        });
-    }
+//         });
+//     }
 
-    function addLandlord(evt) {
-        evt.preventDefault();
-        var name = $('#add-landlord-form').serialize();
+//     function addLandlord(evt) {
+//         evt.preventDefault();
+//         var name = $('#add-landlord-form').serialize();
 
-        $.post('/add-new-landlord.json', name, function (results) {
-            alert(results);
+//         $.post('/add-new-landlord.json', name, function (results) {
+//             alert(results);
 
-        $('#results').html('');
-        });
-    }
+//         $('#results').html('');
+//         });
+//     }
 
-      // $("#search-by-address").on("submit", lookupByAddress);
+//       // $("#search-by-address").on("submit", lookupByAddress);
 
-    $("#search-by-name").on("submit", lookupByName);
+//     $("#search-by-name").on("submit", lookupByName);
 
-    // When user finishes entering landlord last name in modal review form, check if landlord in database
-    $('#lname-field-review').on('blur', function() {
-        var fname = $('#fname-field-review').val();
-        var lname = $('#lname-field-review').val();
-        var name = {fname: fname, lname: lname};
+//     // When user finishes entering landlord last name in modal review form, check if landlord in database
+//     $('#lname-field-review').on('blur', function() {
+//         var fname = $('#fname-field-review').val();
+//         var lname = $('#lname-field-review').val();
+//         var name = {fname: fname, lname: lname};
 
-      $.get('/lookup-by-name.json', name, displayResultsMessage);
-    });
+//       $.get('/lookup-by-name.json', name, displayResultsMessage);
+//     });
 
-    $("#add-landlord-btn").on("click", showLandlordForm);
+//     $("#add-landlord-btn").on("click", showLandlordForm);
 
-    // When add address button is clicked, show the form to add addresses
-    // $("#add-address-btn").on("click", showAddressForm);
+//     // When add address button is clicked, show the form to add addresses
+//     // $("#add-address-btn").on("click", showAddressForm);
     
-    // Process landlord when add landlord form is submitted
-    $("#add-landlord-form").on("submit", addLandlord);
+//     // Process landlord when add landlord form is submitted
+//     $("#add-landlord-form").on("submit", addLandlord);
 
-    // Process address when add address button is submitted
-    $("#add-address-form").on("submit", addAddress);
+//     // Process address when add address button is submitted
+//     $("#add-address-form").on("submit", addAddress);
 
 
 
-    function displayResultsMessage(results) {
-      alert(results);
-    }
+//     function displayResultsMessage(results) {
+//       alert(results);
+//     }
 
-    $('#modal-review-form').on('submit', function (evt) {
-      evt.preventDefault();
-      var inputs = $('#modal-review-form').serialize();
-      $.post('/process-rating2.json', inputs, displayResultsMessage);
-    })
-</script>
+//     $('#modal-review-form').on('submit', function (evt) {
+//       evt.preventDefault();
+//       var inputs = $('#modal-review-form').serialize();
+//       $.post('/process-rating2.json', inputs, displayResultsMessage);
+//     })
+// </script>
 
 
 
@@ -211,6 +202,7 @@
                                                     });
     geocoderControl.addTo(map);
     $('.leaflet-control-mapbox-geocoder-form input').attr('placeholder', 'Search by address');
+    $('.leaflet-control-mapbox-geocoder-form input').addClass('form-control');
 
     // Request addresses as GeoJSON and add to map
     $.get('/all_addresses.json', createLayer);
@@ -224,7 +216,7 @@
           var landlords = properties.landlords;
           for (var i = 0; i < landlords.length; i++) {
             // if (reviews.hasOwnProperty(reviews[i])) {
-              popup += '<br><b>Landlord: <a href="/landlord/' + landlords[i].landlordID +'">' + landlords[i].firstName + ' ' + landlords[i].lastName +'</a></b><br>Average rating: ' + landlords[i].averagerating;
+              popup += '<br><b>Landlord: <a href="/landlord/' + landlords[i].landlordID +'">' + landlords[i].firstName + ' ' + landlords[i].lastName +'</a></b><br>Average rating: ' + landlords[i].averagerating || 'No ratings yet';
             // }
             
           }

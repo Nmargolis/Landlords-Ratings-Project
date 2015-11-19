@@ -441,6 +441,7 @@ def process_rating2():
             print "{} {} exists as a landlord.".format(fname, lname)
             landlord_id = landlord_result.landlord_id
         else:
+            print "{} {} does not exist as a landlord.".format(fname, lname)
             return "found-no-landlords"
             # landlord = Landlord(fname=fname, lname=lname)
 
@@ -511,7 +512,7 @@ def process_rating2():
         # If there are no features that match the city the user searched for
         if feature_to_add is None:
             flash("Can't find the street address you entered in the city you entered.")
-            return "failed to find address"
+            return "Address-not-valid"
 
         # Otherwise, continue the process to add the address to the database
         else:

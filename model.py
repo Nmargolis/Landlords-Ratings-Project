@@ -68,6 +68,33 @@ class Landlord(db.Model):
 
         return geojson
 
+    def get_average_ratings_by_rating(self):
+        """Returns a tuple containing a landlord's average score for each of the 5 rating fields"""
+
+        avg_ratings = db.session.query(db.func.avg(Review.rating1),
+                                       db.func.avg(Review.rating2),
+                                       db.func.avg(Review.rating3),
+                                       db.func.avg(Review.rating4),
+                                       db.func.avg(Review.rating5)).filter(Review.landlord_id == self.landlord_id).first()
+
+        return avg_ratings
+
+    def get_average_rating_overall(self):
+        """Returns a single number with the average of all ratings"""
+
+        total_overall_rating = 0
+        count_ratings = 0
+        avg_overall_rating = None
+
+        for rating in self.get_average_ratings_by_rating():
+            if rating is not None:
+                total_overall_rating += rating
+                count_ratings += 1
+
+        if count_ratings != 0:
+            avg_overall_rating = total_overall_rating/count_ratings
+
+        return avg_overall_rating
 
 
 class Building(db.Model):
@@ -116,7 +143,7 @@ class Address(db.Model):
                     "firstName": landlord.fname,
                     "lastName": landlord.lname,
                     "landlordID": landlord.landlord_id,
-                    "averagerating": 4.5
+                    "averagerating": landlord.get_average_rating_overall()
                 }
                 )
 

@@ -19,7 +19,7 @@
 
         <h1>{{ landlord.fname }} {{ landlord.lname }}</h1>
 
-         <h3>Rate {{ landlord.fname }} {{ landlord.lname }}</h3>
+         <!-- <h3>Rate {{ landlord.fname }} {{ landlord.lname }}</h3> -->
 
         {% if 'user' in session %}
           <button type="button" id="btn-rate-this-landlord" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modalRatingForm">
@@ -32,6 +32,10 @@
               var lname = "{{landlord.lname}}";
               $('#fname-field-review').val(fname);
               $('#lname-field-review').val(lname);
+
+              // data-attributes tag similar to meta tag
+              // The way i have it
+              // Ajax call to go back to server
 
             });
           </script>
@@ -106,7 +110,7 @@
           User: {{ review.user_id }} <br><!-- To Do: Make this a link to the user's profile -->
           Address: {{ review.address.street }}<br> <!-- To Do: add more address info -->
           Created at: {{ review.created_at }}<br>
-          <span class = "rating">Average rating: {{ (review.rating1 + review.rating2 + review.rating3 + review.rating4 + review.rating5)/5 }}<br></span>
+
           <span class = "rating">rating1: {{ review.rating1 }}<br></span>
           <span class = "rating">rating2: {{ review.rating2 }}<br></span>
           <span class = "rating">rating3: {{ review.rating3 }}<br></span>

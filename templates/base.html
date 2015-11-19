@@ -198,20 +198,24 @@
         if (results == "found-no-landlords") {
             $('#results-message').empty();
             $('#results-message').prepend('<p>Could not find any landlords matching your search.</p>');
-            $('#add-landlord-btn').removeClass('hide');
+            // $('#add-landlord-btn').removeClass('hide');
         }
             
         else if (results == "found-no-addresses") {
             $('#results-message').empty();
             $('#results-message').prepend('<p>Could not find any addresses matching your search.</p>');
-            $('#add-address-btn').removeClass('hide');
+            // $('#add-address-btn').removeClass('hide');
         }
 
         else if(results == "found-address-no-reviews") {
             $('#results-message').empty();
             $('#results-message').prepend('<p>No reviews exist for this address yet.</p>');
         }
-            
+        
+        else if(results == "address-not-valid") {
+            $('#results-message').empty();
+            $('#results-message').prepend('<p>Address is not valid.</p>');
+        }
         // Otherwise display each landlord as a link to the page for that landlord
         else {
             $('#results-message').empty();
@@ -283,14 +287,17 @@
 
     $("#search-by-name").on("submit", lookupByName);
 
-    // When user finishes entering landlord last name in modal review form, check if landlord in database
-    $('#lname-field-review').on('blur', function() {
-        var fname = $('#fname-field-review').val();
-        var lname = $('#lname-field-review').val();
-        var name = {fname: fname, lname: lname};
+    // // When user finishes entering landlord last name in modal review form, check if landlord in database
+    // $('#lname-field-review').on('blur', function() {
+    //     var fname = $('#fname-field-review').val();
+    //     var lname = $('#lname-field-review').val();
+    //     var name = {fname: fname, lname: lname};
+    //     console.log(name);
 
-      $.get('/lookup-by-name.json', name, displayResultsMessage);
-    });
+    //   $.get('/lookup-by-name.json', name, displayResultsMessage);
+    // });
+
+    //TO DO: Figure out logical way to do validation
 
     $("#add-landlord-btn").on("click", showLandlordForm);
 
@@ -306,7 +313,7 @@
 
 
     function displayResultsMessage(results) {
-      alert(results);
+            alert(results);
     }
 
     $('#modal-review-form').on('submit', function (evt) {
