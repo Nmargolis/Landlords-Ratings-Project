@@ -2,13 +2,139 @@
 {% block title %}Landlord{% endblock %}
 {% block styles %}
     <style>
-        .map { position:relative; top:0; bottom:0; width:50%; height: 500px; float:right; }
+        .map {
+            border-left:1px solid #fff;
+            width:100%;
+            height:500px;
+            top:0;
+            bottom:0;
+        }
     </style>
 {% endblock %}
 {% block content %}
-    <div>
-        <div id='map' class='map'> </div>
-    </div>
+  <div class="container-fluid">
+    
+    <div class="row">
+      <div class="col-xs-12 col-md-4 col-lg-4">
+
+        <h1>{{ landlord.fname }} {{ landlord.lname }}</h1>
+
+         <h3>Rate {{ landlord.fname }} {{ landlord.lname }}</h3>
+
+        {% if 'user' in session %}
+          <button type="button" id="btn-rate-this-landlord" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modalRatingForm">
+          Rate {{ landlord.fname }} {{ landlord.lname }}
+          </button>
+
+          <script>
+            $('#btn-rate-this-landlord').on('click', function() {
+              var fname = "{{landlord.fname}}";
+              var lname = "{{landlord.lname}}";
+              $('#fname-field-review').val(fname);
+              $('#lname-field-review').val(lname);
+
+            });
+          </script>
+
+         <!--  <form action="/process-rating" method="POST">
+              <input type="hidden" name="landlord-id" value={{ landlord.landlord_id }}>
+              <label><b>Address:</b></label>
+                <input type="text" name="street-number" placeholder="1234">
+                <input type="text" name="street-name" placeholder="Main St">
+                <input type="text" name="city" placeholder="San Francisco">
+                <input type="text" name="state" placeholder="California">
+                <input type="text" name="zipcode" placeholder="00000">
+                <input type="text" name="country" placeholder="United States"><br>
+
+              <label>When did you move in? (optional)
+                <input type="date" name="move-in" placeholder="mm/dd/yyyy">
+              </label><br>
+               <label>When did you move out (optional)?
+                <input type="date" name="move-out" placeholder="mm/dd/yyyy">
+              </label><br>
+
+              <b>Please rate on the following criteria:</b><br>
+              <label>Maintenance and repairs
+                  <input type="radio" name="rating1" value="1"> 1 
+                  <input type="radio" name="rating1" value="2"> 2 
+                  <input type="radio" name="rating1" value="3"> 3 
+                  <input type="radio" name="rating1" value="4"> 4 
+                  <input type="radio" name="rating1" value="5"> 5 
+              </label><br>
+              <label>Responsiveness
+                  <input type="radio" name="rating2" value="1"> 1 
+                  <input type="radio" name="rating2" value="2"> 2 
+                  <input type="radio" name="rating2" value="3"> 3 
+                  <input type="radio" name="rating2" value="4"> 4 
+                  <input type="radio" name="rating2" value="5"> 5 
+              </label></br>
+              <label>Pest management
+                  <input type="radio" name="rating3" value="1"> 1 
+                  <input type="radio" name="rating3" value="2"> 2 
+                  <input type="radio" name="rating3" value="3"> 3 
+                  <input type="radio" name="rating3" value="4"> 4 
+                  <input type="radio" name="rating3" value="5"> 5 
+              </label></br>
+               <label>Respect in communications
+                  <input type="radio" name="rating4" value="1"> 1 
+                  <input type="radio" name="rating4" value="2"> 2 
+                  <input type="radio" name="rating4" value="3"> 3 
+                  <input type="radio" name="rating4" value="4"> 4 
+                  <input type="radio" name="rating4" value="5"> 5 
+              </label></br>
+               <label>Rent increases
+                  <input type="radio" name="rating5" value="1"> 1 
+                  <input type="radio" name="rating5" value="2"> 2 
+                  <input type="radio" name="rating5" value="3"> 3 
+                  <input type="radio" name="rating5" value="4"> 4 
+                  <input type="radio" name="rating5" value="5"> 5 
+              </label></br>
+              <label>Comment
+                  <input type="text" name="comment" placeholder="Your comment here">
+              </label>
+              <input type="submit" value="Submit">
+          </form> -->
+
+        {% else %}
+          <p>You must be logged in to rate a landlord. Please <a href="/login">log in.</a></p>
+        {% endif %}
+        
+
+        <h3>Landlord reviews</h3>
+        {% for review in landlord.reviews %}
+          <article>
+          User: {{ review.user_id }} <br><!-- To Do: Make this a link to the user's profile -->
+          Address: {{ review.address.street }}<br> <!-- To Do: add more address info -->
+          Created at: {{ review.created_at }}<br>
+          <span class = "rating">Average rating: {{ (review.rating1 + review.rating2 + review.rating3 + review.rating4 + review.rating5)/5 }}<br></span>
+          <span class = "rating">rating1: {{ review.rating1 }}<br></span>
+          <span class = "rating">rating2: {{ review.rating2 }}<br></span>
+          <span class = "rating">rating3: {{ review.rating3 }}<br></span>
+          <span class = "rating">rating4: {{ review.rating4 }}<br></span>
+          <span class = "rating">rating5: {{ review.rating5 }}<br></span>
+          <p class = "comment">comment: {{ review.comment }}</p>
+
+          {% if 'user' in session %}
+            {% if session['user'] == review.user_id %}
+              <b>*** This is your review ***</b>
+            {% else %}
+               <a href="/send-message/{{ review.user_id }}"><button id="send-message">Message this user</button></a>
+            {% endif %}
+         
+          {% else %}
+          <a href="/login"><button>Log in to message this user</button>
+          {% endif %}
+          </article>
+          <hr>
+
+        {% endfor %}
+
+      </div> <!-- close col containing content -->
+
+      <div class="col-xs-12 col-md-8 col-lg-8"> 
+        <div id="map" class="map"></div> 
+      </div> <!-- close col containing map -->
+
     <script>
            // Initialize the map
     L.mapbox.accessToken = 'pk.eyJ1Ijoibm1hcmdvbGlzODkiLCJhIjoiY2lnbXZlem9xMDAzdDZjbTM4a2tteXdzMSJ9.j6aj2wMzUUb8FZR1XMBiBg';
@@ -62,104 +188,7 @@
     }
 
   </script>
-    </script>
 
-  <h1>{{ landlord.fname }} {{ landlord.lname }}</h1>
 
-   <h3>Rate {{ landlord.fname }} {{ landlord.lname }}</h3>
-
-  {% if 'user' in session %}
-
-    <form action="/process-rating" method="POST">
-          <input type="hidden" name="landlord-id" value={{ landlord.landlord_id }}>
-          <label><b>Address:</b></label>
-            <input type="text" name="street-number" placeholder="1234">
-            <input type="text" name="street-name" placeholder="Main St">
-            <input type="text" name="city" placeholder="San Francisco">
-            <input type="text" name="state" placeholder="California">
-            <input type="text" name="zipcode" placeholder="00000">
-            <input type="text" name="country" placeholder="United States"><br>
-
-          <label>When did you move in? (optional)
-            <input type="date" name="move-in" placeholder="mm/dd/yyyy">
-          </label><br>
-           <label>When did you move out (optional)?
-            <input type="date" name="move-out" placeholder="mm/dd/yyyy">
-          </label><br>
-
-          <b>Please rate on the following criteria:</b><br>
-          <label>Maintenance and repairs
-              <input type="radio" name="rating1" value="1"> 1 
-              <input type="radio" name="rating1" value="2"> 2 
-              <input type="radio" name="rating1" value="3"> 3 
-              <input type="radio" name="rating1" value="4"> 4 
-              <input type="radio" name="rating1" value="5"> 5 
-          </label><br>
-          <label>Responsiveness
-              <input type="radio" name="rating2" value="1"> 1 
-              <input type="radio" name="rating2" value="2"> 2 
-              <input type="radio" name="rating2" value="3"> 3 
-              <input type="radio" name="rating2" value="4"> 4 
-              <input type="radio" name="rating2" value="5"> 5 
-          </label></br>
-          <label>Pest management
-              <input type="radio" name="rating3" value="1"> 1 
-              <input type="radio" name="rating3" value="2"> 2 
-              <input type="radio" name="rating3" value="3"> 3 
-              <input type="radio" name="rating3" value="4"> 4 
-              <input type="radio" name="rating3" value="5"> 5 
-          </label></br>
-           <label>Respect in communications
-              <input type="radio" name="rating4" value="1"> 1 
-              <input type="radio" name="rating4" value="2"> 2 
-              <input type="radio" name="rating4" value="3"> 3 
-              <input type="radio" name="rating4" value="4"> 4 
-              <input type="radio" name="rating4" value="5"> 5 
-          </label></br>
-           <label>Rent increases
-              <input type="radio" name="rating5" value="1"> 1 
-              <input type="radio" name="rating5" value="2"> 2 
-              <input type="radio" name="rating5" value="3"> 3 
-              <input type="radio" name="rating5" value="4"> 4 
-              <input type="radio" name="rating5" value="5"> 5 
-          </label></br>
-          <label>Comment
-              <input type="text" name="comment" placeholder="Your comment here">
-          </label>
-        <input type="submit" value="Submit">
-      </form>
-
-  {% else %}
-    <p>You must be logged in to rate a landlord. Please <a href="/login">log in.</a></p>
-  {% endif %}
- 
-  <h3>Landlord reviews</h3>
-  {% for review in landlord.reviews %}
-    <article>
-    User: {{ review.user_id }} <br><!-- To Do: Make this a link to the user's profile -->
-    Address: {{ review.address.street }}<br> <!-- To Do: add more address info -->
-    Created at: {{ review.created_at }}<br>
-    <span class = "rating">Average rating: {{ (review.rating1 + review.rating2 + review.rating3 + review.rating4 + review.rating5)/5 }}<br></span>
-    <span class = "rating">rating1: {{ review.rating1 }}<br></span>
-    <span class = "rating">rating2: {{ review.rating2 }}<br></span>
-    <span class = "rating">rating3: {{ review.rating3 }}<br></span>
-    <span class = "rating">rating4: {{ review.rating4 }}<br></span>
-    <span class = "rating">rating5: {{ review.rating5 }}<br></span>
-    <p class = "comment">comment: {{ review.comment }}</p>
-
-    {% if 'user' in session %}
-      {% if session['user'] == review.user_id %}
-        <b>*** This is your review ***</b>
-      {% else %}
-         <a href="/send-message/{{ review.user_id }}"><button id="send-message">Message this user</button></a>
-      {% endif %}
-   
-    {% else %}
-    <a href="/login"><button>Log in to message this user</button>
-    {% endif %}
-    </article>
-    <hr>
-
-  {% endfor %}
 
 {% endblock %}

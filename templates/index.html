@@ -4,9 +4,8 @@
     <style>
         .map {
             border-left:1px solid #fff;
-            position:absolute;
-            left:33.3333%;
-            width:66.6666%;
+            width:100%;
+            height:500px;
             top:0;
             bottom:0;
         }
@@ -16,141 +15,53 @@
 {% endblock %}
 {% block content %}
   <div class="container-fluid">
-    <h1>Home</h1>
+    
     <div class="row">
-      <div id="map" class="map"></div>
-    </div> <!-- close row containing map -->
+      <div class="col-xs-12 col-md-4 col-lg-4">
+        <h1>Home</h1>
+     
+        <!-- Form to search by name -->
+<!--         <form id="search-by-name">
+            <label>Enter landlord's first name:</label>
+            <input type="text" id="fname-field" name="fname" placeholder="first name"></input><br>
+            <label>Enter landlord's last name:</label>
+            <input type="text" id="lname-field" name="lname" placeholder="last name"></input><br>
+            <input type="submit" class="btn btn-primary" value="Search"></input>
+        </form> -->
 
-    <div class="row">
-
-      <!-- Form to search by name -->
-      <form id="search-by-name">
-          <label>Enter landlord's first name:</label>
-          <input type="text" id="fname-field" name="fname" placeholder="first name"></input><br>
-          <label>Enter landlord's last name:</label>
-          <input type="text" id="lname-field" name="lname" placeholder="last name"></input><br>
-          <input type="submit" class="btn btn-primary" value="Search"></input>
-      </form>
-
-      <!-- div to display results -->
-      <div id='results'>
-          <div id="results-message"></div>
-          <button class="hide" id="add-address-btn">Add address</button>
-          <button class="hide" id="add-landlord-btn">Add landlord</button>
-      </div> <!-- close results -->
+        <!-- div to display results -->
+        <div id='results'>
+            <!-- <div id="results-message"></div> -->
+            <!-- <button class="hide" id="add-address-btn">Add address</button>
+            <button class="hide" id="add-landlord-btn">Add landlord</button> -->
+        </div> <!-- close results -->
 
 
-<!--       <div id='add-landlord-div' class='hide'>
-          <form id="add-landlord-form">
-              <label>Enter landlord's first name:</label>
-              <input type="text" id="fname-field-add" name="fname-add" value=""></input>
-              <br>
-              <label>Enter landlord's last name:</label>
-              <input type="text" id="lname-field-add" name="lname-add" value=""></input><br>
-              <input type="submit" value="Add landlord"></input>
-          </form>
-
-          </div> --><!-- close add-landlord-div -->
-
-
-      <!-- Button for modal form window -->
-     <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modalRatingForm">
-       Rate a landlord
-     </button>
-
-      <!-- Modal form window -->
-      <div class="modal fade" id="modalRatingForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              <h4 class="modal-title" id="myModalLabel">Add a review</h4>
-            </div> <!-- close modal-header -->
-            <div class="modal-body">
-              
-              {% if 'user' in session %}
-
-              <form id="modal-review-form">
+  <!--       <div id='add-landlord-div' class='hide'>
+            <form id="add-landlord-form">
                 <label>Enter landlord's first name:</label>
-                <input type="text" id="fname-field-review" name="fname" placeholder="first name"></input><br>
+                <input type="text" id="fname-field-add" name="fname-add" value=""></input>
+                <br>
                 <label>Enter landlord's last name:</label>
-                <input type="text" id="lname-field-review" name="lname" placeholder="last name"></input><br>
+                <input type="text" id="lname-field-add" name="lname-add" value=""></input><br>
+                <input type="submit" value="Add landlord"></input>
+            </form>
 
-          <!--    TO DO: add button to do ajax call to check if landlord in databse
-                  Allow user to choose to add landlord to databse if they don't exist
-                  OR: Just add the landlord if they don't exist. -->
-
-                <label><b>Address:</b></label>
-                  <input type="text" name="street-number" placeholder="1234">
-                  <input type="text" name="street-name" placeholder="Main St">
-                  <input type="text" name="city" placeholder="San Francisco">
-                  <input type="text" name="state" placeholder="California">
-                  <input type="text" name="zipcode" placeholder="00000">
-                  <input type="text" name="country" placeholder="United States"><br>
-
-                <label>When did you move in? (optional)
-                  <input type="date" name="move-in" placeholder="mm/dd/yyyy">
-                </label><br>
-                 <label>When did you move out (optional)?
-                  <input type="date" name="move-out" placeholder="mm/dd/yyyy">
-                </label><br>
-
-                <b>Please rate on the following criteria:</b><br>
-                <label>Maintenance and repairs
-                    <input type="radio" name="rating1" value="1"> 1 
-                    <input type="radio" name="rating1" value="2"> 2 
-                    <input type="radio" name="rating1" value="3"> 3 
-                    <input type="radio" name="rating1" value="4"> 4 
-                    <input type="radio" name="rating1" value="5"> 5 
-                </label><br>
-                <label>Responsiveness
-                    <input type="radio" name="rating2" value="1"> 1 
-                    <input type="radio" name="rating2" value="2"> 2 
-                    <input type="radio" name="rating2" value="3"> 3 
-                    <input type="radio" name="rating2" value="4"> 4 
-                    <input type="radio" name="rating2" value="5"> 5 
-                </label></br>
-                <label>Pest management
-                    <input type="radio" name="rating3" value="1"> 1 
-                    <input type="radio" name="rating3" value="2"> 2 
-                    <input type="radio" name="rating3" value="3"> 3 
-                    <input type="radio" name="rating3" value="4"> 4 
-                    <input type="radio" name="rating3" value="5"> 5 
-                </label></br>
-                 <label>Respect in communications
-                    <input type="radio" name="rating4" value="1"> 1 
-                    <input type="radio" name="rating4" value="2"> 2 
-                    <input type="radio" name="rating4" value="3"> 3 
-                    <input type="radio" name="rating4" value="4"> 4 
-                    <input type="radio" name="rating4" value="5"> 5 
-                </label></br>
-                 <label>Rent increases
-                    <input type="radio" name="rating5" value="1"> 1 
-                    <input type="radio" name="rating5" value="2"> 2 
-                    <input type="radio" name="rating5" value="3"> 3 
-                    <input type="radio" name="rating5" value="4"> 4 
-                    <input type="radio" name="rating5" value="5"> 5 
-                </label></br>
-                <label>Comment
-                    <input type="text" name="comment" placeholder="Your comment here">
-                </label>
-                <input type="submit" value="Submit">
-              </form>
-
-              {% else %}
-                <p>You must be logged in to rate a landlord. Please <a href="/login">log in.</a></p>
-              {% endif %}
+            </div> --><!-- close add-landlord-div -->
 
 
-            </div> <!-- close modal-body -->
-            <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary">Save changes</button>
-            </div> <!-- close modal-footer -->
-          </div> <!-- close modal-content -->
-        </div> <!-- close modal-dialog -->
-      </div> <!-- close modal -->
+        <!-- Button for modal form window -->
+       <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modalRatingForm">
+         Rate a landlord
+       </button>
+
+        
+      </div> <!-- close col containing content -->
+      <div class="col-xs-12 col-md-8 col-lg-8"> 
+        <div id="map" class="map"></div> 
+      </div> <!-- close col containing map -->
     </div> <!-- close row -->
+
   </div> <!-- close container -->
 
 <script>
@@ -203,7 +114,7 @@
 
         $.get('lookup-by-name.json', name, showLandlords);
         console.log("Finished sending name");
-        $('#modalSearchByNameForm').modal('hide');
+        $('#modalResultsWindow').modal('show');
     }
 
     function showAddressForm(evt) {

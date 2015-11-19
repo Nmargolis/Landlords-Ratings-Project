@@ -9,6 +9,11 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
     {% block styles %} {% endblock %}
+    <style>
+        .navbar-default {
+            margin-bottom: 0px;
+        }
+    </style>
 </head>
 
 <body>
@@ -29,24 +34,25 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="collapsed-menu">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="/account-home">Account home <span class="sr-only">(current)</span></a></li>
+            <li><a href="/account-home">Account home</a></li>
             <li><a href="/login">Login </a></li>
             <li><a href="/logout">Logout </a></li>
             <li><a href="/signup">Sign up </a></li>
         
           </ul>
-          <form class="navbar-form navbar-left" role="search">
+          <form id="search-by-name" class="navbar-form navbar-left" role="search">
             <div class="form-group">
-              <input type="text" class="form-control" placeholder="Search by name">
+                <label>Look up a landlord:
+                <input type="text" class="form-control" name="fname" placeholder="First name"></input>
+                <input type="text" class="form-control" id="lname-field" name="lname" placeholder="Last name"></input>
             </div>
-            <button type="submit" class="btn btn-default">Submit</button>
+            <button type="submit" class="btn btn-default">Search for a landlord</button>
           </form>
 
         </div><!-- /.navbar-collapse -->
       </div><!-- /.container-fluid -->
     </nav>
 
-    <div class="container-fluid">
 
     {% with messages = get_flashed_messages() %}
         {% if messages %}
@@ -58,11 +64,254 @@
         {% endif %}
     {% endwith %}
 
-    </div>
- 
 
     {% block content %}BODY CONTENT
     
     {% endblock %}
 
+<!--     Modal windows -->
+
+    <!-- Modal form window -->
+    <div class="modal fade" id="modalRatingForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Add a review</h4>
+          </div> <!-- close modal-header -->
+          <div class="modal-body">
+            
+            {% if 'user' in session %}
+
+            <form id="modal-review-form">
+              <label>Enter landlord's first name:</label>
+              <input type="text" id="fname-field-review" name="fname" placeholder="first name"></input><br>
+              <label>Enter landlord's last name:</label>
+              <input type="text" id="lname-field-review" name="lname" placeholder="last name"></input><br>
+
+        <!--    TO DO: add button to do ajax call to check if landlord in databse
+                Allow user to choose to add landlord to databse if they don't exist
+                OR: Just add the landlord if they don't exist. -->
+
+              <label><b>Address:</b></label>
+                <input type="text" name="street-number" placeholder="1234">
+                <input type="text" name="street-name" placeholder="Main St">
+                <input type="text" name="city" placeholder="San Francisco">
+                <input type="text" name="state" placeholder="California">
+                <input type="text" name="zipcode" placeholder="00000">
+                <input type="text" name="country" placeholder="United States"><br>
+
+              <label>When did you move in? (optional)
+                <input type="date" name="move-in" placeholder="mm/dd/yyyy">
+              </label><br>
+               <label>When did you move out (optional)?
+                <input type="date" name="move-out" placeholder="mm/dd/yyyy">
+              </label><br>
+
+              <b>Please rate on the following criteria:</b><br>
+              <label>Maintenance and repairs
+                  <input type="radio" name="rating1" value="1"> 1 
+                  <input type="radio" name="rating1" value="2"> 2 
+                  <input type="radio" name="rating1" value="3"> 3 
+                  <input type="radio" name="rating1" value="4"> 4 
+                  <input type="radio" name="rating1" value="5"> 5 
+              </label><br>
+              <label>Responsiveness
+                  <input type="radio" name="rating2" value="1"> 1 
+                  <input type="radio" name="rating2" value="2"> 2 
+                  <input type="radio" name="rating2" value="3"> 3 
+                  <input type="radio" name="rating2" value="4"> 4 
+                  <input type="radio" name="rating2" value="5"> 5 
+              </label></br>
+              <label>Pest management
+                  <input type="radio" name="rating3" value="1"> 1 
+                  <input type="radio" name="rating3" value="2"> 2 
+                  <input type="radio" name="rating3" value="3"> 3 
+                  <input type="radio" name="rating3" value="4"> 4 
+                  <input type="radio" name="rating3" value="5"> 5 
+              </label></br>
+               <label>Respect in communications
+                  <input type="radio" name="rating4" value="1"> 1 
+                  <input type="radio" name="rating4" value="2"> 2 
+                  <input type="radio" name="rating4" value="3"> 3 
+                  <input type="radio" name="rating4" value="4"> 4 
+                  <input type="radio" name="rating4" value="5"> 5 
+              </label></br>
+               <label>Rent increases
+                  <input type="radio" name="rating5" value="1"> 1 
+                  <input type="radio" name="rating5" value="2"> 2 
+                  <input type="radio" name="rating5" value="3"> 3 
+                  <input type="radio" name="rating5" value="4"> 4 
+                  <input type="radio" name="rating5" value="5"> 5 
+              </label></br>
+              <label>Comment
+                  <input type="text" name="comment" placeholder="Your comment here">
+              </label>
+              <input type="submit" value="Submit">
+            </form>
+
+            {% else %}
+              <p>You must be logged in to rate a landlord. Please <a href="/login">log in.</a></p>
+            {% endif %}
+
+
+          </div> <!-- close modal-body -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+          </div> <!-- close modal-footer -->
+        </div> <!-- close modal-content -->
+      </div> <!-- close modal-dialog -->
+    </div> <!-- close modal -->
+
+  <!--   Modal results window -->
+    <div class="modal fade" id="modalResultsWindow" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Results</h4>
+          </div> <!-- close modal-header -->
+          <div class="modal-body">
+            <div id='results'>
+            <div id="results-message"></div>
+        </div> <!-- close results -->
+            
+          </div> <!-- close modal-body -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div> <!-- close modal-footer -->
+        </div> <!-- close modal-content -->
+      </div> <!-- close modal-dialog -->
+    </div> <!-- close modal -->
 </body>
+
+
+
+<script>
+      // Functions to lookup by name or address and show list of landlords
+
+    function showLandlords(results) {
+
+        console.log(results);
+
+        if (results == "found-no-landlords") {
+            $('#results-message').empty();
+            $('#results-message').prepend('<p>Could not find any landlords matching your search.</p>');
+            $('#add-landlord-btn').removeClass('hide');
+        }
+            
+        else if (results == "found-no-addresses") {
+            $('#results-message').empty();
+            $('#results-message').prepend('<p>Could not find any addresses matching your search.</p>');
+            $('#add-address-btn').removeClass('hide');
+        }
+
+        else if(results == "found-address-no-reviews") {
+            $('#results-message').empty();
+            $('#results-message').prepend('<p>No reviews exist for this address yet.</p>');
+        }
+            
+        // Otherwise display each landlord as a link to the page for that landlord
+        else {
+            $('#results-message').empty();
+            for (var landlordID in results) {
+                if (results.hasOwnProperty(landlordID)) {
+                    $('#results-message').append("<p>Landlord: <a href='/landlord/"+ landlordID + "'> " + results[landlordID]['fname'] + " " + results[landlordID]['lname'] + "</a> </p>");
+                }
+            }
+        }
+    }
+
+          // function lookupByAddress(evt) {
+          //     evt.preventDefault();
+          //     var address = $('#search-by-address').serialize();
+          //     console.log(address)
+              
+          //     $.get('/lookup-by-address.json', address, showLandlords);
+          //     console.log("Finished sending address");
+          // }
+
+    function lookupByName(evt) {
+        evt.preventDefault();
+        var name = $('#search-by-name').serialize();
+
+        $.get('/lookup-by-name.json', name, showLandlords);
+        console.log("Finished sending name");
+        $('#modalResultsWindow').modal('show');
+    }
+
+    function showAddressForm(evt) {
+        console.log("clicked add address button");
+        $("#add-address-div").removeClass('hide');
+        $("#street-field-add").attr('value', $('#street-field').val());
+        $("#city-field-add").attr('value', $('#city-field').val());
+        $("#state-field-add").attr('value', $('#state-field').val());
+    }
+
+    function showLandlordForm(evt) {
+        console.log("clicked add landlord button");
+        $("#add-landlord-div").removeClass('hide');
+        $("#fname-field-add").attr('value', $('#fname-field').val());
+        $("#lname-field-add").attr('value', $('#lname-field').val());
+    }
+
+    function addAddress(evt) {
+        evt.preventDefault();
+        var name = $('#add-address-form').serialize();
+
+        $.post('/add-new-address.json', name, function (results) {
+            alert(results);
+
+        $('#results').html('');
+
+        });
+    }
+
+    function addLandlord(evt) {
+        evt.preventDefault();
+        var name = $('#add-landlord-form').serialize();
+
+        $.post('/add-new-landlord.json', name, function (results) {
+            alert(results);
+
+        $('#results').html('');
+        });
+    }
+
+      // $("#search-by-address").on("submit", lookupByAddress);
+
+    $("#search-by-name").on("submit", lookupByName);
+
+    // When user finishes entering landlord last name in modal review form, check if landlord in database
+    $('#lname-field-review').on('blur', function() {
+        var fname = $('#fname-field-review').val();
+        var lname = $('#lname-field-review').val();
+        var name = {fname: fname, lname: lname};
+
+      $.get('/lookup-by-name.json', name, displayResultsMessage);
+    });
+
+    $("#add-landlord-btn").on("click", showLandlordForm);
+
+    // When add address button is clicked, show the form to add addresses
+    // $("#add-address-btn").on("click", showAddressForm);
+    
+    // Process landlord when add landlord form is submitted
+    $("#add-landlord-form").on("submit", addLandlord);
+
+    // Process address when add address button is submitted
+    $("#add-address-form").on("submit", addAddress);
+
+
+
+    function displayResultsMessage(results) {
+      alert(results);
+    }
+
+    $('#modal-review-form').on('submit', function (evt) {
+      evt.preventDefault();
+      var inputs = $('#modal-review-form').serialize();
+      $.post('/process-rating2.json', inputs, displayResultsMessage);
+    })
+</script>
