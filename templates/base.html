@@ -318,6 +318,7 @@
     $('#modal-review-form').on('submit', function (evt) {
       evt.preventDefault();
       //validate
+      
       var inputs = $('#modal-review-form').serialize();
       $.post('/process-rating2.json', inputs, displayResultsMessage);
     })
