@@ -205,6 +205,34 @@ class Review(db.Model):
         return "<Review review_id = {} user_id = {} landlord_id = {} address_id = {} created_at = {}>".format(
             self.review_id, self.user_id, self.landlord_id, self.address_id, self.created_at)
 
+    def calculate_overall_rating(self):
+        """Returns the average of the 5 rating criteria for a review"""
+        overall_rating = 0
+        count_ratings = 0
+
+        # If there are no ratings, return None
+        if not (self.rating1 or self.rating2 or self.rating3 or self.rating4 or self.rating5):
+            return None
+
+        if self.rating1:
+            overall_rating += self.rating1
+            count_ratings += 1
+        if self.rating2:
+            overall_rating += self.rating2
+            count_ratings += 1
+        if self.rating3:
+            overall_rating += self.rating3
+            count_ratings += 1
+        if self.rating4:
+            overall_rating += self.rating4
+            count_ratings += 1
+        if self.rating5:
+            overall_rating += self.rating5
+            count_ratings += 1
+
+        average_rating = overall_rating/count_ratings
+        return average_rating
+
     def convert_to_dict(self):
         """Returns review object in dictionary form"""
 
@@ -221,6 +249,7 @@ class Review(db.Model):
                         'moved_in_at': self.moved_in_at,
                         'moved_out_at': self.moved_out_at,
                         'created_at': self.created_at,
+                        'rating_overall': self.calculate_overall_rating(),
                         'rating1': self.rating1,
                         'rating2': self.rating2,
                         'rating3': self.rating3,

@@ -688,7 +688,6 @@ def get_addresses():
     for address in addresses:
         features.append(address.return_geojson())
 
-
     geojson = {"features": [
                 {
                     "type": "FeatureCollection",
@@ -701,8 +700,8 @@ def get_addresses():
 
 @app.route('/get_recent_reviews')
 def get_recent_reviews():
-    """Get a list of the 10 most recent reviews and return json object"""
-    recent_reviews = db.session.query(Review).order_by(db.desc(Review.created_at)).limit(10).all()
+    """Get a list of the 5 most recent reviews and return json object"""
+    recent_reviews = db.session.query(Review).order_by(db.desc(Review.created_at)).limit(5).all()
 
     # reviews_dict = {}
     # for review in recent_reviews:
