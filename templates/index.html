@@ -18,10 +18,16 @@
     
     <div class="row">
       <div class="col-xs-12 col-md-4 col-lg-4">
-        <h1>Home</h1>
+
+      <!-- Button for modal form window -->
+        <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modalRatingForm">
+           Rate a landlord
+        </button>
+
+        <h1>Recent reviews</h1>
      
         <!-- div to display results -->
-        <div id='results'>
+        <div id='results-sidebar'>
             <!-- <div id="results-message"></div> -->
             <!-- <button class="hide" id="add-address-btn">Add address</button>
             <button class="hide" id="add-landlord-btn">Add landlord</button> -->
@@ -40,12 +46,6 @@
 
             </div> --><!-- close add-landlord-div -->
 
-
-        <!-- Button for modal form window -->
-       <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#modalRatingForm">
-         Rate a landlord
-       </button>
-
         
       </div> <!-- close col containing content -->
       <div class="col-xs-12 col-md-8 col-lg-8"> 
@@ -55,7 +55,8 @@
 
   </div> <!-- close container -->
 
-// <script>
+<script>
+
 //       // Functions to lookup by name or address and show list of landlords
 
 //     function showLandlords(results) {
@@ -183,7 +184,12 @@
 //     })
 // </script>
 
+{% endblock %}
 
+{% block pagescripts %}
+  <script>
+    $.get('/get_recent_reviews', displayReviews);
+  </script>
 
 <script>
     // Functions having to do with the map

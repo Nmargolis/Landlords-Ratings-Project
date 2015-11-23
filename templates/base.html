@@ -186,64 +186,69 @@
     </div> <!-- close modal -->
 </body>
 
+{% block scripts %}
+    <script src="/static/js/landlordratings.js"></script>
+    {% block pagescripts %}
+    {% endblock %}
 
+{% endblock %}
 
 <script>
-      // Functions to lookup by name or address and show list of landlords
+    //   // Functions to lookup by name or address and show list of landlords
 
-    function showLandlords(results) {
+    // function showLandlords(results) {
 
-        console.log(results);
+    //     console.log(results);
 
-        if (results == "found-no-landlords") {
-            $('#results-message').empty();
-            $('#results-message').prepend('<p>Could not find any landlords matching your search.</p>');
-            // $('#add-landlord-btn').removeClass('hide');
-        }
+    //     if (results == "found-no-landlords") {
+    //         $('#results-message').empty();
+    //         $('#results-message').prepend('<p>Could not find any landlords matching your search.</p>');
+    //         // $('#add-landlord-btn').removeClass('hide');
+    //     }
             
-        else if (results == "found-no-addresses") {
-            $('#results-message').empty();
-            $('#results-message').prepend('<p>Could not find any addresses matching your search.</p>');
-            // $('#add-address-btn').removeClass('hide');
-        }
+    //     else if (results == "found-no-addresses") {
+    //         $('#results-message').empty();
+    //         $('#results-message').prepend('<p>Could not find any addresses matching your search.</p>');
+    //         // $('#add-address-btn').removeClass('hide');
+    //     }
 
-        else if(results == "found-address-no-reviews") {
-            $('#results-message').empty();
-            $('#results-message').prepend('<p>No reviews exist for this address yet.</p>');
-        }
+    //     else if(results == "found-address-no-reviews") {
+    //         $('#results-message').empty();
+    //         $('#results-message').prepend('<p>No reviews exist for this address yet.</p>');
+    //     }
         
-        else if(results == "address-not-valid") {
-            $('#results-message').empty();
-            $('#results-message').prepend('<p>Address is not valid.</p>');
-        }
-        // Otherwise display each landlord as a link to the page for that landlord
-        else {
-            $('#results-message').empty();
-            for (var landlordID in results) {
-                if (results.hasOwnProperty(landlordID)) {
-                    $('#results-message').append("<p>Landlord: <a href='/landlord/"+ landlordID + "'> " + results[landlordID]['fname'] + " " + results[landlordID]['lname'] + "</a> </p>");
-                }
-            }
-        }
-    }
+    //     else if(results == "address-not-valid") {
+    //         $('#results-message').empty();
+    //         $('#results-message').prepend('<p>Address is not valid.</p>');
+    //     }
+    //     // Otherwise display each landlord as a link to the page for that landlord
+    //     else {
+    //         $('#results-message').empty();
+    //         for (var landlordID in results) {
+    //             if (results.hasOwnProperty(landlordID)) {
+    //                 $('#results-message').append("<p>Landlord: <a href='/landlord/"+ landlordID + "'> " + results[landlordID]['fname'] + " " + results[landlordID]['lname'] + "</a> </p>");
+    //             }
+    //         }
+    //     }
+    // }
 
-          // function lookupByAddress(evt) {
-          //     evt.preventDefault();
-          //     var address = $('#search-by-address').serialize();
-          //     console.log(address)
+    //       // function lookupByAddress(evt) {
+    //       //     evt.preventDefault();
+    //       //     var address = $('#search-by-address').serialize();
+    //       //     console.log(address)
               
-          //     $.get('/lookup-by-address.json', address, showLandlords);
-          //     console.log("Finished sending address");
-          // }
+    //       //     $.get('/lookup-by-address.json', address, showLandlords);
+    //       //     console.log("Finished sending address");
+    //       // }
 
-    function lookupByName(evt) {
-        evt.preventDefault();
-        var name = $('#search-by-name').serialize();
+    // function lookupByName(evt) {
+    //     evt.preventDefault();
+    //     var name = $('#search-by-name').serialize();
 
-        $.get('/lookup-by-name.json', name, showLandlords);
-        console.log("Finished sending name");
-        $('#modalResultsWindow').modal('show');
-    }
+    //     $.get('/lookup-by-name.json', name, showLandlords);
+    //     console.log("Finished sending name");
+    //     $('#modalResultsWindow').modal('show');
+    // }
 
     // function showAddressForm(evt) {
     //     console.log("clicked add address button");
@@ -253,74 +258,96 @@
     //     $("#state-field-add").attr('value', $('#state-field').val());
     // }
 
-    // function showLandlordForm(evt) {
-    //     console.log("clicked add landlord button");
-    //     $("#add-landlord-div").removeClass('hide');
-    //     $("#fname-field-add").attr('value', $('#fname-field').val());
-    //     $("#lname-field-add").attr('value', $('#lname-field').val());
-    // }
+    // // function showLandlordForm(evt) {
+    // //     console.log("clicked add landlord button");
+    // //     $("#add-landlord-div").removeClass('hide');
+    // //     $("#fname-field-add").attr('value', $('#fname-field').val());
+    // //     $("#lname-field-add").attr('value', $('#lname-field').val());
+    // // }
 
-    // function addAddress(evt) {
-    //     evt.preventDefault();
-    //     var name = $('#add-address-form').serialize();
+    // // function addAddress(evt) {
+    // //     evt.preventDefault();
+    // //     var name = $('#add-address-form').serialize();
 
-    //     $.post('/add-new-address.json', name, function (results) {
-    //         alert(results);
+    // //     $.post('/add-new-address.json', name, function (results) {
+    // //         alert(results);
 
-    //     $('#results').html('');
+    // //     $('#results').html('');
 
-    //     });
-    // }
+    // //     });
+    // // }
 
-    // function addLandlord(evt) {
-    //     evt.preventDefault();
-    //     var name = $('#add-landlord-form').serialize();
+    // // function addLandlord(evt) {
+    // //     evt.preventDefault();
+    // //     var name = $('#add-landlord-form').serialize();
 
-    //     $.post('/add-new-landlord.json', name, function (results) {
-    //         alert(results);
+    // //     $.post('/add-new-landlord.json', name, function (results) {
+    // //         alert(results);
 
-    //     $('#results').html('');
-    //     });
-    // }
+    // //     $('#results').html('');
+    // //     });
+    // // }
 
-      // $("#search-by-address").on("submit", lookupByAddress);
+    //   // $("#search-by-address").on("submit", lookupByAddress);
 
-    $("#search-by-name").on("submit", lookupByName);
+    // $("#search-by-name").on("submit", lookupByName);
 
-    // // When user finishes entering landlord last name in modal review form, check if landlord in database
-    // $('#lname-field-review').on('blur', function() {
-    //     var fname = $('#fname-field-review').val();
-    //     var lname = $('#lname-field-review').val();
-    //     var name = {fname: fname, lname: lname};
-    //     console.log(name);
+    // // // When user finishes entering landlord last name in modal review form, check if landlord in database
+    // // $('#lname-field-review').on('blur', function() {
+    // //     var fname = $('#fname-field-review').val();
+    // //     var lname = $('#lname-field-review').val();
+    // //     var name = {fname: fname, lname: lname};
+    // //     console.log(name);
 
-    //   $.get('/lookup-by-name.json', name, displayResultsMessage);
-    // });
+    // //   $.get('/lookup-by-name.json', name, displayResultsMessage);
+    // // });
 
-    //TO DO: Figure out logical way to do validation
+    // //TO DO: Figure out logical way to do validation
 
-    // $("#add-landlord-btn").on("click", showLandlordForm);
+    // // $("#add-landlord-btn").on("click", showLandlordForm);
 
-    // When add address button is clicked, show the form to add addresses
-    // $("#add-address-btn").on("click", showAddressForm);
+    // // When add address button is clicked, show the form to add addresses
+    // // $("#add-address-btn").on("click", showAddressForm);
     
-    // Process landlord when add landlord form is submitted
-    // $("#add-landlord-form").on("submit", addLandlord);
+    // // Process landlord when add landlord form is submitted
+    // // $("#add-landlord-form").on("submit", addLandlord);
 
-    // Process address when add address button is submitted
-    // $("#add-address-form").on("submit", addAddress);
+    // // Process address when add address button is submitted
+    // // $("#add-address-form").on("submit", addAddress);
 
 
 
-    function displayResultsMessage(results) {
-            alert(results);
-    }
+    // function displayResultsMessage(results) {
+    //         alert(results);
+    // }
 
-    $('#modal-review-form').on('submit', function (evt) {
-      evt.preventDefault();
-      //validate
+    // function displayReviews(results) {
+    //     var resultSidebar = $('#results-sidebar');
+    //     console.log(results);
+    //     console.log(resultSidebar);
+    //     for (review in results) {
+    //         console.log(results[review]);
+    //         console.log(results[review].user_id);
+    //         var reviewHTML = "User: " + results[review].user_id + "<br>" +
+    //                          "Address: " + results[review].address_street + "<br>" +
+    //                          "Created at: " + results[review].created_at + "<br>" +
+    //                          "<span class='rating'>Rating1: " + results[review].rating1 + "</span><br>" +
+    //                          "<span class='rating'>Rating2: " + results[review].rating2 + "</span><br>" +
+    //                          "<span class='rating'>Rating3: " + results[review].rating3 + "</span><br>" +
+    //                          "<span class='rating'>Rating4: " + results[review].rating4 + "</span><br>" +
+    //                          "<span class='rating'>Rating5: " + results[review].rating1 + "</span><br>" +
+    //                          "<p> <span class='comment'>Comment: " + results[review].comment + "</span></br><hr>";
 
-      var inputs = $('#modal-review-form').serialize();
-      $.post('/process-rating2.json', inputs, displayResultsMessage);
-    })
+    //         resultSidebar.append(reviewHTML);
+    //     }
+    // }
+
+    
+    // $('#modal-review-form').on('submit', function (evt) {
+    //   evt.preventDefault();
+    //   //validate
+    //       var inputs = $('#modal-review-form').serialize();
+    //       $.post('/process-rating2.json', inputs, displayResultsMessage);
+    // })
+
 </script>

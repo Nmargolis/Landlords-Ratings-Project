@@ -78,6 +78,9 @@
         <div id="map" class="map"></div> 
       </div> <!-- close col containing map -->
 
+    {% endblock %}
+
+    {% block pagescripts %}
     <script>
            // Initialize the map
     L.mapbox.accessToken = 'pk.eyJ1Ijoibm1hcmdvbGlzODkiLCJhIjoiY2lnbXZlem9xMDAzdDZjbTM4a2tteXdzMSJ9.j6aj2wMzUUb8FZR1XMBiBg';
@@ -89,13 +92,13 @@
 
 
     // Request addresses as GeoJSON and add to map
-    $.get('/get_landlord_geojson.json?landlord-id=' + {{landlord.landlord_id}}, createLayer);
+    $.get('/get_landlord_geojson.json?landlord-id=' + {{landlord.landlord_id}}, createLandlordLayer);
 
-    function createLayer(results) {
+    function createLandlordLayer(results) {
       var geojson = results.features;
       console.log(geojson);
 
-      if (geojson.features) {
+      if (geojson[0].features) {
       myLayer.setGeoJSON(geojson);
       
       // Fit the bounds of the map to show all reviews for the landlord

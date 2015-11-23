@@ -224,6 +224,7 @@ def get_landlord_geojson():
     landlord_id = request.args.get('landlord-id')
 
     landlord = Landlord.query.get(landlord_id)
+    print landlord.get_geojson()
 
     return jsonify(landlord.get_geojson())
 
@@ -424,25 +425,44 @@ def process_rating2():
     """Get ratings from modal form and store them in reviews table"""
 
     user_id = session['user']
-    # TO DO: Delete
-    landlord_id = request.form.get('landlord-id-field')
-    print landlord_id
 
+    # If landlord_id was passed as data, set it equal to landlord_id to be used in review
+    landlord_id = request.form.get('landlord-id-field')
+    if landlord_id:
+        print "Received landlord_id: {}".format(landlord_id)
 
     if not landlord_id:
-        # TO DO: refactor so this doesn't repeat add_new_landlord
+
         fname = request.form.get('fname')
         lname = request.form.get('lname')
 
-        landlord_result = db.session.query(Landlord).filter(Landlord.fname == fname,
-                                                            Landlord.lname == lname).first()
+        # See if landlord exists in database as entered (case insensitive)
+        landlord_result = db.session.query(Landlord).filter(db.func.lower(Landlord.fname) == db.func.lower(fname),
+                                                            db.func.lower(Landlord.lname) == db.func.lower(lname)).first()
+
+        # TO DO: change to .all() and return both, giving user option to choose
 
         if landlord_result:
             print "{} {} exists as a landlord.".format(fname, lname)
             landlord_id = landlord_result.landlord_id
         else:
-            print "{} {} does not exist as a landlord.".format(fname, lname)
-            return "found-no-landlords"
+            print "{} {} does not exist as a landlord as entered.".format(fname, lname)
+
+            # Use more flexible lookup to find possible matches
+            landlord_results = find_landlords_by_name(fname,lname)
+
+            # Return json object with landlord results
+            if landlord_results:
+
+                landlord_dict = {}
+
+                for landlord in landlord_results:
+                    landlord_dict[landlord.landlord_id] = landlord.convert_to_dict()
+
+                    return jsonify(landlord_dict)
+
+            else:
+                return "found-no-landlords"
             # landlord = Landlord(fname=fname, lname=lname)
 
             # db.session.add(landlord)
@@ -679,6 +699,23 @@ def get_addresses():
 
     return jsonify(geojson)
 
+@app.route('/get_recent_reviews')
+def get_recent_reviews():
+    """Get a list of the 10 most recent reviews and return json object"""
+    recent_reviews = db.session.query(Review).order_by(db.desc(Review.created_at)).limit(10).all()
+
+    # reviews_dict = {}
+    # for review in recent_reviews:
+    #     reviews_dict[review.review_id] = review.convert_to_dict()
+
+    reviews_list = []
+    for review in recent_reviews:
+        reviews_list.append(review.convert_to_dict())
+
+    reviews_dict = {'results': reviews_list}
+    return jsonify(reviews_dict)
+
+
 #####################################################################
 """Helper functions"""
 
@@ -709,7 +746,7 @@ def find_landlords_by_name(fname=None, lname=None):
 
     if landlords:
         for landlord in landlords:
-            print "Found {} {}.\n".format(fname, lname)
+            print "Found {} {}.\n".format(landlord.fname, landlord.lname)
         return landlords
     else:
         print "{} {} was not found.".format(fname, lname)
