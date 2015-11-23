@@ -190,21 +190,21 @@ def find_landlords_by_address():
 def find_landlords_by_name():
     """Query for landlords by name and return json object with landlords"""
 
-    print "Im at lookup-by-name"
+    print "Im at lookup-by-name.json route"
     fname = request.args.get('fname')
     lname = request.args.get('lname')
 
-    landlords = db.session.query(Landlord).filter(db.or_(Landlord.fname.ilike("%"+fname+"%"),
-                                                  Landlord.lname .ilike("%"+lname+"%"))).all()
-    print landlords
+    landlords = find_landlords_by_name(fname, lname)
 
-    landlord_dict = {}
+    if landlords:
 
-    for landlord in landlords:
-        landlord_dict[landlord.landlord_id] = landlord.convert_to_dict()
+        landlord_dict = {}
 
-    print landlord_dict
-    if landlord_dict:
+        for landlord in landlords:
+            landlord_dict[landlord.landlord_id] = landlord.convert_to_dict()
+
+        print landlord_dict
+
         return jsonify(landlord_dict)
     else:
         return "found-no-landlords"
@@ -228,195 +228,195 @@ def get_landlord_geojson():
     return jsonify(landlord.get_geojson())
 
 
-@app.route('/add-new-address.json', methods=['POST'])
-def add_new_address():
-    """Add new address to database"""
-    print "I'm at add-new-address"
-    street = request.form.get('street-add')
-    city = request.form.get('city-add')
-    state = request.form.get('state-add')
-    zipcode = request.form.get('zipcode-add')
-    country = request.form.get('country-add')
+# @app.route('/add-new-address.json', methods=['POST'])
+# def add_new_address():
+#     """Add new address to database"""
+#     print "I'm at add-new-address"
+#     street = request.form.get('street-add')
+#     city = request.form.get('city-add')
+#     state = request.form.get('state-add')
+#     zipcode = request.form.get('zipcode-add')
+#     country = request.form.get('country-add')
 
-    address = db.session.query(Address).filter(Address.street == street,
-                                               Address.state == state,
-                                               Address.city == city).all()
+#     address = db.session.query(Address).filter(Address.street == street,
+#                                                Address.state == state,
+#                                                Address.city == city).all()
 
-    if address:
-        return "{} {} already exists as an address.".format(street, city, state)
+#     if address:
+#         return "{} {} already exists as an address.".format(street, city, state)
 
-    else:
-        # TO DO: Refactor to not repeat the following code both here and in process-review
+#     else:
+#         # TO DO: Refactor to not repeat the following code both here and in process-review
 
-        # Geocode to find lat and lng
-        # Use center of San Francisco for proximity lat and lng
-        proxim_lng = -122.4194155
-        proxim_lat = 37.7749295
+#         # Geocode to find lat and lng
+#         # Use center of San Francisco for proximity lat and lng
+#         proxim_lng = -122.4194155
+#         proxim_lat = 37.7749295
 
-        # Make request to mapbox geocoding api and turn response into json
-        req = 'https://api.mapbox.com/geocoding/v5/mapbox.places/{}.json?proximity={},{}&access_token={}'.format(street, proxim_lng, proxim_lat, mapbox_token)
-        r = requests.get(req)
-        json_response = r.json()
-        # pp.pprint(json_response)
+#         # Make request to mapbox geocoding api and turn response into json
+#         req = 'https://api.mapbox.com/geocoding/v5/mapbox.places/{}.json?proximity={},{}&access_token={}'.format(street, proxim_lng, proxim_lat, mapbox_token)
+#         r = requests.get(req)
+#         json_response = r.json()
+#         # pp.pprint(json_response)
 
-        feature_to_add = None
+#         feature_to_add = None
 
-        # Isolate the feature in the city the user searched for
-        for feature in json_response['features']:
-            print 'iterating over json response'
-            if city == feature['context'][1]["text"]:
-                feature_to_add = feature
-                break
+#         # Isolate the feature in the city the user searched for
+#         for feature in json_response['features']:
+#             print 'iterating over json response'
+#             if city == feature['context'][1]["text"]:
+#                 feature_to_add = feature
+#                 break
 
-        # If there are no features that match the city the user searched for
-        if feature_to_add is None:
-            return "Can't find the street address you entered in the city you entered."
+#         # If there are no features that match the city the user searched for
+#         if feature_to_add is None:
+#             return "Can't find the street address you entered in the city you entered."
 
-        # Otherwise, continue the process to add the address to the database
-        else:
-            address = Address(street=street,
-                              city=city,
-                              state=state,
-                              zipcode=zipcode,
-                              country=country,
-                              lng=feature_to_add['center'][0],
-                              lat=feature_to_add['center'][1])
-            print address
-            db.session.add(address)
-            db.session.commit()
+#         # Otherwise, continue the process to add the address to the database
+#         else:
+#             address = Address(street=street,
+#                               city=city,
+#                               state=state,
+#                               zipcode=zipcode,
+#                               country=country,
+#                               lng=feature_to_add['center'][0],
+#                               lat=feature_to_add['center'][1])
+#             print address
+#             db.session.add(address)
+#             db.session.commit()
 
-        return "Successfully added {}, {}, {} as an address.".format(street, city, state)
-
-
-@app.route('/add-new-landlord.json', methods=['POST'])
-def add_new_landlord():
-    """Add new landlord to database"""
-    fname = request.form.get('fname-add')
-    lname = request.form.get('lname-add')
-
-    print fname
-    print lname
-
-    landlords = db.session.query(Landlord).filter(Landlord.fname == fname,
-                                                  Landlord.lname == lname).all()
-
-    if landlords:
-        return "{} {} already exists as a landlord.".format(fname, lname)
-
-    else:
-        landlord = Landlord(fname=fname, lname=lname)
-
-        db.session.add(landlord)
-        db.session.commit()
-        return "Successfully added {} {} as a landlord.".format(fname, lname)
+#         return "Successfully added {}, {}, {} as an address.".format(street, city, state)
 
 
-@app.route('/process-rating', methods=['POST'])
-def process_rating():
-    """Get ratings from form and store them in reviews table"""
+# @app.route('/add-new-landlord.json', methods=['POST'])
+# def add_new_landlord():
+#     """Add new landlord to database"""
+#     fname = request.form.get('fname-add')
+#     lname = request.form.get('lname-add')
 
-    user_id = session['user']
-    landlord_id = request.form.get('landlord-id')
+#     print fname
+#     print lname
 
-    street_number = request.form.get('street-number')
-    street_name = request.form.get('street-name')
-    city = request.form.get('city')
-    state = request.form.get('state')
-    country = request.form.get('country')
-    zipcode = request.form.get('zipcode')
+#     landlords = db.session.query(Landlord).filter(Landlord.fname == fname,
+#                                                   Landlord.lname == lname).all()
 
-    moved_in_at = request.form.get('move-in')
-    moved_out_at = request.form.get('move-out')
+#     if landlords:
+#         return "{} {} already exists as a landlord.".format(fname, lname)
 
-    if moved_in_at:
-        moved_in_at = datetime.strptime(moved_in_at, "%Y-%m-%d")
+#     else:
+#         landlord = Landlord(fname=fname, lname=lname)
 
-    else:
-        moved_in_at = None
+#         db.session.add(landlord)
+#         db.session.commit()
+#         return "Successfully added {} {} as a landlord.".format(fname, lname)
 
-    if moved_out_at:
-        moved_out_at = datetime.strptime(moved_out_at, "%Y-%m-%d")
 
-    else:
-        moved_out_at = None
+# @app.route('/process-rating', methods=['POST'])
+# def process_rating():
+#     """Get ratings from form and store them in reviews table"""
 
-    rating1 = request.form.get('rating1')
-    rating2 = request.form.get('rating2')
-    rating3 = request.form.get('rating3')
-    rating4 = request.form.get('rating4')
-    rating5 = request.form.get('rating5')
-    comment = request.form.get('comment')
+#     user_id = session['user']
+#     landlord_id = request.form.get('landlord-id')
 
-    # Process address to check if it is already in the databse
-    street = street_number + ' ' + street_name
+#     street_number = request.form.get('street-number')
+#     street_name = request.form.get('street-name')
+#     city = request.form.get('city')
+#     state = request.form.get('state')
+#     country = request.form.get('country')
+#     zipcode = request.form.get('zipcode')
 
-    # Query for the address in the database that matches the street, city and state
-    address = db.session.query(Address).filter(Address.street == street,
-                                               Address.city == city,
-                                               Address.state == state).first()
-    if address:
-        address_id = address.address_id
+#     moved_in_at = request.form.get('move-in')
+#     moved_out_at = request.form.get('move-out')
 
-    # If the address is not in the database
-    elif address is None:
+#     if moved_in_at:
+#         moved_in_at = datetime.strptime(moved_in_at, "%Y-%m-%d")
 
-        # Geocode to find lat and lng
-        # Use center of San Francisco for proximity lat and lng
-        proxim_lng = -122.4194155
-        proxim_lat = 37.7749295
-        req = 'https://api.mapbox.com/geocoding/v5/mapbox.places/{}.json?proximity={},{}&access_token={}'.format(street, proxim_lng, proxim_lat, mapbox_token)
-        r = requests.get(req)
-        json_response = r.json()
-        # pp.pprint(json_response)
+#     else:
+#         moved_in_at = None
 
-        feature_to_add = None
+#     if moved_out_at:
+#         moved_out_at = datetime.strptime(moved_out_at, "%Y-%m-%d")
 
-        # Isolate the feature in the city the user searched for
-        for feature in json_response['features']:
-            print 'iterating over json response'
-            if city == feature['context'][1]["text"]:
-                feature_to_add = feature
-                break
+#     else:
+#         moved_out_at = None
 
-        # If there are no features that match the city the user searched for
-        if feature_to_add is None:
-            flash("Can't find the street address you entered in the city you entered.")
-            return "failed to find address"
+#     rating1 = request.form.get('rating1')
+#     rating2 = request.form.get('rating2')
+#     rating3 = request.form.get('rating3')
+#     rating4 = request.form.get('rating4')
+#     rating5 = request.form.get('rating5')
+#     comment = request.form.get('comment')
 
-        # Otherwise, continue the process to add the address to the database
-        else:
-            address = Address(street=street,
-                              city=city,
-                              state=state,
-                              zipcode=zipcode,
-                              country=country,
-                              lng=feature_to_add['center'][0],
-                              lat=feature_to_add['center'][1])
+#     # Process address to check if it is already in the databse
+#     street = street_number + ' ' + street_name
 
-            db.session.add(address)
-            db.session.commit()
+#     # Query for the address in the database that matches the street, city and state
+#     address = db.session.query(Address).filter(Address.street == street,
+#                                                Address.city == city,
+#                                                Address.state == state).first()
+#     if address:
+#         address_id = address.address_id
 
-            address_id = address.address_id
+#     # If the address is not in the database
+#     elif address is None:
 
-    # Add the review to the database
+#         # Geocode to find lat and lng
+#         # Use center of San Francisco for proximity lat and lng
+#         proxim_lng = -122.4194155
+#         proxim_lat = 37.7749295
+#         req = 'https://api.mapbox.com/geocoding/v5/mapbox.places/{}.json?proximity={},{}&access_token={}'.format(street, proxim_lng, proxim_lat, mapbox_token)
+#         r = requests.get(req)
+#         json_response = r.json()
+#         # pp.pprint(json_response)
 
-    review = Review(user_id=user_id,
-                    landlord_id=landlord_id,
-                    address_id=address_id,
-                    moved_in_at=moved_in_at,
-                    moved_out_at=moved_out_at,
-                    created_at=datetime.utcnow(),
-                    rating1=rating1,
-                    rating2=rating2,
-                    rating3=rating3,
-                    rating4=rating4,
-                    rating5=rating5,
-                    comment=comment)
+#         feature_to_add = None
 
-    db.session.add(review)
-    db.session.commit()
+#         # Isolate the feature in the city the user searched for
+#         for feature in json_response['features']:
+#             print 'iterating over json response'
+#             if city == feature['context'][1]["text"]:
+#                 feature_to_add = feature
+#                 break
 
-    return "success"
+#         # If there are no features that match the city the user searched for
+#         if feature_to_add is None:
+#             flash("Can't find the street address you entered in the city you entered.")
+#             return "failed to find address"
+
+#         # Otherwise, continue the process to add the address to the database
+#         else:
+#             address = Address(street=street,
+#                               city=city,
+#                               state=state,
+#                               zipcode=zipcode,
+#                               country=country,
+#                               lng=feature_to_add['center'][0],
+#                               lat=feature_to_add['center'][1])
+
+#             db.session.add(address)
+#             db.session.commit()
+
+#             address_id = address.address_id
+
+#     # Add the review to the database
+
+#     review = Review(user_id=user_id,
+#                     landlord_id=landlord_id,
+#                     address_id=address_id,
+#                     moved_in_at=moved_in_at,
+#                     moved_out_at=moved_out_at,
+#                     created_at=datetime.utcnow(),
+#                     rating1=rating1,
+#                     rating2=rating2,
+#                     rating3=rating3,
+#                     rating4=rating4,
+#                     rating5=rating5,
+#                     comment=comment)
+
+#     db.session.add(review)
+#     db.session.commit()
+
+#     return "success"
 
 
 @app.route('/process-rating2.json', methods=['POST'])
@@ -424,7 +424,9 @@ def process_rating2():
     """Get ratings from modal form and store them in reviews table"""
 
     user_id = session['user']
-    landlord_id = request.form.get('landlord-id')
+    # TO DO: Delete
+    landlord_id = request.form.get('landlord-id-field')
+    print landlord_id
 
 
     if not landlord_id:
@@ -480,8 +482,8 @@ def process_rating2():
     street = street_number + ' ' + street_name
 
     # Query for the address in the database that matches the street, city and state
-    address = db.session.query(Address).filter(Address.street == street,
-                                               Address.city == city,
+    address = db.session.query(Address).filter(Address.street.ilike("%"+street+"%"),
+                                               Address.city.ilike("%"+city+"%"),
                                                Address.state == state).first()
     if address:
         address_id = address.address_id
@@ -502,6 +504,7 @@ def process_rating2():
 
         # Isolate the feature in the city the user searched for
         for feature in json_response['features']:
+            print json_response['features']
             print 'iterating over json response'
             if city == feature['context'][1]["text"]:
                 feature_to_add = feature
@@ -509,7 +512,7 @@ def process_rating2():
 
         # If there are no features that match the city the user searched for
         if feature_to_add is None:
-            flash("Can't find the street address you entered in the city you entered.")
+            # flash("Can't find the street address you entered in the city you entered.")
             return "Address-not-valid"
 
         # Otherwise, continue the process to add the address to the database
@@ -676,7 +679,43 @@ def get_addresses():
 
     return jsonify(geojson)
 
+#####################################################################
+"""Helper functions"""
 
+def find_landlords_by_name(fname=None, lname=None):
+    """Returns a list of landlord objects that loosely match fname or lname in query"""
+
+    print "At find landlords by name."
+    print "Query: {} {}".format(fname, lname)
+
+    # Query for landlords where fname or lname is like either of the fname or lname inputs
+    if fname and lname:
+        landlords = db.session.query(Landlord).filter(db.or_(Landlord.fname.ilike("%"+fname+"%"),
+                                                             Landlord.fname.ilike("%"+lname+"%"),
+                                                             Landlord.lname.ilike("%"+fname+"%"),
+                                                             Landlord.lname .ilike("%"+lname+"%"))).all()
+
+    elif fname and not lname:
+        landlords = db.session.query(Landlord).filter(db.or_(Landlord.fname.ilike("%"+fname+"%"),
+                                                             Landlord.lname.ilike("%"+fname+"%"))).all()
+
+    elif lname and not fname:
+        landlords = db.session.query(Landlord).filter(db.or_(Landlord.fname.ilike("%"+lname+"%"),
+                                                             Landlord.lname.ilike("%"+lname+"%"))).all()
+
+    else:
+        print "Received no arguments"
+        raise TypeError
+
+    if landlords:
+        for landlord in landlords:
+            print "Found {} {}.\n".format(fname, lname)
+        return landlords
+    else:
+        print "{} {} was not found.".format(fname, lname)
+        return None
+
+    # TO DO: Prioritize closest match
 
 if __name__ == "__main__":
 

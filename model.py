@@ -3,6 +3,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
+
 db = SQLAlchemy()
 
 
@@ -42,7 +43,12 @@ class Landlord(db.Model):
             self.landlord_id, self.fname, self.lname)
 
     def convert_to_dict(self):
-        """Returns landlord object in dictionary form"""
+        """Returns landlord object in dictionary form
+
+        >>> sorted(Landlord.query.get('41').convert_to_dict().items())
+        [('fname', u'Marylou'), ('landlord_id', 41), ('lname', u'Streich')]
+
+        """
 
         landlord_dict = {'landlord_id': self.landlord_id,
                         'fname': self.fname,
@@ -306,8 +312,11 @@ def connect_to_db(app):
 
 if __name__ == "__main__":
 
+    # import doctest
     from server import app
 
     connect_to_db(app)
     print "Connected to DB."
-    # db.create_all()
+    db.create_all()
+
+    # doctest.testmod()

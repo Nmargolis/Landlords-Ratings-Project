@@ -235,7 +235,6 @@
     function processGeocodeSelect(res) {
       console.log(res);
 
-      //TO DO: Deal with error if nothing found
       //TO DO: Handle if user presses enter instead of selecting from results
       //TO DO: Close all tooltips that may be open
 
@@ -269,6 +268,7 @@
             msg = '';
           }
       });
+      console.log(msg);
       if (msg != '') {
         alert(msg);
       }

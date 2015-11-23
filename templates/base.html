@@ -84,6 +84,7 @@
             {% if 'user' in session %}
 
             <form id="modal-review-form">
+              <input type="hidden" id="hidden-landlord-id" name="landlord-id-field" value="">
               <label>Enter landlord's first name:</label>
               <input type="text" id="fname-field-review" name="fname" placeholder="first name" required></input><br>
               <label>Enter landlord's last name:</label>
@@ -244,43 +245,43 @@
         $('#modalResultsWindow').modal('show');
     }
 
-    function showAddressForm(evt) {
-        console.log("clicked add address button");
-        $("#add-address-div").removeClass('hide');
-        $("#street-field-add").attr('value', $('#street-field').val());
-        $("#city-field-add").attr('value', $('#city-field').val());
-        $("#state-field-add").attr('value', $('#state-field').val());
-    }
+    // function showAddressForm(evt) {
+    //     console.log("clicked add address button");
+    //     $("#add-address-div").removeClass('hide');
+    //     $("#street-field-add").attr('value', $('#street-field').val());
+    //     $("#city-field-add").attr('value', $('#city-field').val());
+    //     $("#state-field-add").attr('value', $('#state-field').val());
+    // }
 
-    function showLandlordForm(evt) {
-        console.log("clicked add landlord button");
-        $("#add-landlord-div").removeClass('hide');
-        $("#fname-field-add").attr('value', $('#fname-field').val());
-        $("#lname-field-add").attr('value', $('#lname-field').val());
-    }
+    // function showLandlordForm(evt) {
+    //     console.log("clicked add landlord button");
+    //     $("#add-landlord-div").removeClass('hide');
+    //     $("#fname-field-add").attr('value', $('#fname-field').val());
+    //     $("#lname-field-add").attr('value', $('#lname-field').val());
+    // }
 
-    function addAddress(evt) {
-        evt.preventDefault();
-        var name = $('#add-address-form').serialize();
+    // function addAddress(evt) {
+    //     evt.preventDefault();
+    //     var name = $('#add-address-form').serialize();
 
-        $.post('/add-new-address.json', name, function (results) {
-            alert(results);
+    //     $.post('/add-new-address.json', name, function (results) {
+    //         alert(results);
 
-        $('#results').html('');
+    //     $('#results').html('');
 
-        });
-    }
+    //     });
+    // }
 
-    function addLandlord(evt) {
-        evt.preventDefault();
-        var name = $('#add-landlord-form').serialize();
+    // function addLandlord(evt) {
+    //     evt.preventDefault();
+    //     var name = $('#add-landlord-form').serialize();
 
-        $.post('/add-new-landlord.json', name, function (results) {
-            alert(results);
+    //     $.post('/add-new-landlord.json', name, function (results) {
+    //         alert(results);
 
-        $('#results').html('');
-        });
-    }
+    //     $('#results').html('');
+    //     });
+    // }
 
       // $("#search-by-address").on("submit", lookupByAddress);
 
@@ -298,16 +299,16 @@
 
     //TO DO: Figure out logical way to do validation
 
-    $("#add-landlord-btn").on("click", showLandlordForm);
+    // $("#add-landlord-btn").on("click", showLandlordForm);
 
     // When add address button is clicked, show the form to add addresses
     // $("#add-address-btn").on("click", showAddressForm);
     
     // Process landlord when add landlord form is submitted
-    $("#add-landlord-form").on("submit", addLandlord);
+    // $("#add-landlord-form").on("submit", addLandlord);
 
     // Process address when add address button is submitted
-    $("#add-address-form").on("submit", addAddress);
+    // $("#add-address-form").on("submit", addAddress);
 
 
 
@@ -318,7 +319,7 @@
     $('#modal-review-form').on('submit', function (evt) {
       evt.preventDefault();
       //validate
-      
+
       var inputs = $('#modal-review-form').serialize();
       $.post('/process-rating2.json', inputs, displayResultsMessage);
     })
