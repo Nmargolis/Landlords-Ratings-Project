@@ -447,19 +447,22 @@ def process_rating2():
             landlord_id = landlord_result.landlord_id
         else:
             print "{} {} does not exist as a landlord as entered.".format(fname, lname)
+            print "Searching for possible matches."
 
             # Use more flexible lookup to find possible matches
-            landlord_results = find_landlords_by_name(fname,lname)
+            landlord_results = find_landlords_by_name(fname, lname)
 
             # Return json object with landlord results
             if landlord_results:
 
-                landlord_dict = {}
+                landlord_list = []
 
                 for landlord in landlord_results:
-                    landlord_dict[landlord.landlord_id] = landlord.convert_to_dict()
+                    landlord_list.append(landlord.convert_to_dict())
 
-                    return jsonify(landlord_dict)
+                landlord_dict = {'landlords': landlord_list}
+
+                return jsonify(landlord_dict)
 
             else:
                 return "found-no-landlords"
