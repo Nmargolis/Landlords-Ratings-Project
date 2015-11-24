@@ -289,27 +289,21 @@ def get_landlord_geojson():
 #         return "Successfully added {}, {}, {} as an address.".format(street, city, state)
 
 
-# @app.route('/add-new-landlord.json', methods=['POST'])
-# def add_new_landlord():
-#     """Add new landlord to database"""
-#     fname = request.form.get('fname-add')
-#     lname = request.form.get('lname-add')
+@app.route('/add-new-landlord.json', methods=['POST'])
+def add_new_landlord():
+    """Add new landlord to database"""
+    fname = request.form.get('fname-add')
+    lname = request.form.get('lname-add')
 
-#     print fname
-#     print lname
+    print fname
+    print lname
 
-#     landlords = db.session.query(Landlord).filter(Landlord.fname == fname,
-#                                                   Landlord.lname == lname).all()
+    landlord = Landlord(fname=fname, lname=lname)
 
-#     if landlords:
-#         return "{} {} already exists as a landlord.".format(fname, lname)
+    db.session.add(landlord)
+    db.session.commit()
 
-#     else:
-#         landlord = Landlord(fname=fname, lname=lname)
-
-#         db.session.add(landlord)
-#         db.session.commit()
-#         return "Successfully added {} {} as a landlord.".format(fname, lname)
+    return "added-landlord"
 
 
 # @app.route('/process-rating', methods=['POST'])
