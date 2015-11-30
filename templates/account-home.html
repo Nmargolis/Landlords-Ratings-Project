@@ -35,11 +35,11 @@
                 {% for review in user.reviews %}
                    <article><b>Landlord: <a href="/landlord/{{review.landlord.landlord_id}}">{{ review.landlord.fname }} {{ review.landlord.lname }}</a></b><br>
                     Address: {{ review.address.street }}, {{ review.address.city }}, {{ review.address.state }}<br>
-                    Rating1: {{ review.rating1 }}<br>
-                    Rating2: {{ review.rating2 }}<br>
-                    Rating3: {{ review.rating3 }}<br>
-                    Rating4: {{ review.rating4 }}<br>
-                    Rating5: {{ review.rating5 }}<br>
+                    Maintenance and Repairs: {{ review.rating1 }}<br>
+                    Responsiveness: {{ review.rating2 }}<br>
+                    Pest Management: {{ review.rating3 }}<br>
+                    Respect in Communications: {{ review.rating4 }}<br>
+                    Fairness in Rent Increases: {{ review.rating5 }}<br>
                     Comment: {{ review.comment }}<br>
                    </article><hr>
                 {% endfor %}

@@ -2,32 +2,58 @@
 {% block title %}Send a message{% endblock %}
 
 {% block content %}
+<div class="container-fluid">
+    
+    <div class="row">
+      <div class="col-xs-12 col-md-6 col-md-offset-3 col-lg-6 col-lg-offset-3">
 
     {% if not existing_convo %}
     <h1>Start a new conversation with user {{ user_to }}</h1>
 
         <form action="/process-message-new" method="POST">
-          <label>Subject: </label><input type="text" name="subject" placeholder="Subject for your conversation">
-          <label>Message: </label><input type="text" name="message" placeholder="Your message here">
+          <label>Subject: </label>
+            <input type="text" class="form-control"name="subject" placeholder="Subject for your conversation">
+          <label>Message: </label>
+           <textarea class="form-control" rows="4" name="message" placeholder="Your message here"></textarea>
           <input type="hidden" name="user-to" value={{ user_to }}>
-          <input type="submit" value="send">
+          <input type="submit" class="btn btn-primary" value="Send">
         </form>
 
     {% else %}
     <h1>Send a new message to user {{ user_to }}</h1>
         <form action="/process-message-existing" method="POST">
-          <label>Message </label><input type="text" name="message" placeholder="Your message here">
+          <label>Message: </label>
+            <textarea class="form-control" rows="4" name="message" placeholder="Your message here"></textarea>
           <input type="hidden" name="convo" value={{ existing_convo.convo_id }}>
-          <input type="submit" value="send">
+          <input type="submit" class="btn btn-primary" value="Send">
         </form>
 
         <h3>Previous messages in this conversation</h3>
 
         {% for message in existing_convo.messages %}
-            <b>Sent by user {{ message.user[0].user_id }} at {{ message.sent_at }}</b>: <br>
-            <p>{{ message.content }}</p> <br>
+            {% if message.user[0].user_id == session['user'] %}
+            <div class="panel panel-primary">
+              <div class="panel-heading">
+                Sent by you at {{ message.sent_at }}
+              </div>
+              <div class="panel-body">
+                <p>{{ message.content }}</p>
+              </div>
+            </div>
+            {% else %}
+            <div class="panel panel-warning">
+              <div class="panel-heading">
+                Sent by user {{ message.user[0].user_id }} at {{ message.sent_at }}
+              </div>
+              <div class="panel-body">
+                <p>{{ message.content }}</p>
+              </div>
+            </div>
+            {% endif %}
+            
         {% endfor %}
-
     {% endif %}
-    
+    </div>
+  </div>
+</div>  
 {% endblock %}  

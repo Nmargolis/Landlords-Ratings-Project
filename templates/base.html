@@ -30,7 +30,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="/">Home</a>
+          <a class="navbar-brand" href="/">Tenant<span class="highlight">Connect</span></a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
@@ -54,12 +54,16 @@
           </div>
           <form id="search-by-name" class="navbar-form navbar-left" role="search">
             <div class="form-group">
-                <label>Look up a landlord:
+                <label class="control-label">Look up a landlord:</label>
                 <input type="text" class="form-control" name="fname" placeholder="First name"></input>
                 <input type="text" class="form-control" id="lname-field" name="lname" placeholder="Last name"></input>
-            <button type="submit" class="btn btn-default">Search for a landlord</button>
+            </div>
+            <button type="submit" class="btn btn-default">Search</button>
           </form>
 
+        <button type="button" class="btn btn-primary navbar-btn" data-toggle="modal" data-target="#modalRatingForm">
+           Rate a landlord
+        </button>
         </div><!-- /.navbar-collapse -->
       </div><!-- /.container-fluid -->
     </nav>
@@ -163,14 +167,14 @@
               </div>
               <div class="col-sm-12"></div>
               <div class="form-group"> 
-                <label class="col-sm-5 control-label form-col">Pest management </label>
+                <label class="col-sm-5 control-label form-col">Pest management: </label>
                 <div class="col-sm-7">
                   <input type="number" name="rating3" data-min='1' data-max='5' class="rating form-control" data-clearable="remove"/>
                 </div>                
               </div>
               <div class="col-sm-12"></div> 
               <div class="form-group"> 
-                <label class="col-sm-5 control-label form-col">Respect in communications  </label>
+                <label class="col-sm-5 control-label form-col">Respect in communications:  </label>
                 <div class="col-sm-7">
                   <input type="number" name="rating4" data-min='1' data-max='5' class="rating form-control" data-clearable="remove"/> 
                </div>
@@ -178,14 +182,14 @@
               </div>
               <div class="col-sm-12"></div> 
               <div class="form-group"> 
-                <label class="col-sm-5 control-label">Fairness in rent increases </label>
+                <label class="col-sm-5 control-label">Fairness in rent increases: </label>
                 <div class="col-sm-7">
                   <input type="number" name="rating5" data-min='1' data-max='5' class="rating form-control" data-clearable="remove"/>
                 </div>
               </div>
               <div class="col-sm-12"></div> 
               <div class="form-group">
-                <label class="col-sm-2">Comment</label>
+                <label class="col-sm-2">Comment:</label>
                 <div class="col-sm-10">
                   <textarea class="form-control" rows="4" name="comment" placeholder="Your comment here"></textarea>
                 </div>

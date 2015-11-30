@@ -14,6 +14,7 @@ h3 {
 
 a {
     color: #16e0a5;
+
 }
 
 a:hover {
@@ -22,12 +23,37 @@ a:hover {
 
 .btn-primary {
   color: #fff;
-  background-color: #008372;
-  border-color: #008372;
+  background-color: #ffa60d;
+  
 }
 
 .btn-primary:hover {
-    background-color: #16e0a5;
+    
+    background-color: #008372;
+    border-color: #008372;
+}
+
+.btn-primary:active {
+    background-color: #ffa60d;
+}
+
+.btn-default {
+    color: #fff;
+    background-color: #008372;
+    border-color: #008372;
+}
+
+.btn-default:hover {
+    background-color: #ffa60d;
+
+}
+.highlight {
+    color: #ffa60d;
+}
+
+.highlight:hover {
+    color: #fff;
+
 }
 
 .navbar-inverse {
@@ -92,9 +118,34 @@ a:hover {
 }
 
 .form-col {
-    padding-right: 0px;
+    padding-right: 0;
 }
 .glyphicon {
     font-size: larger;
     color: #ffa60d;
+}
+
+.panel {
+    background-color: #555;
+    color: #fff;
+}
+
+.panel-primary{
+  border-color: #008372;
+}
+
+.panel-primary>.panel-heading {
+    background-color: #008372;
+    border-color: #008372;
+}
+
+.panel-warning{
+    color: #fff;
+    border-color: #ffa60d;
+}
+
+.panel-warning>.panel-heading {
+    color: #fff;
+    background-color: #ffa60d;
+    border-color: #008372;
 }

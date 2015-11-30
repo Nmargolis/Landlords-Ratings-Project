@@ -44,11 +44,11 @@
           Address: {{ review.address.street }}<br> <!-- To Do: add more address info -->
           Created at: {{ review.created_at }}<br>
 
-          <span class = "rating">rating1: {{ review.rating1 }}<br></span>
-          <span class = "rating">rating2: {{ review.rating2 }}<br></span>
-          <span class = "rating">rating3: {{ review.rating3 }}<br></span>
-          <span class = "rating">rating4: {{ review.rating4 }}<br></span>
-          <span class = "rating">rating5: {{ review.rating5 }}<br></span>
+          <span class = "rating">Maintenance and Repairs: {{ review.rating1 }}<br></span>
+          <span class = "rating">Responsiveness: {{ review.rating2 }}<br></span>
+          <span class = "rating">Pest Management: {{ review.rating3 }}<br></span>
+          <span class = "rating">Respect in Communications: {{ review.rating4 }}<br></span>
+          <span class = "rating">Fairness in Rent Increases: {{ review.rating5 }}<br></span>
           <p class = "comment">comment: {{ review.comment }}</p>
 
           {% if 'user' in session %}

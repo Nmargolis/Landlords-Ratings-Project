@@ -241,11 +241,11 @@
                              "Address: " + results[review].address_street + "<br>" +
                              "Created at: " + results[review].created_at + "<br>" +
                              "<span class='rating'>Overall rating: " + results[review].rating_overall + "<br></span>" +
-                             "<span class='rating hidden'>Rating1: " + results[review].rating1 + "<br></span>" +
-                             "<span class='rating hidden'>Rating2: " + results[review].rating2 + "<br></span>" +
-                             "<span class='rating hidden'>Rating3: " + results[review].rating3 + "<br></span>" +
-                             "<span class='rating hidden'>Rating4: " + results[review].rating4 + "<br></span>" +
-                             "<span class='rating hidden'>Rating5: " + results[review].rating1 + "<br></span>" +
+                             "<span class='rating hidden'>Maintenance and Repairs: " + results[review].rating1 + "<br></span>" +
+                             "<span class='rating hidden'>Responsiveness: " + results[review].rating2 + "<br></span>" +
+                             "<span class='rating hidden'>Pest Management: " + results[review].rating3 + "<br></span>" +
+                             "<span class='rating hidden'>Respect in Communications: " + results[review].rating4 + "<br></span>" +
+                             "<span class='rating hidden'>Fairness in Rent Increases: " + results[review].rating1 + "<br></span>" +
                              "<p> <span class='comment'>Comment: " + results[review].comment + "</span></br><hr>";
 
             resultSidebar.append(reviewHTML);
