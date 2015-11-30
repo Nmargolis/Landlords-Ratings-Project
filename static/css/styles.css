@@ -76,15 +76,24 @@ a:hover {
     bottom:0;
 }
 
+
 .modal-content {
     background-color: #efefef;
     color: #444;
 }
 
+.modal-header{
+    background-color: #008372;
+    color: #fff;
+
+}
 .rating-input {
     display: inline;
 }
 
+.form-col {
+    padding-right: 0px;
+}
 .glyphicon {
     font-size: larger;
     color: #ffa60d;

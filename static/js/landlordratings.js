@@ -80,7 +80,7 @@
                 msg = '<div class="alert alert-danger">Found no landlords matching ' + fname + ' ' + lname + '.' +
                 'Would you like to add ' + fname + ' ' + lname + 'as a landlord?  ' +
                 '<button class="btn btn-default" id="add-landlord-btn" data-fname="' + fname + '" data-lname="' + lname +
-                '">Yes</button></div>';
+                '">Yes</button> <button class="btn btn-default" id="dont-add-landlord-btn">No</button>';
                 $('#landlord-verification-results').html(msg);
             }
             else if (results.landlords) {
@@ -104,16 +104,29 @@
                 }
 
                 msg += '</ul></div>Or would you like to add ' + fname + ' ' + lname + ' as a landlord?  ' +
-                '<button class="btn btn-default" id="add-landlord-btn" data-fname="' + fname + '" data-lname="' + lname +
-                '">Yes</button></div>';
+                '<button type="button" class="btn btn-default" id="add-landlord-btn" data-fname="' + fname + '" data-lname="' + lname +
+                '">Yes</button> <button type="button" class="btn btn-default" id="dont-add-landlord-btn">No</button></div>';
                 $('#landlord-verification-results').html(msg);
             }
-            else {
-            console.log(results);
-            
+            else if (results=='address-not-valid') {
+                msg = '<div class="alert alert-danger">Could not find the address as entered. Please try again.</div>';
             }
+
+            else if (results['success']) {
+                alert('Success!');
+                console.log(results);
+                console.log(results['success']);
+                $('#modalRatingForm').modal('hide');
+                $.get('/get_recent_reviews', displayReviews);
+                // var url = '/landlord/'+ results['success'];
+                
+            }
+            
+            
+            
     }
 
+    // When user selects a landlord, populate the review form with that landlord's info
     // Use Event delegation to bind click event to landlord links that have not been created yet
     $(document).on('click', 'a.select-landlord', function(evt) {
         console.log('selected landlord');
@@ -127,9 +140,15 @@
 
     });
 
-    $(document).on('click', '#add-landlord-btn', function(evt) {
-       $.post('/add-new-landlord.json', {'fname-add': $(this).attr('data-fname'), 'lname-add': $(this).attr('data-lname')}, function(results){
-            if (results == "added-landlord") {
+    // When a user clicks on the add landlord button, add the landlord to the database
+    // Use Event delegation to bind click event to button that has not been created yet
+    $(document).on('click', '#add-landlord-btn', function(e) {
+        e.preventDefault();
+        console.log('clicked add landlord button');
+       $.post('/add-new-landlord.json', {'fname-add': $(this).attr('data-fname'), 'lname-add': $(this).attr('data-lname')}, function(res){
+            console.log('finished add-new-landlord request.');
+            if (res == "added-landlord") {
+                console.log('added-landlord');
                 $('#landlord-verification-results').html('<div class="alert alert-success">Successfully added!</div>');
             }
             else {alert('something went wrong');}
@@ -137,11 +156,20 @@
 
     });
 
+    $(document).on('click', '#dont-add-landlord-btn', function(evt) {
+        console.log('clicked dont add landlord button');
+        var fname = $('#fname-field-review').val();
+        var lname = $('#lname-field-review').val();
+        $('#landlord-verification-results').html('<div class="alert alert-danger">Found no landlords matching' +
+            fname + ' ' + lname + '. Please try again with a different name.</div>');
+    } );
+
 
     function autoCompleteAddress() {
-        var streetNum = $('#street-number-field').val();
-        var streetName = $('#street-name-field').val();
-        var street = '' + streetNum + ' ' + streetName;
+        // var streetNum = $('#street-number-field').val();
+        // var streetName = $('#street-name-field').val();
+        // var street = '' + streetNum + ' ' + streetName;
+        var street = $('#street-field').val();
         var city = $('#city-field').val();
         var zipcode = '';
         var state = '';
@@ -201,7 +229,7 @@
         var resultSidebar = $('#results-sidebar');
         // console.log(results);
         // console.log(resultSidebar);
-
+        resultSidebar.html('');
         results = results['results'];
         for (var review in results) {
             // console.log(results[review]);
@@ -227,6 +255,7 @@
     
     $('#modal-review-form').on('submit', function (evt) {
       evt.preventDefault();
+      // alert('submitting form');
       //validate
           var inputs = $('#modal-review-form').serialize();
           $.post('/process-rating2.json', inputs, displayResultsMessage);

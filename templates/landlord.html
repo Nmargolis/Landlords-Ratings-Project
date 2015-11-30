@@ -33,7 +33,7 @@
 
 
         {% else %}
-          <p>You must be logged in to rate a landlord. Please <a href="/login">log in.</a></p>
+          <p>You must be logged in to rate a landlord. <button type="button" id="show-login-btn" class="btn btn-primary navbar-btn show-login-btn" data-toggle="modal" data-target="#modalLoginWindow">Log in</button>
         {% endif %}
         
 
@@ -59,7 +59,7 @@
             {% endif %}
          
           {% else %}
-          <a href="/login"><button>Log in to message this user</button>
+          <a href="/login" class="show-login-btn"><button>Log in to message this user</button>
           {% endif %}
           </article>
           <hr>

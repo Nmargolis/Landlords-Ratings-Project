@@ -49,7 +49,7 @@
             
             </ul>
             {% else %}
-            <button type="button" id="show-login-btn" class="btn btn-primary navbar-btn" data-toggle="modal" data-target="#modalLoginWindow">Sign in</button>
+            <button type="button" id="show-login-btn" class="btn btn-primary navbar-btn show-login-btn" data-toggle="modal" data-target="#modalLoginWindow">Sign in</button>
             {% endif %}
           </div>
           <form id="search-by-name" class="navbar-form navbar-left" role="search">
@@ -94,90 +94,117 @@
             
             {% if 'user' in session %}
 
-            <form id="modal-review-form">
-              <div class="form-group">
+            <form class="horizontal-form" id="modal-review-form">
+              
               <input type="hidden" id="hidden-landlord-id" name="landlord-id-field" value="">
-              <label>Enter landlord's first name:</label>
-              <input type="text" class="form-control" id="fname-field-review" name="fname" placeholder="first name" required></input><br>
-              <label>Enter landlord's last name:</label>
-              <input type="text" class="form-control" id="lname-field-review" name="lname" placeholder="last name" required></input><br>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">Landlord:</label>
+                <div class="col-sm-5">
+                  <input type="text" class="form-control" id="fname-field-review" name="fname" placeholder="first name" required></input>
+                </div>
+                <div class="col-sm-5">
+                  <input type="text" class="form-control" id="lname-field-review" name="lname" placeholder="last name" required></input>
+                </div><br>
+              </div>
 
               <div id="landlord-verification-results"></div>
 
-        <!--    TO DO: add button to do ajax call to check if landlord in databse
+<!--                 TO DO: add button to do ajax call to check if landlord in databse
                 Allow user to choose to add landlord to databse if they don't exist
                 OR: Just add the landlord if they don't exist. -->
 
+              <div class = "form-group">
+              <label class = "col-sm-2 control-label"><b>Address:</b></label>
+                  <div class="col-sm-3 form-col">
+                    <input type="text" class="form-control" id="street-field" name="street-field" placeholder="1234 Main St" required>
+                  </div>
+                  <div class="col-sm-3 form-col">
+                    <input type="text" class="form-control" id="city-field" name="city" placeholder="San Francisco" required>
+                  </div>
+                <div class="col-sm-3 form-col">
+                  <input type="text" class="form-control" id="state-field" name="state" placeholder="California" required>
+                </div><br><br>
+                <div class="col-sm-3 col-sm-offset-2 form-col">
+                  <input type="text" class="form-control" id="zipcode-field" name="zipcode" placeholder="00000" required>
+                </div>
+                <div class="col-sm-3 form-col">
+                  <input type="text" class="form-control" id="country-field" name="country" placeholder="United States" required><br>
+                </div>
+              </div>
 
-              <label><b>Address:</b></label>
-                <input type="text" class="form-control" id="street-number-field" name="street-number" placeholder="1234" required>
-                <input type="text" class="form-control" id="street-name-field" name="street-name" placeholder="Main St" required>
-                <input type="text" class="form-control" id="city-field" name="city" placeholder="San Francisco" required>
-                <input type="text" class="form-control" id="state-field" name="state" placeholder="California" required>
-                <input type="text" class="form-control" id="zipcode-field" name="zipcode" placeholder="00000" required>
-                <input type="text" class="form-control" id="country-field" name="country" placeholder="United States" required><br>
-
-              <label>When did you move in? (optional)
-                <input type="date" name="move-in" placeholder="mm/dd/yyyy">
-              </label><br>
-               <label>When did you move out (optional)?
-                <input type="date" name="move-out" placeholder="mm/dd/yyyy">
-              </label><br>
-
-              <b>Please rate on the following criteria:</b><br>
-              <label>Maintenance and repairs: <input type="number" name="rating1" data-min='1' data-max='5' class="rating" data-clearable="remove"/>
-                  <!-- <input type="radio" name="rating1" value="1"> 1 
-                  <input type="radio" name="rating1" value="2"> 2 
-                  <input type="radio" name="rating1" value="3"> 3 
-                  <input type="radio" name="rating1" value="4"> 4 
-                  <input type="radio" name="rating1" value="5"> 5  -->
-              </label><br>
-              <label>Responsiveness
-                  <input type="radio" name="rating2" value="1"> 1 
-                  <input type="radio" name="rating2" value="2"> 2 
-                  <input type="radio" name="rating2" value="3"> 3 
-                  <input type="radio" name="rating2" value="4"> 4 
-                  <input type="radio" name="rating2" value="5"> 5 
-              </label></br>
-              <label>Pest management
-                  <input type="radio" name="rating3" value="1"> 1 
-                  <input type="radio" name="rating3" value="2"> 2 
-                  <input type="radio" name="rating3" value="3"> 3 
-                  <input type="radio" name="rating3" value="4"> 4 
-                  <input type="radio" name="rating3" value="5"> 5 
-              </label></br>
-               <label>Respect in communications
-                  <input type="radio" name="rating4" value="1"> 1 
-                  <input type="radio" name="rating4" value="2"> 2 
-                  <input type="radio" name="rating4" value="3"> 3 
-                  <input type="radio" name="rating4" value="4"> 4 
-                  <input type="radio" name="rating4" value="5"> 5 
-              </label></br>
-               <label>Rent increases
-                  <input type="radio" name="rating5" value="1"> 1 
-                  <input type="radio" name="rating5" value="2"> 2 
-                  <input type="radio" name="rating5" value="3"> 3 
-                  <input type="radio" name="rating5" value="4"> 4 
-                  <input type="radio" name="rating5" value="5"> 5 
-              </label></br>
-              <label>Comment<br>
-                  <textarea name="comment" placeholder="Your comment here"></textarea>
-              </label>
-
+              <div class="form-group">
+                <div class="col-sm-6">
+                  <label class="control-label">When did you move in? (optional)</label>
+                    <input type="date" class="form-control" name="move-in" placeholder="mm/dd/yyyy">
+                  
+                </div>
+                <div class="col-sm-6">
+                  <label class = "control-label">When did you move out (optional)?</label>
+                    <input type="date" class="form-control" name="move-out" placeholder="mm/dd/yyyy">
+                  
+                </div><br>
+              </div>
+              <div class="col-sm-12"></div> 
+<!-- 
+              <div class="col-sm-12"><b>Please rate on the following criteria:</b></div> -->
+              
+              <div class="form-group"> 
+                <label class="col-sm-5 control-label form-col">Maintenance and repairs:</label>
+                <div class="col-sm-7">
+                  <input type="number" name="rating1" data-min='1' data-max='5' class="rating form-control" data-clearable="remove"/>
+                </div>             
+              </div>
+              <div class="col-sm-12"></div>
+              <div class="form-group"> 
+                <label class="col-sm-5 control-label form-col">Responsiveness:</label>
+                <div class="col-sm-7">
+                  <input type="number" name="rating2" data-min='1' data-max='5' class="rating form-control" data-clearable="remove"/>
+                </div>
+              </div>
+              <div class="col-sm-12"></div>
+              <div class="form-group"> 
+                <label class="col-sm-5 control-label form-col">Pest management </label>
+                <div class="col-sm-7">
+                  <input type="number" name="rating3" data-min='1' data-max='5' class="rating form-control" data-clearable="remove"/>
+                </div>                
+              </div>
+              <div class="col-sm-12"></div> 
+              <div class="form-group"> 
+                <label class="col-sm-5 control-label form-col">Respect in communications  </label>
+                <div class="col-sm-7">
+                  <input type="number" name="rating4" data-min='1' data-max='5' class="rating form-control" data-clearable="remove"/> 
+               </div>
+               <div class="col-sm-12"></div> 
+              </div>
+              <div class="col-sm-12"></div> 
+              <div class="form-group"> 
+                <label class="col-sm-5 control-label">Fairness in rent increases </label>
+                <div class="col-sm-7">
+                  <input type="number" name="rating5" data-min='1' data-max='5' class="rating form-control" data-clearable="remove"/>
+                </div>
+              </div>
+              <div class="col-sm-12"></div> 
+              <div class="form-group">
+                <label class="col-sm-2">Comment</label>
+                <div class="col-sm-10">
+                  <textarea class="form-control" rows="4" name="comment" placeholder="Your comment here"></textarea>
+                </div>
+              </div>
+             
+            <div class="col-sm-12"></div>
             {% else %}
-              <p>You must be logged in to rate a landlord. Please <a href="/login">log in.</a></p>
+              <p>You must be logged in to rate a landlord. Please <button type="button" id="show-login-btn" class="btn btn-primary navbar-btn show-login-btn" data-toggle="modal" data-target="#modalLoginWindow">Log in</button></p>
             {% endif %}
-
 
           </div> <!-- close modal-body -->
           <div class="modal-footer">
-            {% if 'user' in session %}
-            <input type="submit" class="btn btn-default" value="Submit">
-             </div> <!-- close form group div -->
+             <div class="col-sm-2 col-sm-offset-8 col-form">
+                <input type="submit" class="btn btn-primary" value="Submit">
+              </div>
             </form>
-            {% endif %}
-         
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+         <div class="col-sm-2">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
           </div> <!-- close modal-footer -->
         </div> <!-- close modal-content -->
       </div> <!-- close modal-dialog -->
