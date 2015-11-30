@@ -2,7 +2,7 @@
 {% block title %}Account Home{% endblock %}
 {% block styles %}
     <style>
-        #reviews {
+/*        #reviews {
             width: 45%;
             position: relative;
             float: left;
@@ -13,48 +13,60 @@
             width: 45%;
             position: relative;
             float: right;
-        }
+        }*/
     </style>
 {% endblock %}
     
 {% block content %}
-    <h1>{{ user.fname }} {{ user.lname }}</h1>
-
-    <div id="reviews">
-        <h3>Your reviews</h3>
-
-        {% for review in user.reviews %}
-           <article><b>Landlord: {{ review.landlord.fname }} {{ review.landlord.lname }}</b><br>
-            Address: {{ review.address.street }}, {{ review.address.city }}, {{ review.address.state }}<br>
-            Rating1: {{ review.rating1 }}<br>
-            Rating2: {{ review.rating2 }}<br>
-            Rating3: {{ review.rating3 }}<br>
-            Rating4: {{ review.rating4 }}<br>
-            Rating5: {{ review.rating5 }}<br>
-            Comment: {{ review.comment }}<br>
-           </article><hr>
-        {% endfor %}
+<div class="container-fluid">
+    
+    <div class="row">
+        <div class="col-xs-12 col-md-4 col-md-offset-1 col-lg-4 col-lg-offset-1">
+            <h1>{{ user.fname }} {{ user.lname }}</h1>
+        </div>
     </div>
+    <div class="row">
+        <div class="col-xs-12 col-md-4 col-md-offset-1 col-lg-4 col-lg-offset-1 sidebar-div">
+            
 
-    <div id="convos">
-    <h3>Your conversations</h3>
+            <div id="reviews">
+                <h3>Your reviews</h3>
 
-    {% for convo in user.conversations %}
-        <article><b>{{ convo.subject }}</b><br>
-            {% for message in convo.messages %}
-               Sent by user {{ message.user[0].user_id }} at {{ message.sent_at }}: 
-               <br>
-            <p>{{ message.content }}</p> <br>
-            {% endfor %}
-          <!--   Get other participant in convo -->
-            {% for participant in convo.participants %}
-                {% if session['user'] != participant.user_id %}
-                    <a href="/send-message/{{ participant.user_id }}"><button id="send-message">Message this user</button></a>
-                {% endif %}
-            {% endfor %}
+                {% for review in user.reviews %}
+                   <article><b>Landlord: <a href="/landlord/{{review.landlord.landlord_id}}">{{ review.landlord.fname }} {{ review.landlord.lname }}</a></b><br>
+                    Address: {{ review.address.street }}, {{ review.address.city }}, {{ review.address.state }}<br>
+                    Rating1: {{ review.rating1 }}<br>
+                    Rating2: {{ review.rating2 }}<br>
+                    Rating3: {{ review.rating3 }}<br>
+                    Rating4: {{ review.rating4 }}<br>
+                    Rating5: {{ review.rating5 }}<br>
+                    Comment: {{ review.comment }}<br>
+                   </article><hr>
+                {% endfor %}
+            </div>
+        </div> <!-- close left column -->
 
-        </article><hr>
-    {% endfor %}
+    <div class="col-xs-12 col-md-4 col-md-offset-1 col-lg-4 col-lg-offset-1 sidebar-div">
+        <div id="convos">
+        <h3>Your conversations</h3>
+
+        {% for convo in user.conversations %}
+            <article><b>{{ convo.subject }}</b><br>
+                {% for message in convo.messages %}
+                   Sent by user {{ message.user[0].user_id }} at {{ message.sent_at }}: 
+                   <br>
+                <p>{{ message.content }}</p> <br>
+                {% endfor %}
+              <!--   Get other participant in convo -->
+                {% for participant in convo.participants %}
+                    {% if session['user'] != participant.user_id %}
+                        <a href="/send-message/{{ participant.user_id }}"><button class="btn btn-default" id="send-message">Message this user</button></a>
+                    {% endif %}
+                {% endfor %}
+
+            </article><hr>
+        {% endfor %}
+        </div>
     </div>
     
 

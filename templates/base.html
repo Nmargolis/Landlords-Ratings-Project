@@ -7,12 +7,11 @@
     <script src='https://api.tiles.mapbox.com/mapbox.js/v2.2.2/mapbox.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox.js/v2.2.2/mapbox.css' rel='stylesheet' />
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="/static/js/bootstrap-rating-input.min.js"></script>
 
     {% block styles %} {% endblock %}
     <style>
-        .navbar-default {
-            margin-bottom: 0px;
-        }
+
 /*        .hidden {
             display:none;
         }*/
@@ -21,7 +20,7 @@
 
 <body>
 
-    <nav class="navbar navbar-default">
+    <nav class="navbar navbar-inverse">
       <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
@@ -35,31 +34,29 @@
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="collapsed-menu">
+        <div class="collapse navbar-collapse navbar-right" id="collapsed-menu">
           <ul class="nav navbar-nav">
             {% if 'user' in session %}
-            <li class="dropdown">
-                <a id="dLabel" data-target="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+            <button type="button" class="btn btn-primary navbar-btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Your account
                     <span class="caret"></span>
-                </a>
+                </button>
                 <ul class="dropdown-menu" aria-labelledby="dLabel">
                     <li><a href="/account-home">Account home</a></li>
                     <li role="separator" class="divider"></li>
                     <li><a href="/logout">Log out</a></li>
                 </ul>
-            </li>
+            
             </ul>
             {% else %}
-            <button type="button" id="show-login-btn" class="btn btn-default navbar-btn" data-toggle="modal" data-target="#modalLoginWindow">Sign in</button>
+            <button type="button" id="show-login-btn" class="btn btn-primary navbar-btn" data-toggle="modal" data-target="#modalLoginWindow">Sign in</button>
             {% endif %}
-
+          </div>
           <form id="search-by-name" class="navbar-form navbar-left" role="search">
             <div class="form-group">
                 <label>Look up a landlord:
                 <input type="text" class="form-control" name="fname" placeholder="First name"></input>
                 <input type="text" class="form-control" id="lname-field" name="lname" placeholder="Last name"></input>
-            </div>
             <button type="submit" class="btn btn-default">Search for a landlord</button>
           </form>
 
@@ -98,11 +95,12 @@
             {% if 'user' in session %}
 
             <form id="modal-review-form">
+              <div class="form-group">
               <input type="hidden" id="hidden-landlord-id" name="landlord-id-field" value="">
               <label>Enter landlord's first name:</label>
-              <input type="text" id="fname-field-review" name="fname" placeholder="first name" required></input><br>
+              <input type="text" class="form-control" id="fname-field-review" name="fname" placeholder="first name" required></input><br>
               <label>Enter landlord's last name:</label>
-              <input type="text" id="lname-field-review" name="lname" placeholder="last name" required></input><br>
+              <input type="text" class="form-control" id="lname-field-review" name="lname" placeholder="last name" required></input><br>
 
               <div id="landlord-verification-results"></div>
 
@@ -112,12 +110,12 @@
 
 
               <label><b>Address:</b></label>
-                <input type="text" id="street-number-field" name="street-number" placeholder="1234" required>
-                <input type="text" id="street-name-field" name="street-name" placeholder="Main St" required>
-                <input type="text" id="city-field" name="city" placeholder="San Francisco" required>
-                <input type="text" id="state-field" name="state" placeholder="California" required>
-                <input type="text" id="zipcode-field" name="zipcode" placeholder="00000" required>
-                <input type="text" id="country-field" name="country" placeholder="United States" required><br>
+                <input type="text" class="form-control" id="street-number-field" name="street-number" placeholder="1234" required>
+                <input type="text" class="form-control" id="street-name-field" name="street-name" placeholder="Main St" required>
+                <input type="text" class="form-control" id="city-field" name="city" placeholder="San Francisco" required>
+                <input type="text" class="form-control" id="state-field" name="state" placeholder="California" required>
+                <input type="text" class="form-control" id="zipcode-field" name="zipcode" placeholder="00000" required>
+                <input type="text" class="form-control" id="country-field" name="country" placeholder="United States" required><br>
 
               <label>When did you move in? (optional)
                 <input type="date" name="move-in" placeholder="mm/dd/yyyy">
@@ -127,12 +125,12 @@
               </label><br>
 
               <b>Please rate on the following criteria:</b><br>
-              <label>Maintenance and repairs
-                  <input type="radio" name="rating1" value="1"> 1 
+              <label>Maintenance and repairs: <input type="number" name="rating1" data-min='1' data-max='5' class="rating" data-clearable="remove"/>
+                  <!-- <input type="radio" name="rating1" value="1"> 1 
                   <input type="radio" name="rating1" value="2"> 2 
                   <input type="radio" name="rating1" value="3"> 3 
                   <input type="radio" name="rating1" value="4"> 4 
-                  <input type="radio" name="rating1" value="5"> 5 
+                  <input type="radio" name="rating1" value="5"> 5  -->
               </label><br>
               <label>Responsiveness
                   <input type="radio" name="rating2" value="1"> 1 
@@ -173,8 +171,12 @@
 
           </div> <!-- close modal-body -->
           <div class="modal-footer">
+            {% if 'user' in session %}
             <input type="submit" class="btn btn-default" value="Submit">
+             </div> <!-- close form group div -->
             </form>
+            {% endif %}
+         
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
           </div> <!-- close modal-footer -->
         </div> <!-- close modal-content -->
@@ -250,6 +252,13 @@
 
 {% block scripts %}
     <script src="/static/js/landlordratings.js"></script>
+    <script>
+    L.mapbox.accessToken = 'pk.eyJ1Ijoibm1hcmdvbGlzODkiLCJhIjoiY2lnbXZlem9xMDAzdDZjbTM4a2tteXdzMSJ9.j6aj2wMzUUb8FZR1XMBiBg';
+
+    var map = L.mapbox.map('map', 'nmargolis89.e7f7fef4')
+      .setView([37.7871, -122.4216], 12);
+      </script>
+
     {% block pagescripts %}
     {% endblock %}
 

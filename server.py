@@ -699,7 +699,6 @@ def get_addresses():
 def get_recent_reviews():
     """Get a list of the 5 most recent reviews and return json object"""
     recent_reviews = db.session.query(Review).order_by(db.desc(Review.created_at)).limit(5).all()
-
     # reviews_dict = {}
     # for review in recent_reviews:
     #     reviews_dict[review.review_id] = review.convert_to_dict()
@@ -707,6 +706,7 @@ def get_recent_reviews():
     reviews_list = []
     for review in recent_reviews:
         reviews_list.append(review.convert_to_dict())
+
 
     reviews_dict = {'results': reviews_list}
     return jsonify(reviews_dict)

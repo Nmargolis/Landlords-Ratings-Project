@@ -2,13 +2,7 @@
 {% block title %}Landlord{% endblock %}
 {% block styles %}
     <style>
-        .map {
-            border-left:1px solid #fff;
-            width:100%;
-            height:500px;
-            top:0;
-            bottom:0;
-        }
+
     </style>
 {% endblock %}
 {% block content %}
@@ -83,10 +77,7 @@
     {% block pagescripts %}
     <script>
            // Initialize the map
-    L.mapbox.accessToken = 'pk.eyJ1Ijoibm1hcmdvbGlzODkiLCJhIjoiY2lnbXZlem9xMDAzdDZjbTM4a2tteXdzMSJ9.j6aj2wMzUUb8FZR1XMBiBg';
-
-    var map = L.mapbox.map('map', 'mapbox.streets')
-      .setView([37.7871, -122.4216], 12);
+    
 
     var myLayer = L.mapbox.featureLayer().addTo(map);
 

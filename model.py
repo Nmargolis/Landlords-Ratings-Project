@@ -241,8 +241,8 @@ class Review(db.Model):
                         'landlord_id': self.landlord_id,
                         'landlord_fname': self.landlord.fname,
                         'landlord_lname': self.landlord.lname,
-                        'address_id' : self.address_id,
-                        'address_street' : self.address.street,
+                        'address_id': self.address_id,
+                        'address_street': self.address.street,
                         'address_city': self.address.city,
                         'address_state': self.address.state,
                         'address_zipcode': self.address.zipcode,
@@ -346,6 +346,7 @@ def connect_to_db(app):
     db.init_app(app)
 
 
+
 if __name__ == "__main__":
 
     # import doctest
@@ -353,6 +354,6 @@ if __name__ == "__main__":
 
     connect_to_db(app)
     print "Connected to DB."
-    db.create_all()
+    # db.create_all()
 
     # doctest.testmod()

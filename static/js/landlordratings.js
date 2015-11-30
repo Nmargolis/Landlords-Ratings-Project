@@ -157,14 +157,11 @@
             console.log(features);
             var closest_result = '';
             var cityRegex = new RegExp(city);
-            console.log(cityRegex);
 
             // If the request returned any features
             if (features) {
                 // Find the feature that matches 
                 for (var feature in features) {
-                    console.log('going through features');
-                    console.log(features[feature].place_name);
                     if (features[feature].place_name.match(cityRegex)) {
                         console.log('matches');
                         closest_result = features[feature];
