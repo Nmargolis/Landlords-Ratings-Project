@@ -2,6 +2,7 @@ body {
     background-color: #444;
     height:100%;
     color: #efefef;
+    font-family: 'Roboto', sans-serif;
 
 }
 h1 {
@@ -17,9 +18,20 @@ a {
 
 }
 
+input {
+    font-family: 'Shadows Into Light Two', sans-serif;
+    font-size: 1.2em;
+}
+
 a:hover {
     color: #ffa60d;
 }
+
+.navbar-brand {
+    font-family: 'Shadows Into Light Two', sans-serif;
+    font-size: 2em;
+}
+
 
 .btn-primary {
   color: #fff;
@@ -108,11 +120,20 @@ a:hover {
     color: #444;
 }
 
-.modal-header{
+.modal-header {
     background-color: #008372;
     color: #fff;
 
 }
+
+.form-control {
+    font-size:1.2em;
+}
+
+input.btn {
+    font-family: 'Roboto', sans-serif;
+}
+
 .rating-input {
     display: inline;
 }
