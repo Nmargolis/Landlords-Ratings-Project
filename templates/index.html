@@ -1,12 +1,6 @@
 {% extends 'base.html' %}
 {% block title %}Home{% endblock %}
-{% block styles %}
-    <style>
 
-        .hide {display:none;}
-    </style>
- 
-{% endblock %}
 {% block content %}
   <div class="container-fluid">
     
@@ -14,9 +8,9 @@
       <div class="col-xs-12 col-md-4 col-lg-4 sidebar-div">
 
       <!-- Button for modal form window -->
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalRatingForm">
+        <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalRatingForm">
            Rate a landlord
-        </button>
+        </button> -->
 
         <h1>Recent reviews</h1>
      
@@ -34,135 +28,6 @@
 
   </div> <!-- close container -->
 
-<script>
-
-//       // Functions to lookup by name or address and show list of landlords
-
-//     function showLandlords(results) {
-
-//         console.log(results);
-
-//         if (results == "found-no-landlords") {
-//             $('#results-message').empty();
-//             $('#results-message').prepend('<p>Could not find any landlords matching your search.</p>');
-//             $('#add-landlord-btn').removeClass('hide');
-//         }
-            
-//         else if (results == "found-no-addresses") {
-//             $('#results-message').empty();
-//             $('#results-message').prepend('<p>Could not find any addresses matching your search.</p>');
-//             $('#add-address-btn').removeClass('hide');
-//         }
-
-//         else if(results == "found-address-no-reviews") {
-//             $('#results-message').empty();
-//             $('#results-message').prepend('<p>No reviews exist for this address yet.</p>');
-//         }
-            
-//         // Otherwise display each landlord as a link to the page for that landlord
-//         else {
-//             $('#results-message').empty();
-//             for (var landlordID in results) {
-//                 if (results.hasOwnProperty(landlordID)) {
-//                     $('#results-message').append("<p>Landlord: <a href='/landlord/"+ landlordID + "'> " + results[landlordID]['fname'] + " " + results[landlordID]['lname'] + "</a> </p>");
-//                 }
-//             }
-//         }
-//     }
-
-//           // function lookupByAddress(evt) {
-//           //     evt.preventDefault();
-//           //     var address = $('#search-by-address').serialize();
-//           //     console.log(address)
-              
-//           //     $.get('/lookup-by-address.json', address, showLandlords);
-//           //     console.log("Finished sending address");
-//           // }
-
-//     function lookupByName(evt) {
-//         evt.preventDefault();
-//         var name = $('#search-by-name').serialize();
-
-//         $.get('lookup-by-name.json', name, showLandlords);
-//         console.log("Finished sending name");
-//         $('#modalResultsWindow').modal('show');
-//     }
-
-//     function showAddressForm(evt) {
-//         console.log("clicked add address button");
-//         $("#add-address-div").removeClass('hide');
-//         $("#street-field-add").attr('value', $('#street-field').val());
-//         $("#city-field-add").attr('value', $('#city-field').val());
-//         $("#state-field-add").attr('value', $('#state-field').val());
-//     }
-
-//     function showLandlordForm(evt) {
-//         console.log("clicked add landlord button");
-//         $("#add-landlord-div").removeClass('hide');
-//         $("#fname-field-add").attr('value', $('#fname-field').val());
-//         $("#lname-field-add").attr('value', $('#lname-field').val());
-//     }
-
-//     function addAddress(evt) {
-//         evt.preventDefault();
-//         var name = $('#add-address-form').serialize();
-
-//         $.post('/add-new-address.json', name, function (results) {
-//             alert(results);
-
-//         $('#results').html('');
-
-//         });
-//     }
-
-//     function addLandlord(evt) {
-//         evt.preventDefault();
-//         var name = $('#add-landlord-form').serialize();
-
-//         $.post('/add-new-landlord.json', name, function (results) {
-//             alert(results);
-
-//         $('#results').html('');
-//         });
-//     }
-
-//       // $("#search-by-address").on("submit", lookupByAddress);
-
-//     $("#search-by-name").on("submit", lookupByName);
-
-//     // When user finishes entering landlord last name in modal review form, check if landlord in database
-//     $('#lname-field-review').on('blur', function() {
-//         var fname = $('#fname-field-review').val();
-//         var lname = $('#lname-field-review').val();
-//         var name = {fname: fname, lname: lname};
-
-//       $.get('/lookup-by-name.json', name, displayResultsMessage);
-//     });
-
-//     $("#add-landlord-btn").on("click", showLandlordForm);
-
-//     // When add address button is clicked, show the form to add addresses
-//     // $("#add-address-btn").on("click", showAddressForm);
-    
-//     // Process landlord when add landlord form is submitted
-//     $("#add-landlord-form").on("submit", addLandlord);
-
-//     // Process address when add address button is submitted
-//     $("#add-address-form").on("submit", addAddress);
-
-
-
-//     function displayResultsMessage(results) {
-//       alert(results);
-//     }
-
-//     $('#modal-review-form').on('submit', function (evt) {
-//       evt.preventDefault();
-//       var inputs = $('#modal-review-form').serialize();
-//       $.post('/process-rating2.json', inputs, displayResultsMessage);
-//     })
-// </script>
-
 {% endblock %}
 
 {% block pagescripts %}
@@ -172,12 +37,6 @@
 
 <script>
     // Functions having to do with the map
-    // Initialize the map
-    // L.mapbox.accessToken = 'pk.eyJ1Ijoibm1hcmdvbGlzODkiLCJhIjoiY2lnbXZlem9xMDAzdDZjbTM4a2tteXdzMSJ9.j6aj2wMzUUb8FZR1XMBiBg';
-
-    // var map = L.mapbox.map('map', 'nmargolis89.e7f7fef4')
-    //   .setView([37.7871, -122.4216], 12);
-
     var myLayer = L.mapbox.featureLayer().addTo(map);
 
     // Add geocoder search input
@@ -221,7 +80,6 @@
       console.log(res);
 
       //TO DO: Handle if user presses enter instead of selecting from results
-      //TO DO: Close all tooltips that may be open
 
       // Put selected place name in the input field
       input = $('.leaflet-control-mapbox-geocoder .leaflet-control-mapbox-geocoder-form input ');

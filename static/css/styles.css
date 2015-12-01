@@ -2,15 +2,17 @@ body {
     background-color: #444;
     height:100%;
     color: #efefef;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Roboto slab', serif;
 
 }
 h1 {
     color: #fff;
+    font-family: 'Didact Gothic', sans-serif;
 }
 
 h3 {
     color: #16e0a5;
+    font-family: 'Didact Gothic', sans-serif;
 }
 
 a {
@@ -19,12 +21,33 @@ a {
 }
 
 input {
-    font-family: 'Shadows Into Light Two', sans-serif;
-    font-size: 1.2em;
+    font-family: 'Didact Gothic', sans-serif;
+    font-size: 1.1em;
 }
 
 a:hover {
     color: #ffa60d;
+}
+
+.navbar-brand img {
+    height: 300%;
+    margin-top: -20px;
+}
+
+.leaflet-container a {
+    color: #16e0a5 !important;
+}
+
+.leaflet-container a:hover {
+    color: #ffa60d !important;
+}
+
+.leaflet-container a:active {
+    color: #ffa60d !important;
+}
+
+.leaflet-color a:visited {
+    color: #16e0a5 !important;
 }
 
 .navbar-brand {
@@ -46,7 +69,38 @@ a:hover {
 }
 
 .btn-primary:active {
+    color: #fff;
+    background-color: #008372;
+    border-color: #008372;
+}
+
+.open>.dropdown-toggle.btn-default:focus, .open>.dropdown-toggle.btn-default:hover {
+    color: #fff;
     background-color: #ffa60d;
+}
+
+.open>.dropdown-toggle.btn-default {
+    color: #fff;
+    background-color: #ffa60d;
+}
+
+.btn-primary:focus {
+
+    color: #fff;
+    background-color: #008372;
+    border-color: #008372;
+}
+
+.btn-primary:active:focus {
+    color: #fff;
+    background-color: #008372;
+    border-color: #008372;
+}
+
+.btn-primary:active:hover {
+    color: #fff;
+    background-color: #ffa60d;
+    border-color: #ffa60d;
 }
 
 .btn-default {
@@ -56,9 +110,27 @@ a:hover {
 }
 
 .btn-default:hover {
+    color: #fff;
     background-color: #ffa60d;
 
 }
+
+.btn-default:active {
+    color: #fff;
+    background-color: #ffa60d;
+}
+
+.btn-default:focus {
+    color: #fff;
+    background-color: #ffa60d;
+}
+
+.btn-default:visited {
+    color: #fff;
+    background-color: #008372;
+    border-color: #008372;
+}
+
 .highlight {
     color: #ffa60d;
 }
@@ -73,6 +145,7 @@ a:hover {
     border-color: #333;
     color: #fff;
     margin-bottom: 0;
+    height: 80px;
 }
 
 /*.navbar-inverse li {
@@ -97,6 +170,9 @@ a:hover {
     background-color: #16e0a5;
 }
 
+.navbar .container-fluid {
+    padding-top: 10px;
+}
 .col-xs-12.col-md-4.col-lg-4.sidebar-div {
   height: 650px;
   overflow: scroll;
@@ -127,13 +203,16 @@ a:hover {
 }
 
 .form-control {
-    font-size:1.2em;
+    font-size: 1.1em;
 }
 
 input.btn {
     font-family: 'Roboto', sans-serif;
 }
 
+input[type="submit"] {
+    font-family: 'Roboto', sans-serif;
+}
 .rating-input {
     display: inline;
 }

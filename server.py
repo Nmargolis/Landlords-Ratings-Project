@@ -123,14 +123,16 @@ def process_signup():
         new_user = User(fname=fname, lname=lname, email=email, password=password)
         db.session.add(new_user)
         db.session.commit()
-        flash("You created an account. Please login to see your account home.")
+        flash("Successfully created an account.")
+
+        session['user'] = new_user.user_id
+        return redirect('/account-home')
 
     # Otherwise, flash message saying an account with that email already exists.
     else:
         flash("You already have an account. Please login to see your account home")
-        # To Do: Figure out how to show two options: logout or account home.
+        return redirect('/login')
 
-    return redirect('/login')
 
 
 @app.route('/account-home')
@@ -144,13 +146,6 @@ def display_account_home():
     else:
         flash('You are not logged in. Please log in.')
         return redirect('/login')
-
-
-# @app.route('/lookup')
-# def display_lookup_page():
-#     """Show page with options to look up landlords"""
-
-#     return render_template('lookup.html')
 
 
 @app.route('/lookup-by-address.json')
@@ -227,66 +222,6 @@ def get_landlord_geojson():
     # print landlord.get_geojson()
 
     return jsonify(landlord.get_geojson())
-
-
-# @app.route('/add-new-address.json', methods=['POST'])
-# def add_new_address():
-#     """Add new address to database"""
-#     print "I'm at add-new-address"
-#     street = request.form.get('street-add')
-#     city = request.form.get('city-add')
-#     state = request.form.get('state-add')
-#     zipcode = request.form.get('zipcode-add')
-#     country = request.form.get('country-add')
-
-#     address = db.session.query(Address).filter(Address.street == street,
-#                                                Address.state == state,
-#                                                Address.city == city).all()
-
-#     if address:
-#         return "{} {} already exists as an address.".format(street, city, state)
-
-#     else:
-#         # TO DO: Refactor to not repeat the following code both here and in process-review
-
-#         # Geocode to find lat and lng
-#         # Use center of San Francisco for proximity lat and lng
-#         proxim_lng = -122.4194155
-#         proxim_lat = 37.7749295
-
-#         # Make request to mapbox geocoding api and turn response into json
-#         req = 'https://api.mapbox.com/geocoding/v5/mapbox.places/{}.json?proximity={},{}&access_token={}'.format(street, proxim_lng, proxim_lat, mapbox_token)
-#         r = requests.get(req)
-#         json_response = r.json()
-#         # pp.pprint(json_response)
-
-#         feature_to_add = None
-
-#         # Isolate the feature in the city the user searched for
-#         for feature in json_response['features']:
-#             print 'iterating over json response'
-#             if city == feature['context'][1]["text"]:
-#                 feature_to_add = feature
-#                 break
-
-#         # If there are no features that match the city the user searched for
-#         if feature_to_add is None:
-#             return "Can't find the street address you entered in the city you entered."
-
-#         # Otherwise, continue the process to add the address to the database
-#         else:
-#             address = Address(street=street,
-#                               city=city,
-#                               state=state,
-#                               zipcode=zipcode,
-#                               country=country,
-#                               lng=feature_to_add['center'][0],
-#                               lat=feature_to_add['center'][1])
-#             print address
-#             db.session.add(address)
-#             db.session.commit()
-
-#         return "Successfully added {}, {}, {} as an address.".format(street, city, state)
 
 
 @app.route('/add-new-landlord.json', methods=['POST'])
@@ -592,9 +527,6 @@ def get_addresses():
 def get_recent_reviews():
     """Get a list of the 5 most recent reviews and return json object"""
     recent_reviews = db.session.query(Review).order_by(db.desc(Review.created_at)).limit(5).all()
-    # reviews_dict = {}
-    # for review in recent_reviews:
-    #     reviews_dict[review.review_id] = review.convert_to_dict()
 
     reviews_list = []
     for review in recent_reviews:

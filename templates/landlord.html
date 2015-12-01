@@ -9,7 +9,7 @@
   <div class="container-fluid">
     
     <div class="row">
-      <div class="col-xs-12 col-md-4 col-lg-4">
+      <div class="col-xs-12 col-md-4 col-lg-4 sidebar-div">
 
         <h1>{{ landlord.fname }} {{ landlord.lname }}</h1>
 
@@ -55,11 +55,11 @@
             {% if session['user'] == review.user_id %}
               <b>*** This is your review ***</b>
             {% else %}
-               <a href="/send-message/{{ review.user_id }}"><button id="send-message">Message this user</button></a>
+               <a href="/send-message/{{ review.user_id }}"><button class="btn btn-default" id="send-message">Message this user</button></a>
             {% endif %}
          
           {% else %}
-          <a href="/login" class="show-login-btn"><button>Log in to message this user</button>
+          <a href="/login" class="show-login-btn"><button class="btn btn-default">Log in to message this user</button>
           {% endif %}
           </article>
           <hr>

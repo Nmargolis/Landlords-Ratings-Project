@@ -31,6 +31,13 @@
 
             <div id="reviews">
                 <h3>Your reviews</h3>
+                {% if not user.reviews %}
+                    <p>You have not reviewed any landlords yet.</p>
+                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalRatingForm">
+                    Rate a landlord
+                    </button>
+
+                {% else %}
 
                 {% for review in user.reviews %}
                    <article><b>Landlord: <a href="/landlord/{{review.landlord.landlord_id}}">{{ review.landlord.fname }} {{ review.landlord.lname }}</a></b><br>
@@ -43,13 +50,16 @@
                     Comment: {{ review.comment }}<br>
                    </article><hr>
                 {% endfor %}
+                {% endif %}
             </div>
         </div> <!-- close left column -->
 
     <div class="col-xs-12 col-md-4 col-md-offset-1 col-lg-4 col-lg-offset-1 sidebar-div">
         <div id="convos">
         <h3>Your conversations</h3>
-
+        {% if not user.conversations %}
+            <p>You have not started any conversations yet</p>
+        {% else %}
         {% for convo in user.conversations %}
             <article><b>{{ convo.subject }}</b><br>
                 {% for message in convo.messages %}
@@ -66,6 +76,7 @@
 
             </article><hr>
         {% endfor %}
+        {% endif %}
         </div>
     </div>
     

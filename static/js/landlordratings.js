@@ -36,14 +36,6 @@
         }
     }
 
-          // function lookupByAddress(evt) {
-          //     evt.preventDefault();
-          //     var address = $('#search-by-address').serialize();
-          //     console.log(address)
-              
-          //     $.get('/lookup-by-address.json', address, showLandlords);
-          //     console.log("Finished sending address");
-          // }
 
     function lookupByName(evt) {
         evt.preventDefault();
@@ -66,9 +58,6 @@
 
     //   $.get('/lookup-by-name.json', name, displayResultsMessage);
     // });
-
-    //TO DO: Figure out logical way to do validation
-
 
     function displayResultsMessage(results) {
             var fname = $('#fname-field-review').val();
