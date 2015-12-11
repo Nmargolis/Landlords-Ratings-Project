@@ -37,19 +37,19 @@
         {% endif %}
         
 
-        <h3>Landlord reviews</h3>
+        <h3>Reviews</h3>
         {% for review in landlord.reviews %}
           <article>
-          User: {{ review.user_id }} <br><!-- To Do: Make this a link to the user's profile -->
-          Address: {{ review.address.street }}<br> <!-- To Do: add more address info -->
-          Created at: {{ review.created_at }}<br>
+          <span class="review-label">User:</span> {{ review.user_id }} <br><!-- To Do: Make this a link to the user's profile -->
+          <span class="review-label">Address:</span> {{ review.address.street }}<br> <!-- To Do: add more address info -->
+          <span class="review-label">Created at:</span> {{ review.created_at }}<br>
 
-          <span class = "rating">Maintenance and Repairs: {{ review.rating1 }}<br></span>
-          <span class = "rating">Responsiveness: {{ review.rating2 }}<br></span>
-          <span class = "rating">Pest Management: {{ review.rating3 }}<br></span>
-          <span class = "rating">Respect in Communications: {{ review.rating4 }}<br></span>
-          <span class = "rating">Fairness in Rent Increases: {{ review.rating5 }}<br></span>
-          <p class = "comment">comment: {{ review.comment }}</p>
+          <span class = "rating"><span class="review-label">Maintenance and Repairs: </span>{{ review.rating1 }}<br></span>
+          <span class = "rating"><span class="review-label">Responsiveness: </span>{{ review.rating2 }}<br></span>
+          <span class = "rating"><span class="review-label">Pest Management: </span>{{ review.rating3 }}<br></span>
+          <span class = "rating"><span class="review-label">Respect in Communications: </span>{{ review.rating4 }}<br></span>
+          <span class = "rating"><span class="review-label">Fairness in Rent Increases: </span>{{ review.rating5 }}<br></span>
+          <p class = "comment"><span class="review-label">Comment: </span>{{ review.comment }}</p>
 
           {% if 'user' in session %}
             {% if session['user'] == review.user_id %}
@@ -59,7 +59,7 @@
             {% endif %}
          
           {% else %}
-          <a href="/login" class="show-login-btn"><button class="btn btn-default">Log in to message this user</button>
+          <a href="/login" class="show-login-btn"><button class="btn btn-default">Log in to message this user</button></a>
           {% endif %}
           </article>
           <hr>

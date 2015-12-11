@@ -214,6 +214,22 @@
 
     $('#city-field').on('change', autoCompleteAddress);
 
+    // Function that takes in rating and returns string of html stars
+    function generateStarRating(rating) {
+        var roundedRating = Math.round(rating);
+        var outputHTML = "";
+                for (var j = 1; j<=5; j++) {
+                if (roundedRating >= j) {
+                    outputHTML += "<i class='glyphicon glyphicon-star'></i>";
+                }
+                else {
+                    outputHTML += "<i class='glyphicon glyphicon-star-empty'></i>";
+                }
+                
+            }
+        return outputHTML;
+    }
+
     function displayReviews(results) {
         var resultSidebar = $('#results-sidebar');
         // console.log(results);
@@ -223,19 +239,22 @@
         for (var review in results) {
             // console.log(results[review]);
             // console.log(results[review].user_id);
+
             var reviewHTML = "<b>Review of <a href='/landlord/" + results[review].landlord_id +
                              "'>" + results[review].landlord_fname +
                              " " + results[review].landlord_lname + "</a></b><br>" +
-                             "User: " + results[review].user_id + "<br>" +
-                             "Address: " + results[review].address_street + "<br>" +
-                             "Created at: " + results[review].created_at + "<br>" +
-                             "<span class='rating'>Overall rating: " + results[review].rating_overall + "<br></span>" +
-                             "<span class='rating hidden'>Maintenance and Repairs: " + results[review].rating1 + "<br></span>" +
-                             "<span class='rating hidden'>Responsiveness: " + results[review].rating2 + "<br></span>" +
-                             "<span class='rating hidden'>Pest Management: " + results[review].rating3 + "<br></span>" +
-                             "<span class='rating hidden'>Respect in Communications: " + results[review].rating4 + "<br></span>" +
-                             "<span class='rating hidden'>Fairness in Rent Increases: " + results[review].rating1 + "<br></span>" +
-                             "<p> <span class='comment'>Comment: " + results[review].comment + "</span></br><hr>";
+                             "<span class='review-label'>User: </span>" + results[review].user_id + "<br>" +
+                             "<span class='review-label'>Address: </span>" + results[review].address_street + "<br>" +
+                             "<span class='review-label'>Created at: </span>" + results[review].created_at + "<br>" +
+                             "<span class='rating'><span class='review-label'>Overall rating: </span>" + generateStarRating(results[review].rating_overall);
+                            
+             reviewHTML +=  "<br></span>" +
+                             "<span class='review-label hidden'>Maintenance and Repairs: <br>" + generateStarRating(results[review].rating1) + "<br></span>" +
+                             "<span class='review-label hidden'>Responsiveness: <br>" + generateStarRating(results[review].rating2) + "<br></span>" +
+                             "<span class='review-label hidden'>Pest Management: <br>" + generateStarRating(results[review].rating3) + "<br></span>" +
+                             "<span class='review-label hidden'>Respect in Communications: <br>" + generateStarRating(results[review].rating4) + "<br></span>" +
+                             "<span class='review-label hidden'>Fairness in Rent Increases: <br>" + generateStarRating(results[review].rating5) + "<br></span>" +
+                             "<p> <span class='comment'><span class='review-label'>Comment: </span>" + results[review].comment + "</span></br><hr>";
 
             resultSidebar.append(reviewHTML);
         }

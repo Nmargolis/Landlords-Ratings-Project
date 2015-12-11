@@ -249,3 +249,7 @@ input[type="submit"] {
     background-color: #ffa60d;
     border-color: #008372;
 }
+
+.review-label {
+    color: #ffa60d;
+}
