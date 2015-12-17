@@ -198,7 +198,7 @@ class Review(db.Model):
     comment = db.Column(db.Text)
 
     user = db.relationship('User', backref='reviews')
-    landlord = db.relationship('Landlord', backref='reviews')
+    landlord = db.relationship('Landlord', backref='reviews', order_by='desc(Review.created_at)')
     address = db.relationship('Address', backref='reviews')
 
     def __repr__(self):
@@ -349,7 +349,6 @@ def connect_to_db(app):
 
 if __name__ == "__main__":
 
-    # import doctest
     from server import app
 
     connect_to_db(app)

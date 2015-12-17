@@ -7,13 +7,13 @@
         if (results == "found-no-landlords") {
             $('#results-message').empty();
             $('#results-message').prepend('<p>Could not find any landlords matching your search.</p>');
-            // $('#add-landlord-btn').removeClass('hide');
+
         }
             
         else if (results == "found-no-addresses") {
             $('#results-message').empty();
             $('#results-message').prepend('<p>Could not find any addresses matching your search.</p>');
-            // $('#add-address-btn').removeClass('hide');
+    
         }
 
         else if(results == "found-address-no-reviews") {
@@ -49,7 +49,8 @@
 
     $("#search-by-name").on("submit", lookupByName);
 
-    // // When user finishes entering landlord last name in modal review form, check if landlord in database
+    // // When user finishes entering landlord last name in modal review form, 
+    // // check if landlord in database
     // $('#lname-field-review').on('blur', function() {
     //     var fname = $('#fname-field-review').val();
     //     var lname = $('#lname-field-review').val();
@@ -121,8 +122,8 @@
         console.log('selected landlord');
         fname = $(this).attr('data-fname');
         lname = $(this).attr('data-lname');
-        console.log(fname);
-        console.log(lname);
+        // console.log(fname);
+        // console.log(lname);
         $('#fname-field-review').val(fname);
         $('#lname-field-review').val(lname);
         $('#landlord-verification-results').html('');
@@ -268,3 +269,7 @@
           var inputs = $('#modal-review-form').serialize();
           $.post('/process-rating2.json', inputs, displayResultsMessage);
     });
+
+    // Clear out auto-populated landlord info if user changes landlord name in form
+    
+    $('#hidden-landlord-id').val('');
