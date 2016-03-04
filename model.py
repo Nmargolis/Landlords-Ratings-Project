@@ -103,14 +103,6 @@ class Landlord(db.Model):
         return avg_overall_rating
 
 
-class Building(db.Model):
-
-    __tablename__ = "Buildings"
-
-    building_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(30))
-
-
 class Address(db.Model):
 
     __tablename__ = "Addresses"
@@ -124,9 +116,7 @@ class Address(db.Model):
     unit = db.Column(db.String(30))
     lat = db.Column(db.Float)
     lng = db.Column(db.Float)
-    building_id = db.Column(db.Integer, db.ForeignKey('Buildings.building_id'))
 
-    building = db.relationship('Building', backref='addresses')
     landlords = db.relationship('Landlord',
                                 secondary='Reviews',
                                 backref='addresses')
@@ -149,7 +139,7 @@ class Address(db.Model):
                     "firstName": landlord.fname,
                     "lastName": landlord.lname,
                     "landlordID": landlord.landlord_id,
-                    "averagerating": landlord.get_average_rating_overall()
+                    "averagerating": float(landlord.get_average_rating_overall())
                 }
                 )
 
@@ -341,7 +331,8 @@ def connect_to_db(app):
     """Connect the database to our Flask app."""
 
     # Configure to use our SQLite database
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///landlordratings.db'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///landlordratings'
+    # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///landlordratings.db'
     db.app = app
     db.init_app(app)
 
@@ -353,6 +344,6 @@ if __name__ == "__main__":
 
     connect_to_db(app)
     print "Connected to DB."
-    # db.create_all()
+    db.create_all()
 
     # doctest.testmod()

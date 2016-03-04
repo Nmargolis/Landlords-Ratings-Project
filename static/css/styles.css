@@ -29,9 +29,17 @@ a:hover {
     color: #ffa60d;
 }
 
+/*.navbar-header {
+    height: 60px;
+}*/
 .navbar-brand img {
-    height: 300%;
-    margin-top: -20px;
+    height: 275%;
+    margin-top: -15px;
+}
+
+.navbar .glyphicon {
+    font-size: inherit;
+    color: white;
 }
 
 .leaflet-container a {
@@ -253,3 +261,14 @@ input[type="submit"] {
 .review-label {
     color: #ffa60d;
 }
+
+/* Hack to show collapsed header nav menu */
+@media screen and (max-width:768px) {
+   #collapsed-menu{
+        position: relative;
+        z-index: 99;
+        background-color: #333;
+    } 
+}
+
+

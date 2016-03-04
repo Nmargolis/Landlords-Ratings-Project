@@ -4,7 +4,7 @@ from flask import Flask, request, render_template, session, redirect, flash, jso
 from flask_debugtoolbar import DebugToolbarExtension
 import os
 from jinja2 import StrictUndefined
-from model import connect_to_db, db, User, Landlord, Building, Address, Review, Convo, Userconvo, Message
+from model import connect_to_db, db, User, Landlord, Address, Review, Convo, Userconvo, Message
 import mapbox
 import pprint
 import requests

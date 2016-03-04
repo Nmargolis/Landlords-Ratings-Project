@@ -1,0 +1,73 @@
+
+
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    
+
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#collapsed-menu" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/"><img alt="TenantConnect" src="/static/img/TenantConnect.gif"></a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse"  id="collapsed-menu">
+      
+
+
+
+      <!-- Search for Landlord Form -->
+      <form id="search-by-name" class="navbar-form navbar-left" role="search">
+        <div class="form-group">
+            <label class="control-label">Find a landlord: </label>
+            <input type="text" class="form-control" name="fname" placeholder="First name"></input>
+            <input type="text" class="form-control" id="lname-field" name="lname" placeholder="Last name"></input>
+        </div>
+        <button type="submit" class="btn btn-default search-btn">
+          <span class="glyphicon glyphicon-search" aria-hidden="true"></span> 
+          <span class="text hidden-sm hidden-md">Search</span>
+        </button>
+
+        
+      </form>
+
+      <!-- Additional Header Nav Items -->
+      <ul class="nav navbar-nav navbar-left">
+        <li>
+          <a class="btn-rate-landlord" role="button" data-toggle="modal" data-target="#modalRatingForm">
+            Rate a landlord
+          </a>
+        </li> 
+      </ul>
+
+
+      <!-- Right Side of the header -->
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+
+          {% if 'user' in session %}
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> 
+              <span class="glyphicon glyphicon-user"></span>           
+              <span class="text hidden-sm hidden-md">Your Account</span> <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                <li><a href="/account-home">Account home</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="/logout">Log out</a></li>
+            </ul>
+          {% else %}
+           <button type="button" id="show-login-btn" class="btn btn-default navbar-btn show-login-btn" data-toggle="modal" data-target="#modalLoginWindow">Sign in</button>
+          
+          {% endif %}
+
+        </li>
+      </ul>
+
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
