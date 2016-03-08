@@ -2,6 +2,7 @@
 
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+import os
 
 
 db = SQLAlchemy()
@@ -331,7 +332,8 @@ def connect_to_db(app):
     """Connect the database to our Flask app."""
 
     # Configure to use our SQLite database
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///landlordratings'
+
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL", 'postgresql:///landlordratings')
     # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///landlordratings.db'
     db.app = app
     db.init_app(app)
