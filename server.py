@@ -17,7 +17,7 @@ pp = pprint.PrettyPrinter(indent=4)
 
 
 app = Flask(__name__)
-app.secret_key = os.environ['SESSION_KEY']
+app.secret_key = os.environ['SESSION_KEY', 'ABCDEF']
 
 
 @app.route('/')
