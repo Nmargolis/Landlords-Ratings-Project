@@ -577,6 +577,7 @@ def find_landlords_by_name(fname=None, lname=None):
 if __name__ == "__main__":
 
     connect_to_db(app)
+    db.create_all()
     PORT = int(os.environ.get("PORT", 5000))
 
     app.run(debug=True, host="0.0.0.0", port=PORT)
