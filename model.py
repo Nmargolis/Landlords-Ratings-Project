@@ -334,7 +334,7 @@ def connect_to_db(app):
     # Configure to use our SQLite database
 
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL", 'postgresql:///landlordratings')
-    # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///landlordratings.db'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.app = app
     db.init_app(app)
 

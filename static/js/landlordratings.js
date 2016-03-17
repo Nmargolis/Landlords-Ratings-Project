@@ -156,9 +156,6 @@
 
 
     function autoCompleteAddress() {
-        // var streetNum = $('#street-number-field').val();
-        // var streetName = $('#street-name-field').val();
-        // var street = '' + streetNum + ' ' + streetName;
         var street = $('#street-field').val();
         var city = $('#city-field').val();
         var zipcode = '';
@@ -233,13 +230,10 @@
 
     function displayReviews(results) {
         var resultSidebar = $('#results-sidebar');
-        // console.log(results);
-        // console.log(resultSidebar);
+
         resultSidebar.html('');
         results = results['results'];
         for (var review in results) {
-            // console.log(results[review]);
-            // console.log(results[review].user_id);
 
             var reviewHTML = "<b>Review of <a href='/landlord/" + results[review].landlord_id +
                              "'>" + results[review].landlord_fname +
@@ -264,12 +258,10 @@
     
     $('#modal-review-form').on('submit', function (evt) {
       evt.preventDefault();
-      // alert('submitting form');
-      //validate
+
           var inputs = $('#modal-review-form').serialize();
           $.post('/process-rating2.json', inputs, displayResultsMessage);
     });
 
     // Clear out auto-populated landlord info if user changes landlord name in form
-    
     $('#hidden-landlord-id').val('');

@@ -1,17 +1,16 @@
 """Server for creating Flask app and handling routes"""
 
 from flask import Flask, request, render_template, session, redirect, flash, jsonify
-from flask_debugtoolbar import DebugToolbarExtension
 import os
-from jinja2 import StrictUndefined
 from model import connect_to_db, db, User, Landlord, Address, Review, Convo, Userconvo, Message
 import mapbox
-import pprint
 import requests
 from datetime import datetime
+import pprint
+# from flask_debugtoolbar import DebugToolbarExtension
+# from jinja2 import StrictUndefined
 
-
-mapbox_token = os.environ['MAPBOX_TOKEN']
+mapbox_token = os.environ.get('MAPBOX_TOKEN')
 geocoder = mapbox.Geocoder(access_token=mapbox_token)
 pp = pprint.PrettyPrinter(indent=4)
 
@@ -132,7 +131,6 @@ def process_signup():
     else:
         flash("You already have an account. Please login to see your account home")
         return redirect('/login')
-
 
 
 @app.route('/account-home')
@@ -502,6 +500,7 @@ def display_map():
 
     return render_template('map.html')
 
+
 @app.route('/all_addresses.json')
 def get_addresses():
     """Returns geojson with all addresses and their reviews"""
@@ -520,8 +519,8 @@ def get_addresses():
                 }
                 ]}
 
-
     return jsonify(geojson)
+
 
 @app.route('/get_recent_reviews')
 def get_recent_reviews():
@@ -532,9 +531,13 @@ def get_recent_reviews():
     for review in recent_reviews:
         reviews_list.append(review.convert_to_dict())
 
-
     reviews_dict = {'results': reviews_list}
     return jsonify(reviews_dict)
+
+
+@app.route("/error")
+def error():
+    raise Exception("Error!")
 
 #####################################################################
 """Helper functions"""
@@ -577,7 +580,8 @@ def find_landlords_by_name(fname=None, lname=None):
 if __name__ == "__main__":
 
     connect_to_db(app)
-    db.create_all()
+    # db.create_all()
     PORT = int(os.environ.get("PORT", 5000))
+    DEBUG = "NO_DEBUG" not in os.environ
 
-    app.run(debug=True, host="0.0.0.0", port=PORT)
+    app.run(debug=DEBUG, host="0.0.0.0", port=PORT)
