@@ -135,15 +135,17 @@ class Address(db.Model):
         landlord_list = []
 
         for landlord in landlords:
+            ave_rating = landlord.get_average_rating_overall()
+            ave_rating = float(ave_rating) if ave_rating else None
+
             landlord_list.append(
                 {
                     "firstName": landlord.fname,
                     "lastName": landlord.lname,
                     "landlordID": landlord.landlord_id,
-                    "averagerating": float(landlord.get_average_rating_overall())
+                    "averagerating": ave_rating
                 }
                 )
-
 
         # print landlord_list
         return {
@@ -193,8 +195,12 @@ class Review(db.Model):
     address = db.relationship('Address', backref='reviews')
 
     def __repr__(self):
-        return "<Review review_id = {} user_id = {} landlord_id = {} address_id = {} created_at = {}>".format(
-            self.review_id, self.user_id, self.landlord_id, self.address_id, self.created_at)
+        return "<Review review_id = {} user_id = {} landlord_id = {} address_id = {} " \
+            "moved_in_at = {} moved_out_at = {} created_at = {} " \
+            "rating1 = {} rating2 = {} rating3 = {} rating4 = {} rating5 = {} " \
+            "comment = {}>".format(self.review_id, self.user_id, self.landlord_id, self.address_id,
+                                self.moved_in_at, self.moved_out_at, self.created_at,
+                                self.rating1, self.rating2, self.rating3, self.rating4, self.rating5, self.comment)
 
     def calculate_overall_rating(self):
         """Returns the average of the 5 rating criteria for a review"""

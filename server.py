@@ -38,8 +38,6 @@ def display_login_form():
         # or figure out a way to give the option of logging out or going to account-home
         # Also decide whether to do this in jinja or here.
     else:
-    #If not logged in, display form
-    #This may be in jinja, not in the route.
         return render_template('login.html')
 
 
@@ -243,6 +241,7 @@ def add_new_landlord():
 def process_rating2():
     """Get ratings from modal form and store them in reviews table"""
     print "At process-rating"
+
     user_id = session['user']
 
     # If landlord_id was passed as data, set it equal to landlord_id to be used in review
@@ -312,15 +311,12 @@ def process_rating2():
     else:
         moved_out_at = None
 
-    rating1 = request.form.get('rating1')
-    rating2 = request.form.get('rating2')
-    rating3 = request.form.get('rating3')
-    rating4 = request.form.get('rating4')
-    rating5 = request.form.get('rating5')
-    comment = request.form.get('comment')
-
-    # Process address to check if it is already in the databse
-    # street = street_number + ' ' + street_name
+    rating1 = request.form.get('rating1') or None
+    rating2 = request.form.get('rating2') or None
+    rating3 = request.form.get('rating3') or None
+    rating4 = request.form.get('rating4') or None
+    rating5 = request.form.get('rating5') or None
+    comment = request.form.get('comment', None)
 
     # Query for the address in the database that matches the street, city and state
     address = db.session.query(Address).filter(Address.street.ilike("%"+street+"%"),
@@ -345,7 +341,7 @@ def process_rating2():
 
         # Isolate the feature in the city the user searched for
         for feature in json_response['features']:
-            print json_response['features']
+            # print json_response['features']
             print 'iterating over json response'
             if city == feature['context'][1]["text"]:
                 feature_to_add = feature
