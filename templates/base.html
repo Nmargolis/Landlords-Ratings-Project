@@ -2,11 +2,11 @@
 <head>
     <title>{% block title %}TITLE{% endblock %}</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-   <link href='https://fonts.googleapis.com/css?family=Shadows+Into+Light+Two|Roboto:400,700,500,900|Special+Elite' rel='stylesheet' type='text/css'>
-   <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,300' rel='stylesheet' type='text/css'>
-   <link href='https://fonts.googleapis.com/css?family=Didact+Gothic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Shadows+Into+Light+Two|Roboto:400,700,500,900' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,300' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Didact+Gothic' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="/static/css/styles.css">
-    <script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
+    <script src="http://code.jquery.com/jquery.js"></script>
     <script src='https://api.tiles.mapbox.com/mapbox.js/v2.2.2/mapbox.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox.js/v2.2.2/mapbox.css' rel='stylesheet' />
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
@@ -18,7 +18,6 @@
 <body>
 
  {% include "header.html" %}
-
 
 
     {% with messages = get_flashed_messages() %}
@@ -49,7 +48,7 @@
             
             {% if 'user' in session %}
 
-            <form class="horizontal-form" id="modal-review-form">
+            <form class="form-horizontal" id="modal-review-form">
               
               <input type="hidden" id="hidden-landlord-id" name="landlord-id-field" value="">
               <div class="form-group">
@@ -74,12 +73,12 @@
                   </div>
                 <div class="col-sm-3 form-col">
                   <input type="text" class="form-control" id="state-field" name="state" placeholder="California" required>
-                </div><br><br>
+                </div>
                 <div class="col-sm-3 col-sm-offset-2 form-col">
                   <input type="text" class="form-control" id="zipcode-field" name="zipcode" placeholder="00000" required>
                 </div>
                 <div class="col-sm-3 form-col">
-                  <input type="text" class="form-control" id="country-field" name="country" placeholder="United States" required><br>
+                  <input type="text" class="form-control" id="country-field" name="country" placeholder="United States" required>
                 </div>
               </div>
 
@@ -93,57 +92,55 @@
                   <label class = "control-label">When did you move out (optional)?</label>
                     <input type="date" class="form-control" name="move-out" placeholder="mm/dd/yyyy">
                   
-                </div><br>
+                </div>
               </div>
-              <div class="col-sm-12"></div> 
-<!-- 
-              <div class="col-sm-12"><b>Please rate on the following criteria:</b></div> -->
               
-              <div class="form-group"> 
+              <div class="form-group rating-group"> 
                 <label class="col-sm-5 control-label form-col">Maintenance and repairs:</label>
                 <div class="col-sm-7">
                   <input type="number" name="rating1" data-min='1' data-max='5' class="rating form-control" data-clearable="remove"/>
                 </div>             
               </div>
-              <div class="col-sm-12"></div>
-              <div class="form-group"> 
+
+              <div class="form-group rating-group"> 
                 <label class="col-sm-5 control-label form-col">Responsiveness:</label>
                 <div class="col-sm-7">
                   <input type="number" name="rating2" data-min='1' data-max='5' class="rating form-control" data-clearable="remove"/>
                 </div>
               </div>
-              <div class="col-sm-12"></div>
-              <div class="form-group"> 
+
+              <div class="form-group rating-group"> 
                 <label class="col-sm-5 control-label form-col">Pest management: </label>
                 <div class="col-sm-7">
                   <input type="number" name="rating3" data-min='1' data-max='5' class="rating form-control" data-clearable="remove"/>
                 </div>                
               </div>
-              <div class="col-sm-12"></div> 
-              <div class="form-group"> 
+
+              <div class="form-group rating-group"> 
                 <label class="col-sm-5 control-label form-col">Respect in communications:  </label>
                 <div class="col-sm-7">
                   <input type="number" name="rating4" data-min='1' data-max='5' class="rating form-control" data-clearable="remove"/> 
-               </div>
-               <div class="col-sm-12"></div> 
+                </div>
               </div>
-              <div class="col-sm-12"></div> 
-              <div class="form-group"> 
-                <label class="col-sm-5 control-label">Fairness in rent increases: </label>
+
+              <div class="form-group rating-group"> 
+                <label class="col-sm-5 control-label form-col">Fairness in rent increases: </label>
                 <div class="col-sm-7">
                   <input type="number" name="rating5" data-min='1' data-max='5' class="rating form-control" data-clearable="remove"/>
                 </div>
               </div>
-              <div class="col-sm-12"></div> 
-              <div class="form-group">
+
+              <div class="form-group rating-group">
                 <label class="col-sm-2">Comment:</label>
                 <div class="col-sm-10">
                   <textarea class="form-control" rows="4" name="comment" placeholder="Your comment here"></textarea>
                 </div>
               </div>
-             
-             
-            <div class="col-sm-12"></div>
+              <div class="text-right">
+                <input type="submit" class="btn btn-primary" value="Submit">
+              </div>
+            </form>
+
             {% else %}
               <p>You must be logged in to rate a landlord. Please <button type="button" id="show-login-btn" class="btn btn-primary navbar-btn show-login-btn" data-toggle="modal" data-target="#modalLoginWindow">Log in</button></p>
             {% endif %}
@@ -151,8 +148,7 @@
           </div> <!-- close modal-body -->
           <div class="modal-footer">
              <div class="col-sm-2 col-sm-offset-8 col-form">
-                <input type="submit" class="btn btn-primary" value="Submit">
-                 </form>
+                
               </div>
             
          <div class="col-sm-2">
@@ -194,41 +190,60 @@
             <h4 class="modal-title" id="myModalLabel">Welcome!</h4>
           </div> <!-- close modal-header -->
           <div class="modal-body">
-             <div class="row">
-            <div class="col-xs-12 col-md-6">
-                <h3>Log in</h3>
-                <form action="/process-login" method="POST">
-                    <div class="form-group">
-                      <label class="col-xs-3">Email: </label>
-                      <div class="col-xs-9">
-                        <input type="email" class="form-control" name="email" placeholder="yourname@email.com" required>
+            <div class="row">
+              <div class="col-xs-12 col-md-6">
+                  <h3>Log in</h3>
+                  <form class="form-horizontal" action="/process-login" method="POST">
+                      <div class="form-group">
+                        <label class="col-xs-3 control-label">Email: </label>
+                        <div class="col-xs-9">
+                          <input type="email" class="form-control" name="email" placeholder="yourname@email.com" required>
+                        </div>
                       </div>
-                    </div>
-                    <div class="form-group">      
-                      <label class="col-xs-3">Password: </label>
-                      <div class="col-xs-9">
-                        <input type="password" class="form-control" name="password" placeholder="yourpassword" required>
+                      <div class="form-group">      
+                        <label class="col-xs-3 control-label">Password: </label>
+                        <div class="col-xs-9">
+                          <input type="password" class="form-control" name="password" placeholder="yourpassword" required>
+                        </div>
                       </div>
-                    </div>
+                      <div class="text-right">
                         <input type="submit" class="btn btn-primary" value="Log in">
-                    
-                </form>
-            </div>
-            <div class="col-xs-12 col-md-6">
-                <h3>Sign up</h3>
-                <form action="/process-signup" method="POST">
-                    <label>First name:</label>
-                        <input type="text" name="fname" placeholder="firstname" required><br>
-                    <label>Last name:</label>
-                        <input type="text" name="lname" placeholder="lastname" required><br>
-                    <label>Email: </label>
-                        <input type="text" name="email" placeholder="yourname@email.com" required><br>
-                    <label>Password: </label>
-                        <input type="password" name="password" placeholder="yourpassword" required><br>
-                    <input type="submit" value="Sign up">
-                </form>
-            </div>
-          </div>
+                      </div>
+                  </form>
+              </div> <!-- close log in column -->
+              <div class="col-xs-12 col-md-6">
+                  <h3>Sign up</h3>
+                  <form class="form-horizontal" action="/process-signup" method="POST">
+                      <div class="form-group">
+                        <label class="col-xs-3 control-label">First name:</label>
+                        <div class = "col-xs-9">
+                          <input type="text" class="form-control" name="fname" placeholder="firstname" required>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="col-xs-3 control-label">Last name:</label>
+                        <div class="col-xs-9">
+                          <input type="text" class="form-control"  name="lname" placeholder="lastname" required>
+                        </div>
+                      </div>
+                     <div class="form-group">
+                        <label class="col-xs-3 control-label">Email: </label>
+                        <div class="col-xs-9">
+                          <input type="text" class="form-control" name="email" placeholder="yourname@email.com" required>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="col-xs-3 control-label">Password: </label>
+                        <div class="col-xs-9">
+                          <input type="password" class="form-control" name="password" placeholder="yourpassword" required>
+                        </div>
+                      </div>
+                      <div class="text-right">
+                        <input type="submit" class="btn btn-primary" value="Sign up">
+                      </div>
+                  </form>
+              </div> <!-- close sign up column -->
+          </div> <!-- close row -->
             
             
           </div> <!-- close modal-body -->

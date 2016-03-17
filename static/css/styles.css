@@ -29,9 +29,9 @@ a:hover {
     color: #ffa60d;
 }
 
-/*.navbar-header {
-    height: 60px;
-}*/
+
+/* Navbar styles */
+
 .navbar-brand img {
     height: 275%;
     margin-top: -15px;
@@ -40,6 +40,61 @@ a:hover {
 .navbar .glyphicon {
     font-size: inherit;
     color: white;
+}
+
+.navbar-brand {
+    font-family: 'Shadows Into Light Two', sans-serif;
+    font-size: 2em;
+}
+
+.navbar-inverse {
+    background-color: #333;
+    border-color: #333;
+    color: #fff;
+    margin-bottom: 0;
+    height: 80px;
+}
+
+.navbar-inverse .navbar-brand {
+    color: #16e0a5;
+}
+.navbar-inverse .navbar-nav>li>a {
+    color:#16e0a5;
+}
+.navbar-inverse .navbar-nav>li>a:hover {
+    color:#ffa60d;
+}
+
+.navbar-inverse .navbar-nav>.open>a, .navbar-inverse .navbar-nav>.open>a:focus, .navbar-inverse .navbar-nav>.open>a:hover {
+    background-color: #16e0a5;
+}
+
+.navbar-nav>li>.dropdown-menu {
+    background-color: #16e0a5;
+}
+
+.navbar .container-fluid {
+    padding-top: 10px;
+}
+
+/* Hack to show collapsed header nav menu */
+@media screen and (max-width:768px) {
+   #collapsed-menu {
+        position: relative;
+        z-index: 99;
+        background-color: #333;
+    } 
+}
+
+
+/* Map styles */
+
+.map {
+    border-left:1px solid #fff;
+    width:100%;
+    height:650px;
+    top:0;
+    bottom:0;
 }
 
 .leaflet-container a {
@@ -58,11 +113,8 @@ a:hover {
     color: #16e0a5 !important;
 }
 
-.navbar-brand {
-    font-family: 'Shadows Into Light Two', sans-serif;
-    font-size: 2em;
-}
 
+/* Button styles */
 
 .btn-primary {
   color: #fff;
@@ -148,56 +200,21 @@ a:hover {
 
 }
 
-.navbar-inverse {
-    background-color: #333;
-    border-color: #333;
-    color: #fff;
-    margin-bottom: 0;
-    height: 80px;
-}
 
-/*.navbar-inverse li {
-    color: #16e0a5;
-}*/
+/* Page structure styles to make sidebar and fix padding on container for map */
 
-.navbar-inverse .navbar-brand {
-    color: #16e0a5;
-}
-.navbar-inverse .navbar-nav>li>a {
-    color:#16e0a5;
-}
-.navbar-inverse .navbar-nav>li>a:hover {
-    color:#ffa60d;
-}
-
-.navbar-inverse .navbar-nav>.open>a, .navbar-inverse .navbar-nav>.open>a:focus, .navbar-inverse .navbar-nav>.open>a:hover {
-    background-color: #16e0a5;
-}
-
-.navbar-nav>li>.dropdown-menu {
-    background-color: #16e0a5;
-}
-
-.navbar .container-fluid {
-    padding-top: 10px;
-}
 .col-xs-12.col-md-4.col-lg-4.sidebar-div {
   height: 650px;
   overflow: scroll;
 }
 
+
 .no-right-padding {
     padding-right:0 !important;
 }
 
-.map {
-    border-left:1px solid #fff;
-    width:100%;
-    height:650px;
-    top:0;
-    bottom:0;
-}
 
+/* Modal styles */
 
 .modal-content {
     background-color: #efefef;
@@ -210,8 +227,10 @@ a:hover {
 
 }
 
+/* Form styles */
+
 .form-control {
-    font-size: 1.1em;
+    font-size: 1em;
 }
 
 input.btn {
@@ -232,6 +251,19 @@ input[type="submit"] {
     font-size: larger;
     color: #ffa60d;
 }
+
+.review-label {
+    color: #ffa60d;
+}
+
+.rating-input>.glyphicon {
+    padding-top: 7px;
+}
+
+.rating-group {
+    margin-bottom: 5px;
+}
+/* Panels for messaging styles */
 
 .panel {
     background-color: #555;
@@ -256,19 +288,6 @@ input[type="submit"] {
     color: #fff;
     background-color: #ffa60d;
     border-color: #008372;
-}
-
-.review-label {
-    color: #ffa60d;
-}
-
-/* Hack to show collapsed header nav menu */
-@media screen and (max-width:768px) {
-   #collapsed-menu{
-        position: relative;
-        z-index: 99;
-        background-color: #333;
-    } 
 }
 
 
